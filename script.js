@@ -33,12 +33,14 @@ moduleLinks.forEach(link => {
                 
                 // Прокручуємо сторінку наверх
                 window.scrollTo(0, 0);
+                updateUIVisibility();
             })
             .catch(error => {
                 console.error('Помилка завантаження модуля:', error);
                 modulesWrapper.innerHTML = `<div class="module-container active"><h1>Незабаром...</h1><p>Цей модуль ще в розробці.</p></div>`;
                 heroSection.style.display = 'none';
                 modulesWrapper.style.display = 'block';
+                updateUIVisibility();
             });
     });
 });
@@ -115,3 +117,41 @@ function initializeQuiz(moduleElement) {
 
     showQuestion(currentQuestionIndex);
 }
+
+// --- ЛОГІКА КЕРУВАННЯ БІЧНОЮ ПАНЕЛЛЮ ---
+const sidebar = document.getElementById('sidebar-nav');
+const menuToggle = document.getElementById('menu-toggle');
+const homeLink = document.getElementById('home-link');
+const sidebarModuleLinks = document.querySelectorAll('.sidebar-module-link');
+
+function updateUIVisibility() {
+    if (heroSection.style.display === 'none') {
+        menuToggle.style.display = 'grid';
+    } else {
+        menuToggle.style.display = 'none';
+    }
+}
+
+menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('visible');
+});
+
+homeLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    heroSection.style.display = '';
+    modulesWrapper.style.display = 'none';
+    sidebar.classList.remove('visible');
+    updateUIVisibility();
+});
+
+sidebarModuleLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+        event.preventDefault();
+        sidebar.classList.remove('visible');
+        const targetModuleId = link.dataset.target;
+        const mainLink = document.querySelector(`.module-link[data-target="${targetModuleId}"]`);
+        if (mainLink) {
+            mainLink.click();
+        }
+    });
+});
