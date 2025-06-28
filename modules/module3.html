@@ -1,0 +1,142 @@
+<h1>Модуль 3: Перші кроки в Автоматизації (Selenium)</h1>
+            <p>
+                Маючи "абетку" Python, ми можемо нарешті почати писати автотести. Для цього нам потрібен головний
+                інструмент
+                — бібліотека <strong>Selenium</strong>.
+            </p>
+            <p>
+                <strong>Selenium WebDriver</strong> — це як універсальний "пульт керування" для браузера. Наш Python-код
+                за
+                допомогою цього пульта віддає команди (відкрити сайт, знайти кнопку, клікнути), а браузер їх виконує.
+            </p>
+
+            <h3><i class="fa-solid fa-cat"></i> Ключові концепції нашого першого тесту</h3>
+
+            <h4>1. WebDriver та WebDriver Manager</h4>
+            <p>Щоб почати роботу, ми створюємо "водія" і автоматично завантажуємо для нього правильну версію за
+                допомогою
+                `webdriver-manager`.</p>
+            <pre><code>driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))</code></pre>
+
+            <h4>2. Пошук елементів (`find_element`)</h4>
+            <p>Щоб взаємодіяти з чимось на сторінці, це спершу треба знайти. Ми використовуємо різні стратегії пошуку
+                (локатори), які ми імпортуємо з `By`.</p>
+            <pre><code># Пошук за унікальним ID
+driver.find_element(By.ID, "username")
+
+# Пошук за іменем атрибута 'name'
+driver.find_element(By.NAME, "search_query")
+
+# Пошук за допомогою CSS-селектора
+driver.find_element(By.CSS_SELECTOR, "button[type='submit']")</code></pre>
+
+            <h4>3. Дії з елементами</h4>
+            <p>Коли елемент знайдено, ми можемо виконувати з ним дії, ніби ми — користувач.</p>
+            <pre><code># Ввести текст
+element.send_keys("якийсь текст")
+
+# Натиснути на елемент
+element.click()
+
+# Отримати текст елемента
+element.text</code></pre>
+
+            <h4>4. "Розумні" очікування (`WebDriverWait`)</h4>
+            <p>Сайти не завжди завантажуються миттєво. Замість "сліпих" пауз `time.sleep()`, ми використовуємо "розумні"
+                очікування, які чекають на певну умову (наприклад, поки елемент не стане клікабельним) до 10 секунд.</p>
+            <pre><code>wait = WebDriverWait(driver, 10)
+button = wait.until(EC.element_to_be_clickable((By.ID, "myButton")))</code></pre>
+
+            <h4>5. Перевірки (`assert`)</h4>
+            <p>Це серце будь-якого тесту. Ми "стверджуємо", що певна умова є правдивою. Якщо ні — тест падає з помилкою.
+            </p>
+            <pre><code>assert "Очікуваний текст" in driver.title</code></pre>
+
+            <hr>
+            <h3><i class="fa-solid fa-cat"></i> Уроки, винесені з "битви" з YouTube</h3>
+            <p>Наш шлях не був простим. У спробах автоматизувати складний сайт ми на практиці дізналися про реальні
+                проблеми, які ми перемогли:</p>
+            <ul>
+                <li><strong>Проблема респонсивного дизайну:</strong> сайт виглядає по-різному залежно від розміру вікна,
+                    і
+                    елементи можуть зникати. Рішення: `driver.maximize_window()`.</li>
+                <li><strong>Проблема cookie-банерів:</strong> спливаючі вікна можуть перекривати елементи. Рішення:
+                    обробка
+                    через `try-except` і пошук надійного локатора.</li>
+                <li><strong>Проблема нестабільних локаторів:</strong> локатори, що залежать від тексту, можуть ламатись
+                    через зміну мови. Рішення: шукати елементи за `ID`, унікальними `class` або атрибутами `aria-label`.
+                </li>
+                <li><strong>Проблема "застарілих" елементів (`StaleElementReferenceException`):</strong> на динамічних
+                    сайтах елементи можуть оновлюватись, поки скрипт працює. Рішення: знаходити елемент і одразу
+                    виконувати
+                    дію.</li>
+                <li><strong>Проблема неінтерактивних елементів (`ElementNotInteractableException`):</strong> елемент є,
+                    але
+                    на нього не можна клікнути. Рішення: імітувати дії через JavaScript (`driver.execute_script`).</li>
+            </ul>
+
+            <hr>
+
+            <h2>Інтерактивний Тест до Модуля 3</h2>
+
+            <div class="quiz-container">
+
+                <div class="quiz-questions-wrapper">
+                    <div class="quiz-question">
+                        <h3>Яка команда Selenium закриє лише поточну вкладку, а не весь браузер?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="false">driver.quit()</div>
+                            <div class="answer-btn" data-correct="true">driver.close()</div>
+                            <div class="answer-btn" data-correct="false">driver.exit()</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+
+                            <p><i class="fa-solid fa-otter"></i> `driver.close()` закриває поточну активну вкладку. А от
+                                `driver.quit()` повністю закриває весь браузер з усіма вкладками і завершує сесію
+                                WebDriver.
+                                Це важливо розрізняти.</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="quiz-question">
+                    <h3>Що робить команда `driver.maximize_window()`?</h3>
+                    <div class="answers-container">
+                        <div class="answer-btn" data-correct="false">Робить скріншот вікна.</div>
+                        <div class="answer-btn" data-correct="true">Розгортає вікно браузера на весь екран.</div>
+                        <div class="answer-btn" data-correct="false">Знаходить найбільший елемент на сторінці.</div>
+                    </div>
+                    <div class="explanation" style="display: none;">
+
+                        <p><i class="fa-solid fa-otter"></i> Як ми дізнались на практиці, це дуже важлива команда. Вона
+                            допомагає уникнути проблем з респонсивним дизайном, гарантуючи, що ми тестуємо "десктопну"
+                            версію сайту, де всі елементи видимі.</p>
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <h3>Який локатор вважається найнадійнішим і найшвидшим, якщо він є у елемента?</h3>
+                    <div class="answers-container">
+                        <div class="answer-btn" data-correct="true">By.ID</div>
+                        <div class="answer-btn" data-correct="false">By.XPATH</div>
+                        <div class="answer-btn" data-correct="false">By.CLASS_NAME</div>
+                    </div>
+                    <div class="explanation" style="display: none;">
+
+                        <p><i class="fa-solid fa-otter"></i> `ID` за визначенням має бути унікальним на сторінці, тому
+                            пошук
+                            за ним є найшвидшим. Завжди віддавай перевагу ID, якщо він доступний і не змінюється
+                            динамічно.
+                        </p>
+                    </div>
+                </div>
+
+
+
+                <div class="quiz-navigation">
+                    <button class="prev-question" disabled>&lt; Назад</button>
+                    <span class="question-counter">Питання 1 / N</span>
+                    <button class="next-question">Вперед &gt;</button>
+
+                </div>

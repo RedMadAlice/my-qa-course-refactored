@@ -1,0 +1,180 @@
+<h1>Модуль 4.1: Практика взаємодії з елементами</h1>
+            <p>
+                Маючи знання про РОМ, зануримось у практику автоматизації конкретних веб-елементів. Тут ми розглянемо
+                два
+                найпоширеніші: випадаючі списки та чекбокси.
+            </p>
+
+            <hr>
+
+            <h3><i class="fa-solid fa-cat"></i> Робота з випадаючими списками (&lt;select&gt;)</h3>
+            <p>
+                Випадаючі списки — це елементи <code>&lt;select&gt;</code>. Для зручної роботи з ними в Selenium є
+                спеціальний допоміжний клас <code>Select</code>, який значно спрощує вибір потрібних опцій.
+            </p>
+
+            <h4>Клас сторінки (dropdown_page.py)</h4>
+            <pre><code>
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
+
+class DropdownPage:
+    DROPDOWN_LIST = (By.ID, "dropdown")
+
+    def __init__(self, driver):
+        self.driver = driver
+        self.dropdown = Select(self.driver.find_element(*self.DROPDOWN_LIST))
+
+    def select_option_by_text(self, visible_text):
+        self.dropdown.select_by_visible_text(visible_text)
+
+    def get_selected_option_text(self):
+        return self.dropdown.first_selected_option.text
+    </code></pre>
+
+            <h4>Тест (test_dropdown.py)</h4>
+            <pre><code>
+from dropdown_page import DropdownPage
+
+# ... (код ініціалізації драйвера) ...
+
+driver.get("http://the-internet.herokuapp.com/dropdown")
+dropdown_page = DropdownPage(driver)
+
+option_to_select = "Option 2"
+dropdown_page.select_option_by_text(option_to_select)
+
+selected_option_text = dropdown_page.get_selected_option_text()
+assert selected_option_text == option_to_select
+
+print("✅ Тест пройдено!")
+driver.quit()
+    </code></pre>
+
+            <hr>
+
+            <h3><i class="fa-solid fa-cat"></i> Робота з чекбоксами (&lt;input type="checkbox"&gt;)</h3>
+            <p>
+                Чекбокси — це елементи, стан яких потрібно не тільки змінювати (клікати), але й перевіряти. Для цього
+                ідеально підходить метод <code>.is_selected()</code>, який повертає <code>True</code> або
+                <code>False</code>.
+            </p>
+
+            <h4>Клас сторінки (checkboxes_page.py)</h4>
+            <pre><code>
+from selenium.webdriver.common.by import By
+
+class CheckboxesPage:
+    CHECKBOX_1 = (By.CSS_SELECTOR, "form#checkboxes input:nth-of-type(1)")
+    CHECKBOX_2 = (By.CSS_SELECTOR, "form#checkboxes input:nth-of-type(2)")
+
+    def __init__(self, driver):
+        self.driver = driver
+
+    def click_checkbox_1(self):
+        self.driver.find_element(*self.CHECKBOX_1).click()
+
+    def is_checkbox_1_selected(self):
+        return self.driver.find_element(*self.CHECKBOX_1).is_selected()
+    
+    # ... (аналогічні методи для другого чекбоксу) ...
+    </code></pre>
+
+            <h4>Тест (test_checkboxes.py)</h4>
+            <pre><code>
+from checkboxes_page import CheckboxesPage
+
+# ... (код ініціалізації драйвера) ...
+
+driver.get("http://the-internet.herokuapp.com/checkboxes")
+checkboxes_page = CheckboxesPage(driver)
+
+# Перевіряємо, що чекбокс 1 НЕ вибраний
+assert not checkboxes_page.is_checkbox_1_selected()
+
+checkboxes_page.click_checkbox_1()
+
+# Перевіряємо, що тепер чекбокс 1 вибраний
+assert checkboxes_page.is_checkbox_1_selected()
+
+print("✅ Тест пройдено!")
+driver.quit()
+    </code></pre>
+
+            <hr>
+
+            <h2>Інтерактивний Тест до Модуля 4.1</h2>
+            <div class="quiz-container">
+                <div class="quiz-questions-wrapper">
+
+                    <div class="quiz-question">
+                        <h3>Для чого призначений клас `Select` в Selenium?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="false">Для вибору будь-якого елемента на сторінці.
+                            </div>
+                            <div class="answer-btn" data-correct="true">Для зручної роботи з випадаючими списками
+                                &lt;select&gt;.</div>
+                            <div class="answer-btn" data-correct="false">Для вибору дати в календарі.</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+
+                            <p><i class="fa-solid fa-otter"></i> Клас `Select` — це спеціалізований інструмент,
+                                створений
+                                саме для взаємодії з HTML-елементами <code>&lt;select&gt;</code>, що робить код чистішим
+                                і
+                                надійнішим.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h3>Який метод є найнадійнішим для вибору опції з випадаючого списку?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="true">select_by_visible_text("Текст опції")</div>
+                            <div class="answer-btn" data-correct="false">select_by_index(1)</div>
+                            <div class="answer-btn" data-correct="false">click()</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+
+                            <p><i class="fa-solid fa-otter"></i> Вибір за видимим текстом (`select_by_visible_text`) є
+                                найнадійнішим, оскільки він не залежить від порядку елементів (як `index`) чи значень
+                                `value`, які можуть бути неінформативними.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h3>Що повертає метод `.is_selected()`?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="false">Текст вибраного елемента.</div>
+                            <div class="answer-btn" data-correct="true">True, якщо елемент вибраний, інакше False.</div>
+                            <div class="answer-btn" data-correct="false">Об'єкт елемента.</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+
+                            <p><i class="fa-solid fa-otter"></i> Метод `.is_selected()` повертає булеве значення
+                                (boolean),
+                                що робить його ідеальним для використання в перевірках `assert`.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h3>Як правильно перевірити, що чекбокс НЕ вибраний?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="true">assert not element.is_selected()</div>
+                            <div class="answer-btn" data-correct="false">assert element.is_selected() == "False"</div>
+                            <div class="answer-btn" data-correct="false">assert element.is_not_selected()</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+
+                            <p><i class="fa-solid fa-otter"></i> Оскільки `.is_selected()` повертає `False`, ми
+                                використовуємо ключове слово `not` в Python, щоб перетворити `False` на `True` і зробити
+                                перевірку `assert` успішною.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="quiz-navigation">
+                    <button class="prev-question" disabled>&lt; Назад</button>
+                    <span class="question-counter">Питання 1 / N</span>
+                    <button class="next-question">Вперед &gt;</button>
+                </div>

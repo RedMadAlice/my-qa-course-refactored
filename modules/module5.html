@@ -1,0 +1,124 @@
+<h1>Модуль 5: Git та GitHub — Зберігаємо історію</h1>
+            <p>
+                Професійна розробка неможлива без системи контролю версій. Це як страхова сітка для акробата — вона
+                дозволяє
+                робити сміливі кроки, знаючи, що завжди можна повернутись у безпечну точку. Наш вибір — Git,
+                найпопулярніша
+                система у світі.
+            </p>
+
+            <h3><i class="fa-solid fa-code-commit"></i> Що таке Git? Аналогія з "сейвами" в грі</h3>
+            <p>
+                <strong>Git</strong> — це програма на твоєму комп'ютері, яка відстежує всі зміни у файлах твого проєкту.
+                Уяви, що твій проєкт — це гра.
+            </p>
+            <ul>
+                <li><strong>Репозиторій (Repository):</strong> Це папка твого проєкту, для якої ти увімкнула відстеження
+                    командою `git init`. Це твоя "папка з грою".</li>
+                <li><strong>Коміт (Commit):</strong> Це точка збереження ("сейв"). Ти робиш коміт, коли завершила
+                    логічний
+                    шматок роботи. Кожен коміт має унікальний ID та опис, щоб ти знала, що саме було збережено.</li>
+            </ul>
+
+            <hr>
+
+            <h3><i class="fa-solid fa-terminal"></i> Локальний робочий цикл: "Свята трійця"</h3>
+            <p>90% щоденної роботи з Git — це цикл з трьох команд:</p>
+            <ol>
+                <li><strong><code>git status</code></strong> — "Що змінилось?". Git показує тобі нові файли або файли зі
+                    змінами.</li>
+                <li><strong><code>git add .</code></strong> — "Підготувати до збереження". Ти кажеш Git підготувати всі
+                    поточні зміни для наступного коміту.</li>
+                <li><strong><code>git commit -m "Опис зміни"</code></strong> — "Зробити збереження". Ти створюєш коміт з
+                    коротким описом того, що саме було зроблено.</li>
+            </ol>
+
+            <hr>
+
+            <h3><i class="fa-brands fa-github"></i> Що таке GitHub? Онлайн-сховище</h3>
+            <p>
+                Якщо Git — це сама система збережень, то <strong>GitHub</strong> — це онлайн-сервіс, "хмара", де ти
+                можеш
+                зберігати копії своїх репозиторіїв.
+            </p>
+            <ul>
+                <li><strong>Резервна копія:</strong> Твій код у безпеці, навіть якщо з твоїм комп'ютером щось станеться.
+                </li>
+                <li><strong>Портфоліо:</strong> Це твоя публічна візитівка, яку ти показуєш роботодавцям.</li>
+                <li><strong>Командна робота:</strong> Дозволяє багатьом розробникам працювати над одним проєктом
+                    одночасно.
+                </li>
+            </ul>
+
+            <h4>Процес синхронізації з GitHub</h4>
+            <p>Щоб відправити свої локальні коміти на GitHub, використовується команда `git push`.</p>
+            <pre><code>
+# 1. Додаємо посилання на віддалений репозиторій (робиться один раз)
+git remote add origin https://github.com/Username/Repo.git
+
+# 2. Відправляємо коміти на GitHub
+git push -u origin main
+    </code></pre>
+            <hr>
+
+            <h2>Інтерактивний Тест до Модуля 5</h2>
+            <div class="quiz-container">
+                <div class="quiz-questions-wrapper">
+
+                    <div class="quiz-question">
+                        <h3>Що таке "коміт" (commit) в Git?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="false">Резервна копія всього комп'ютера.</div>
+                            <div class="answer-btn" data-correct="true">Знімок стану файлів у певний момент часу, "точка
+                                збереження".</div>
+                            <div class="answer-btn" data-correct="false">Коментар у коді.</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+
+                            <p><i class="fa-solid fa-otter"></i> Коміт — це ключове поняття в Git. Це не просто зміна, а
+                                повний знімок (snapshot) проєкту в конкретний момент часу з унікальним ID та описом.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h3>Яка команда покаже поточний стан репозиторію: які файли змінено, які готові до коміту?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="false">git commit</div>
+                            <div class="answer-btn" data-correct="false">git add</div>
+                            <div class="answer-btn" data-correct="true">git status</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+
+                            <p><i class="fa-solid fa-otter"></i> `git status` — це твоя "приладова панель". Цю команду
+                                використовують найчастіше, щоб зрозуміти, що відбувається в репозиторії перед тим, як
+                                робити
+                                будь-які дії.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h3>У чому головна відмінність між Git та GitHub?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="false">Це одне й те саме.</div>
+                            <div class="answer-btn" data-correct="true">Git — це програма на комп'ютері, а GitHub — це
+                                веб-сайт для хостингу репозиторіїв.</div>
+                            <div class="answer-btn" data-correct="false">Git — для програмістів, а GitHub — для
+                                дизайнерів.
+                            </div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+
+                            <p><i class="fa-solid fa-otter"></i> Це фундаментальна відмінність. Git — це інструмент (як
+                                молоток). GitHub — це місце, де ти зберігаєш проєкти, зроблені цим інструментом
+                                (майстерня).
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="quiz-navigation">
+                    <button class="prev-question" disabled>&lt; Назад</button>
+                    <span class="question-counter">Питання 1 / N</span>
+                    <button class="next-question">Вперед &gt;</button>
+                </div>

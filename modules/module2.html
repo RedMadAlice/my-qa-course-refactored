@@ -1,0 +1,154 @@
+<h1>Модуль 2: Python — База для Автоматизатора</h1>
+            <p>
+                Теорія — це важливо, але справжня магія починається з коду. У цьому модулі ми вивчимо "абетку" мови
+                Python —
+                ті основні інструменти, які потрібні кожному автоматизатору щодня.
+            </p>
+
+            <h3><i class="fa-solid fa-cat"></i> 1. Змінні та Типи Даних</h3>
+            <p>
+                <strong>Змінна</strong> — це як підписана коробочка, в яку ми можемо покласти якусь інформацію. Основні
+                типи
+                інформації (даних), які ми використовуємо:
+            </p>
+            <ul>
+                <li><strong>Рядок (string, str):</strong> Будь-який текст у лапках. Наприклад:
+                    <code>"Привіт, світ!"</code>.
+                </li>
+                <li><strong>Ціле число (integer, int):</strong> Числа без дробової частини. Наприклад: <code>101</code>.
+                </li>
+                <li><strong>Булевий тип (boolean, bool):</strong> Дуже важливий для тестів! Має лише два значення:
+                    <code>True</code> (правда) або <code>False</code> (хибність).
+                </li>
+            </ul>
+            <pre><code>
+# Створюємо змінні
+test_name = "Перевірка логіну"
+test_id = 5
+is_passed = True
+    </code></pre>
+
+            <h3><i class="fa-solid fa-cat"></i> 2. Умови (if / else)</h3>
+            <p>
+                Дозволяють нашій програмі приймати рішення. "<strong>Якщо</strong> умова правдива — роби це, **інакше**
+                —
+                роби щось інше".
+            </p>
+            <pre><code>
+if is_passed == True:
+    print("Тест успішний! ✅")
+else:
+    print("Тест провалено! ❌")
+    </code></pre>
+
+            <h3><i class="fa-solid fa-cat"></i> 3. Цикли (for)</h3>
+            <p>
+                Дозволяють повторювати одну й ту саму дію багато разів. Наприклад, перевірити кожен елемент у списку.
+            </p>
+            <pre><code>
+# Створюємо список (list)
+browsers = ["Chrome", "Firefox", "Safari"]
+
+# Цикл, що пройдеться по кожному елементу
+for browser in browsers:
+    print(f"Запускаю тест у браузері {browser}...")
+    </code></pre>
+
+            <h3><i class="fa-solid fa-cat"></i> 4. Функції (def)</h3>
+            <p>
+                Це як створити власний інструмент. Ми "упаковуємо" шматок коду, даємо йому ім'я і можемо потім викликати
+                його багато разів. Це слідує принципу <strong>DRY (Don't Repeat Yourself - Не повторюй себе)</strong>.
+            </p>
+            <pre><code>
+# Оголошуємо функцію
+def print_separator():
+    print("---===---")
+
+# Викликаємо функцію
+print("Початок тесту")
+print_separator()
+print("Кінець тесту")
+    </code></pre>
+
+            <hr>
+
+            <h2>Інтерактивний Тест до Модуля 2</h2>
+
+
+            <div class="quiz-container">
+
+                <div class="quiz-questions-wrapper">
+                    <div class="quiz-question">
+                        <h3>Що буде результатом виконання коду: `x = "5"`, `y = "3"`, `print(x + y)`?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="true">"53"</div>
+                            <div class="answer-btn" data-correct="false">8</div>
+                            <div class="answer-btn" data-correct="false">Помилка</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+
+                            <p><i class="fa-solid fa-otter"></i> Оскільки і "5", і "3" знаходяться в лапках, вони є
+                                рядками
+                                (strings). Оператор `+` для рядків означає конкатенацію (склеювання), а не математичне
+                                додавання.</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="quiz-question">
+                    <h3>Який оператор використовується для перевірки рівності двох значень?</h3>
+                    <div class="answers-container">
+                        <div class="answer-btn" data-correct="false">=</div>
+                        <div class="answer-btn" data-correct="true">==</div>
+                        <div class="answer-btn" data-correct="false">!=</div>
+                    </div>
+                    <div class="explanation" style="display: none;">
+
+                        <p><i class="fa-solid fa-otter"></i> Одинарний знак `=` використовується для присвоєння значення
+                            змінній (`x = 5`), тоді як подвійний `==` використовується для порівняння ("чи дорівнює `x`
+                            п'яти?").</p>
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <h3>Що таке `список` (list) в Python?</h3>
+                    <div class="answers-container">
+                        <div class="answer-btn" data-correct="false">Незмінний набір елементів.</div>
+                        <div class="answer-btn" data-correct="true">Впорядкований, змінний набір елементів у квадратних
+                            дужках.</div>
+                        <div class="answer-btn" data-correct="false">Набір унікальних елементів у фігурних дужках.</div>
+                    </div>
+                    <div class="explanation" style="display: none;">
+
+                        <p><i class="fa-solid fa-otter"></i> Списки `[...]` є однією з найпоширеніших структур даних в
+                            Python. Вони впорядковані (мають індекси) і їх можна змінювати (додавати, видаляти
+                            елементи).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <h3>Що означає ключове слово `pass` в Python?</h3>
+                    <div class="answers-container">
+                        <div class="answer-btn" data-correct="true">Нічого не робити; це заглушка.</div>
+                        <div class="answer-btn" data-correct="false">Зупинити виконання програми.</div>
+                        <div class="answer-btn" data-correct="false">Пропустити поточну ітерацію циклу.</div>
+                    </div>
+                    <div class="explanation" style="display: none;">
+
+                        <p><i class="fa-solid fa-otter"></i> `pass` використовується, коли синтаксично потрібен якийсь
+                            код,
+                            але вам не потрібно, щоб щось виконувалось. Наприклад, у порожній функції або класі, який ви
+                            плануєте написати пізніше.</p>
+                    </div>
+                </div>
+
+
+
+                <div class="quiz-navigation">
+                    <button class="prev-question" disabled>&lt; Назад</button>
+                    <span class="question-counter">Питання 1 / N</span>
+                    <button class="next-question">Вперед &gt;</button>
+
+                </div>

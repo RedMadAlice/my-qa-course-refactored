@@ -1,0 +1,342 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=Jura:wght@400;700&family=Montserrat:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Playfair+Display+SC&display=swap');
+
+/* --- Скидання стилів (CSS Reset) --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================== */
+/* === ПАНЕЛЬ КЕРУВАННЯ СТИЛЕМ (змінюйте тут) === */
+/* ============================================== */
+
+:root {
+    /* --- Налаштування Кольорів --- */
+    --color-background: #FFFFE2; /* Колір фону всієї сторінки */
+    --color-text-main: #134611; /* Основний колір тексту */
+    --color-text-header: #612940; /* Колір заголовків */
+    --color-primary-accent: #134611; /* Головний акцентний колір (бузковий) */
+
+    /* Кольори для кнопок-відповідей */
+    --color-btn-normal-bg: #FFFFE2;
+    --color-btn-normal-border: #134611;
+    --color-btn-hover-bg: #F8FCBE;
+    
+    --color-btn-correct-bg: #96E072; /* Зелений */
+    --color-btn-correct-border: #134611;
+    --color-btn-correct-text: #134611;
+
+    --color-btn-incorrect-bg: #F58594; /* Червоний */
+    --color-btn-incorrect-border: #612940;
+    --color-btn-incorrect-text: #612940;
+    
+    --color-explanation-bg: #F8FCBE;
+    --color-explanation-border: var(--color-primary-accent);
+
+    /* --- Налаштування Шрифтів --- */
+    --font-family-headers: 'Jura', sans-serif;
+    --font-family-text: 'Montserrat', sans-serif;
+    --font-family-code: "Fira Code Light", monospace;
+    --font-size-text: 18px;
+    --font-size-header: 22px;
+}
+/* ======================================================= */
+/* === ОСНОВНІ СТИЛІ (тут нічого не чіпаємо) === */
+/* ======================================================= */
+body {
+    background-color: var(--color-background);
+    font-family: var(--font-family-text);
+    color: var(--color-text-main);
+    font-size: var(--font-size-text);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;   
+    /* padding: 20px; <--- ВИДАЛИ ЦЕЙ РЯДОК */
+}
+
+/* --- Фон для навчальних модулів --- */
+#modules-wrapper {
+  display: none; /* <--- Важливо! За замовчуванням обгортка прихована */
+  width: 100%;
+  
+  /* --- ОСЬ СЮДИ ВСТАВЛЯЄМО КАРТИНКУ --- */
+  background-image: url('hero-image-module.png'); 
+  
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 50px 0;
+}
+
+.module-container {
+    max-width: 800px;
+    width: 100%;
+}
+h1, h2, h3 {
+    font-family: var(--font-family-headers);
+    color: var(--color-text-header);
+}
+h1 { font-size: 28px; }
+h2 { font-size: 28px; margin-top: 22px; }
+h3 { font-size: var(--font-size-header); }
+hr {
+    border: none;
+    height: 1px;
+    background-color: #eee;
+    margin: 40px 0;
+}
+.quiz-question { margin-bottom: 40px; }
+.answer-btn {
+    display: block; padding: 15px; margin: 10px 0;
+    background-color: var(--color-btn-normal-bg);
+    border: 2px solid var(--color-btn-normal-border);
+    border-radius: 8px; cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    font-family: var(--font-family-text); font-size: var(--font-size-text);
+    font-weight: 500;
+}
+.answer-btn:hover {
+    background-color: var(--color-btn-hover-bg);
+    border-color: var(--color-primary-accent);
+    transform: translateY(-2px);
+}
+.answer-btn.correct {
+    background-color: var(--color-btn-correct-bg);
+    border-color: var(--color-btn-correct-border);
+    color: var(--color-btn-correct-text);
+}
+.answer-btn.incorrect {
+    background-color: var(--color-btn-incorrect-bg);
+    border-color: var(--color-btn-incorrect-border);
+    color: var(--color-btn-incorrect-text);
+}
+.explanation {
+    margin-top: 20px; padding: 15px;
+    background-color: var(--color-explanation-bg);
+    border-left: 5px solid var(--color-explanation-border);
+    border-radius: 5px;
+}
+
+pre {
+  background-color: #2d2d2d;         /* Фон для всієї "коробки" */
+  color: #f8f8f2;                    /* Колір тексту всередині */
+  font-family: var(--font-family-code); /* Наш кодовий шрифт */
+  font-size: 0.9em;                   /* Трохи менший розмір */
+  padding: 15px;                      /* Внутрішні відступи */
+  border-radius: 5px;                 /* Округлені куточки */
+  white-space: pre-wrap;              /* Дозволяємо перенос рядків */
+  word-wrap: break-word;              /* Дозволяємо розрив довгих слів */
+  overflow-x: auto;                   /* Горизонтальний скрол про всяк випадок */
+}
+
+.quiz-question {
+    display: none; /* Ховаємо всі питання за замовчуванням */
+}
+
+.quiz-question.active {
+    display: block; /* Показуємо тільки активне питання */
+}
+
+.quiz-navigation {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.quiz-navigation button {
+    padding: 10px 20px;
+    border: 2px solid var(--color-primary-accent, #007bff);
+    background-color: white;
+    color: var(--color-primary-accent, #007bff);
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.quiz-navigation button:hover {
+    background-color: var(--color-primary-accent, #007bff);
+    color: white;
+}
+
+.quiz-navigation button:disabled {
+    border-color: #ccc;
+    color: #ccc;
+    cursor: not-allowed;
+    background-color: #f7f7f7;
+}
+
+/* --- Стилі для навігації --- */
+.main-nav {
+  width: 100%;
+  background-color: var(--color-text-header);
+  padding: 10px 0;
+  margin-bottom: 30px;
+  border-radius: 8px;
+}
+
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.main-nav .nav-link {
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: var(--color-background);
+  font-family: var(--font-family-headers);
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+/* Стиль для активного посилання в меню */
+.main-nav .nav-link.active,
+.main-nav .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.module-container {
+  /* --- ОСЬ ЦЕ ГОЛОВНИЙ РЯДОК --- */
+  background-color: rgba(254, 255, 230, 0.3); /* Білий колір з 85% непрозорості */
+
+  /* Змінимо колір тексту на темний, щоб він добре читався на світлій підкладці */
+  color: #2c2c2c;
+
+  border-radius: 10px; /* Залишимо заокруглені кутки */
+  padding: 25px 40px;  /* Трохи збільшимо внутрішні відступи */
+  margin: 30px auto;   /* Відступи між модулями, якщо їх буде кілька на сторінці */
+  max-width: 900px;    /* Обмеження ширини для комфортного читання */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Додамо легку тінь, щоб "відірвати" блок від фону */
+
+  display: none; /* Залишаємо, бо за замовчуванням модулі приховані */
+}
+/* Показуємо тільки активний модуль (з НАЙВИЩИМ пріоритетом) */
+body .module-container.active {
+  display: block !important; /* <-- НАШ ГОЛОВНИЙ ІНСТРУМЕНТ */
+}
+
+/* --- Стилі для нового стартового екрану --- */
+
+/* --- Стилі для стартового екрану з деревом праворуч --- */
+
+/* --- Новий підхід до фонового зображення --- */
+
+.hero-image {
+  position: fixed; /* <--- Ключова зміна: прибиваємо до вікна браузера */
+  top: 0;
+  left: 0;
+  width: 100vw;    /* <--- Ключова зміна: 100% ширини вікна */
+  height: 100vh;   /* <--- Ключова зміна: 100% висоти вікна */
+
+  object-fit: cover; /* Залишаємо, щоб картинка гарно масштабувалась */
+  z-index: -1;     /* Залишаємо, щоб була на задньому плані */
+  filter: brightness(0.8); /* Затемнення теж залишаємо */
+}
+
+#hero-section {
+  /* Цей блок тепер просто контейнер для контенту, він не контролює фон */
+  width: 100%;
+  height: 100vh; /* Залишаємо, щоб він займав весь екран по висоті */
+
+  /* Всі стилі для центрування контенту залишаються */
+  position: relative; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+}
+
+/* Стилі для #quote-text та .module-links-container залишаються без змін */
+
+#quote-text {
+  position: absolute;
+  top: 25%;             /* <--- Можеш погратись (20%, 30%) */
+  left: 45%;            /* <--- Зміщуємо трохи вліво, бо дерево тепер справа */
+  transform: translateX(-50%); 
+  
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8em;
+  font-style: serif;
+  max-width: 600px;
+  width: 90%;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+.module-links-container {
+    position: absolute;
+    top: 57%;           /* <--- Посунемо нижче, під символ QA */
+    left: 68.5%;          /* <--- Зміщуємо вправо, в зону стовбура (бо дерево справа) */
+    transform: translateX(-50%);
+    width: 30%;         /* <--- Робимо сам контейнер вужчим */
+    max-width: 400px;   /* <--- Обмежуємо максимальну ширину */
+    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 15px; /* 10px по вертикалі, 15px по горизонталі */
+}
+
+.module-link {
+  font-family: 'Ginzel', serif;
+  color: white;
+  text-decoration: none;
+  font-size: 1.1em;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.module-link:hover {
+  opacity: 1;
+  text-shadow: 0 0 8px #fff, 0 0 15px #fff;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+
+  /* ... твої існуючі стилі для #quote-text та .hero-image ... */
+  .hero-image {
+    object-position: left center; /* <--- ОСЬ ЦЯ МАГІЯ */
+  }
+
+  .module-links-container {
+    position: static;
+    transform: none;
+    width: 60%;
+    margin-top: 0px;
+
+    /* --- НОВІ СТИЛІ ДЛЯ СТОВПЧИКА --- */
+    display: flex;
+    flex-direction: column; /* <--- Головна команда: "Стати в стовпчик!" */
+    align-items: center;   /* <--- Центруємо елементи по горизонталі */
+    gap: 15px;             /* <--- Відстань між кнопками-порталами */
+  }
+
+  .module-link {
+    font-size: 1.1em; /* Можна зробити трохи більшими для зручності натискання */
+    text-align: center;
+    width: 180%; /* Задаємо ширину, щоб вони були однакові */
+    max-width: 350px; /* Обмежуємо, щоб не були занадто широкими */
+    padding: 0px;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Додамо ледь помітну рамку */
+    border-radius: 8px; /* Заокруглимо кутки */
+    background-color: rgba(13 32 44 / 30%); /* Ледь помітний фон для кращої читабельності */
+  }
+  
+}
