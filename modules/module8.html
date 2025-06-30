@@ -1,0 +1,49 @@
+
+    <h1>Модуль 8: Просунутий Selenium</h1>
+    <p>Тепер, коли ми маємо стабільний сайт і професійний фреймворк, ми можемо поєднати ці знання і вивести нашу UI-автоматизацію на новий рівень.</p>
+
+    <h3><i class="fa-solid fa-hourglass-half"></i> Проблема "Стану гонитви" (Race Condition)</h3>
+    <p>Найпоширеніша проблема в UI-тестах: наш Selenium-скрипт працює значно швидше, ніж реагує веб-сторінка. Він намагається знайти кнопку, яка ще не встигла з'явитись після кліку. Це призводить до помилки `NoSuchElementException`.</p>
+
+    <h3><i class="fa-solid fa-clock"></i> Рішення: "Розумні" очікування (`WebDriverWait`)</h3>
+    <p>Ми не використовуємо "сліпі" паузи `time.sleep()`. Замість цього ми кажемо Selenium: "Будь ласка, почекай до 10 секунд, поки не виконається певна умова". Це робиться за допомогою `WebDriverWait` та `expected_conditions`.</p>
+    <pre><code>
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+# Створюємо об'єкт очікування
+wait = WebDriverWait(driver, 10)
+
+# Приклад: чекаємо, поки елемент стане видимим, і лише потім беремо його текст
+header_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "h1")))
+header_text = header_element.text
+    </code></pre>
+    <p>Це робить наші тести стабільними і надійними, бо вони адаптуються до швидкості роботи сайту.</p>
+    
+    <hr>
+    <h2>Інтерактивний Тест до Модуля 8</h2>
+    <div class="quiz-container">
+        <div class="quiz-questions-wrapper">
+            <div class="quiz-question">
+                <h3>Що таке "Race Condition" в UI-автоматизації?</h3>
+                <div class="answers-container">
+                    <div class="answer-btn" data-correct="false">Коли два тести запускаються одночасно.</div>
+                    <div class="answer-btn" data-correct="true">Коли тест намагається взаємодіяти з елементом, який ще не завантажився.</div>
+                    <div class="answer-btn" data-correct="false">Помилка в дизайні сайту.</div>
+                </div>
+            </div>
+             <div class="quiz-question">
+                <h3>Який інструмент є професійним рішенням для боротьби з "Race Condition"?</h3>
+                <div class="answers-container">
+                    <div class="answer-btn" data-correct="false">time.sleep(10)</div>
+                    <div class="answer-btn" data-correct="false">Перезапуск тесту</div>
+                    <div class="answer-btn" data-correct="true">WebDriverWait з Expected Conditions</div>
+                </div>
+            </div>
+        </div>
+        <div class="quiz-navigation">
+            <button class="prev-question" disabled>&lt; Назад</button>
+            <span class="question-counter">Питання 1 / N</span>
+            <button class="next-question">Вперед &gt;</button>
+        </div>
+    </div>

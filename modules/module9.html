@@ -1,0 +1,114 @@
+<h1>Модуль 9: Магія Pytest (Фікстури та Conftest.py)</h1>
+<p>
+    Написати тест — це половина справи. Професійний тест має бути чистим, читабельним і не повторювати код. У цьому модулі ми опануємо найпотужніший інструмент `pytest` — фікстури, які дозволяють елегантно вирішувати задачі підготовки та очищення тестового середовища.
+</p>
+
+<h3><i class="fa-solid fa-wand-magic-sparkles"></i> Проблема: Повторення коду (WET)</h3>
+<p>
+    Уявіть, що у нас є 10 тестів, і кожен з них потребує запуску браузера перед початком і його закриття після завершення. Писати цей код в кожному тесті — погана ідея. Це порушує принцип <strong>DRY (Don't Repeat Yourself)</strong>. Нам потрібен спосіб "винести" цю логіку в одне місце.
+</p>
+
+<h3><i class="fa-solid fa-wand-magic-sparkles"></i> Рішення: Фікстури (@pytest.fixture)</h3>
+<p>
+    <strong>Фікстура</strong> — це функція, яка готує для тесту певні дані або стан системи (наприклад, створює об'єкт драйвера, підключається до бази даних) і, за потреби, виконує очищення після тесту.
+</p>
+<p>Ось як ми створили нашу фікстуру `driver`, яка робить всю "брудну" роботу за нас:</p>
+<pre><code>
+# Декоратор, який перетворює функцію на фікстуру
+@pytest.fixture
+def driver():
+    # --- Фаза 1: Підготовка (Setup) ---
+    # Цей код виконується ПЕРЕД кожним тестом, що використовує фікстуру
+    driver_service = ChromeService(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=driver_service)
+    driver.maximize_window()
+    
+    # --- Фаза 2: Виконання тесту ---
+    # Ключове слово 'yield' передає готовий 'driver' у тест
+    yield driver
+    
+    # --- Фаза 3: Очищення (Teardown) ---
+    # Цей код виконується ПІСЛЯ кожного тесту, що використовує фікстуру
+    driver.quit()
+</code></pre>
+
+<h3><i class="fa-solid fa-wand-magic-sparkles"></i> "Чарівний" файл: conftest.py</h3>
+<p>
+    Але де зберігати фікстури, щоб їх бачили всі тести? Для цього `pytest` має спеціальний файл — <strong>`conftest.py`</strong>. Його не потрібно нікуди імпортувати. Просто створіть його в папці `tests`, і `pytest` автоматично знайде його і зробить усі фікстури з нього доступними для всіх тестів у цій папці.
+</p>
+<p>
+    Перемістивши нашу фікстуру `driver` у `conftest.py`, ми зробили наш тестовий файл набагато чистішим, адже він тепер містить лише логіку самого тесту:
+</p>
+<pre><code>
+# tests/test_navigation.py
+
+# Зверніть увагу: тут немає коду для створення драйвера!
+
+def test_full_navigation_flow(driver): # Тест просто просить 'driver' як аргумент
+    # І pytest магічним чином надає його з conftest.py
+    driver.get("http://localhost:8000")
+    # ... далі логіка тесту
+</code></pre>
+
+<hr>
+
+<h2>Інтерактивний Тест до Модуля 9</h2>
+<div class="quiz-container">
+    <div class="quiz-questions-wrapper">
+        
+        <div class="quiz-question">
+            <h3>Яка головна мета фікстур у pytest?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Щоб прискорити виконання тестів.</div>
+                <div class="answer-btn" data-correct="true">Щоб перевикористовувати код підготовки (setup) та очищення (teardown).</div>
+                <div class="answer-btn" data-correct="false">Щоб писати звіти про тестування.</div>
+            </div>
+            <div class="explanation" style="display: none;">
+                <p><i class="fa-solid fa-otter"></i> Фікстури дозволяють винести логіку, яка повторюється (створення драйвера, підключення до БД), в одне місце, слідуючи принципу DRY (Don't Repeat Yourself).</p>
+            </div>
+        </div>
+
+        <div class="quiz-question">
+            <h3>Як тест отримує доступ до фікстури?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="true">Вказуючи ім'я фікстури як аргумент у тестовій функції.</div>
+                <div class="answer-btn" data-correct="false">Імпортуючи фікстуру з іншого файлу.</div>
+                <div class="answer-btn" data-correct="false">Викликаючи фікстуру як звичайну функцію всередині тесту.</div>
+            </div>
+            <div class="explanation" style="display: none;">
+                <p><i class="fa-solid fa-otter"></i> Pytest автоматично знаходить фікстуру за її іменем і передає результат її виконання (те, що до `yield`) в тест як аргумент. Це називається "dependency injection".</p>
+            </div>
+        </div>
+
+        <div class="quiz-question">
+            <h3>Що робить ключове слово `yield` всередині фікстури?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Негайно завершує виконання фікстури.</div>
+                <div class="answer-btn" data-correct="false">Повертає випадкове значення.</div>
+                <div class="answer-btn" data-correct="true">Передає об'єкт у тест і виконує код після себе після завершення тесту.</div>
+            </div>
+            <div class="explanation" style="display: none;">
+                <p><i class="fa-solid fa-otter"></i> `yield` — це серце фікстури. Код до `yield` — це setup. Код після `yield` — це teardown (очищення), який гарантовано виконається, навіть якщо тест впаде.</p>
+            </div>
+        </div>
+
+        <div class="quiz-question">
+            <h3>В якому файлі прийнято зберігати спільні для всього проєкту фікстури?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">test_fixtures.py</div>
+                <div class="answer-btn" data-correct="true">conftest.py</div>
+                <div class="answer-btn" data-correct="false">utils.py</div>
+            </div>
+            <div class="explanation" style="display: none;">
+                <p><i class="fa-solid fa-otter"></i> `conftest.py` — це спеціальне ім'я файлу, яке `pytest` автоматично розпізнає і завантажує з нього фікстури, роблячи їх глобально доступними для тестів без необхідності імпортів.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="quiz-navigation">
+        <button class="prev-question" disabled>&lt; Назад</button>
+        <span class="question-counter">Питання 1 / N</span>
+        <button class="next-question">Вперед &gt;</button>
+    </div>
+</div>

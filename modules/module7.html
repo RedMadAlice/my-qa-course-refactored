@@ -1,0 +1,64 @@
+
+    <h1>Модуль 7: Pytest — Професійний Підхід до Тестів</h1>
+    <p>Коли тестів стає багато, запускати їх по одному незручно. Нам потрібен фреймворк, який автоматизує запуск тестів та надає зручні звіти. Найпопулярніший фреймворк для Python — це `pytest`.</p>
+    
+    <h3><i class="fa-solid fa-magic-wand-sparkles"></i> Основи Pytest: Автоматичний пошук</h3>
+    <p>`pytest` сам знаходить і запускає тести, якщо дотримуватись простих правил:</p>
+    <ul>
+        <li>Назви файлів з тестами мають починатись з `test_` (напр., `test_api.py`).</li>
+        <li>Назви функцій з тестами всередині цих файлів теж мають починатись з `test_` (напр., `def test_status_code():`).</li>
+    </ul>
+    <p>Після цього достатньо в терміналі написати одну команду, і `pytest` зробить всю роботу:</p>
+    <pre><code>pytest -v</code></pre>
+
+    <h3><i class="fa-solid fa-key"></i> Фікстури: Уникаємо повторення коду (DRY)</h3>
+    <p>Фікстури — це найпотужніша риса `pytest`. Це функції, які готують дані або стан для наших тестів. Якщо кілька тестів роблять одну й ту саму підготовчу дію (наприклад, роблять API-запит), ми можемо винести цю дію в фікстуру.</p>
+    <pre><code>
+import pytest
+import requests
+
+# Створюємо фікстуру, яка робить запит
+@pytest.fixture
+def api_response():
+    response = requests.get("https://.../users/1")
+    return response
+
+# Тепер тести можуть "просити" цю фікстуру
+def test_status_code(api_response):
+    assert api_response.status_code == 200
+
+def test_user_name(api_response):
+    assert api_response.json()["name"] == "Leanne Graham"
+    </code></pre>
+    
+    <h3><i class="fa-solid fa-file-invoice"></i> HTML-звіти</h3>
+    <p>За допомогою плагіну `pytest-html` ми можемо створювати красиві звіти про результати наших тестів. Після встановлення (`pip install pytest-html`), тести запускаються командою:</p>
+    <pre><code>pytest --html=report.html</code></pre>
+    
+    <hr>
+    <h2>Інтерактивний Тест до Модуля 7</h2>
+    <div class="quiz-container">
+        <div class="quiz-questions-wrapper">
+            <div class="quiz-question">
+                <h3>Як має називатись функція, щоб `pytest` вважав її тестом?</h3>
+                <div class="answers-container">
+                    <div class="answer-btn" data-correct="false">run_my_test()</div>
+                    <div class="answer-btn" data-correct="true">test_something()</div>
+                    <div class="answer-btn" data-correct="false">MyTestFunction()</div>
+                </div>
+            </div>
+            <div class="quiz-question">
+                <h3>Що таке фікстура в `pytest`?</h3>
+                <div class="answers-container">
+                    <div class="answer-btn" data-correct="true">Функція для підготовки даних або стану перед тестом.</div>
+                    <div class="answer-btn" data-correct="false">Помилка в тесті.</div>
+                    <div class="answer-btn" data-correct="false">Фінальний звіт про тестування.</div>
+                </div>
+            </div>
+        </div>
+        <div class="quiz-navigation">
+            <button class="prev-question" disabled>&lt; Назад</button>
+            <span class="question-counter">Питання 1 / N</span>
+            <button class="next-question">Вперед &gt;</button>
+        </div>
+    </div>

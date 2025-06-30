@@ -1,0 +1,67 @@
+
+    <h1>Модуль 6: Тестування API — Запити до "Серця" Програми</h1>
+    <p>Ми переходимо від тестування видимого інтерфейсу (UI) до тестування "мозку" додатку — його API. Якщо UI — це зал ресторану, то API — це кухня, куди ми будемо робити замовлення напряму. Для цього ми використовуємо потужну бібліотеку Python — `requests`.</p>
+
+    <h3><i class="fa-solid fa-server"></i> Основи API: CRUD та HTTP-методи</h3>
+    <p>В основі більшості API лежить концепція CRUD (Create, Read, Update, Delete), яка реалізується через HTTP-методи:</p>
+    <ul>
+        <li><strong>Create (Створити):</strong> Метод `POST`. Відправляємо дані на сервер для створення нового об'єкта.</li>
+        <li><strong>Read (Прочитати):</strong> Метод `GET`. Запитуємо існуючі дані з сервера.</li>
+        <li><strong>Update (Оновити):</strong> Метод `PUT`. Повністю замінюємо існуючий об'єкт новими даними.</li>
+        <li><strong>Delete (Видалити):</strong> Метод `DELETE`. Видаляємо об'єкт з сервера.</li>
+    </ul>
+
+    <h3><i class="fa-solid fa-key"></i> Аутентифікація: API-ключі</h3>
+    <p>Більшість API захищені. Найпростіший спосіб аутентифікації — це API-ключ. Це унікальний "пропуск", який ми додаємо до наших запитів, щоб сервер знав, хто ми, і чи є у нас дозвіл на отримання даних.</p>
+    <pre><code>
+# Приклад передачі ключа як параметра запиту
+api_key = "ВАШ_СЕКРЕТНИЙ_КЛЮЧ"
+params = {
+  "q": "Kyiv",
+  "appid": api_key 
+}
+response = requests.get("https://api.openweathermap.org/...", params=params)
+    </code></pre>
+
+    <h3><i class="fa-solid fa-traffic-light"></i> Коди статусу HTTP</h3>
+    <p>Кожна відповідь від сервера містить код статусу, який показує результат операції:</p>
+    <ul>
+        <li><strong>2xx (Успіх):</strong> `200 OK` (Все добре), `201 Created` (Створено новий ресурс).</li>
+        <li><strong>4xx (Помилка клієнта):</strong> `400 Bad Request` (Неправильний запит), `401 Unauthorized` (Проблема з ключем), `404 Not Found` (Не знайдено).</li>
+        <li><strong>5xx (Помилка сервера):</strong> `500 Internal Server Error` (Щось зламалось на сервері).</li>
+    </ul>
+    <hr>
+    <h2>Інтерактивний Тест до Модуля 6</h2>
+    <div class="quiz-container">
+        <div class="quiz-questions-wrapper">
+            <div class="quiz-question">
+                <h3>Який HTTP-метод використовується для СТВОРЕННЯ нового ресурсу?</h3>
+                <div class="answers-container">
+                    <div class="answer-btn" data-correct="false">GET</div>
+                    <div class="answer-btn" data-correct="true">POST</div>
+                    <div class="answer-btn" data-correct="false">PUT</div>
+                </div>
+            </div>
+            <div class="quiz-question">
+                <h3>Що означає статус-код `401 Unauthorized`?</h3>
+                <div class="answers-container">
+                    <div class="answer-btn" data-correct="true">Проблема з аутентифікацією (неправильний або неактивний API-ключ).</div>
+                    <div class="answer-btn" data-correct="false">Ресурс не знайдено.</div>
+                    <div class="answer-btn" data-correct="false">Запит виконано успішно.</div>
+                </div>
+            </div>
+            <div class="quiz-question">
+                <h3>Яку бібліотеку Python ми використовували для роботи з API?</h3>
+                <div class="answers-container">
+                    <div class="answer-btn" data-correct="false">Selenium</div>
+                    <div class="answer-btn" data-correct="false">Pytest</div>
+                    <div class="answer-btn" data-correct="true">Requests</div>
+                </div>
+            </div>
+        </div>
+        <div class="quiz-navigation">
+            <button class="prev-question" disabled>&lt; Назад</button>
+            <span class="question-counter">Питання 1 / N</span>
+            <button class="next-question">Вперед &gt;</button>
+        </div>
+    </div>

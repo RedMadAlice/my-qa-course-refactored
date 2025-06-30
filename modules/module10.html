@@ -1,0 +1,97 @@
+<h1>Модуль 10: Мистецтво Дебагінгу Автотестів</h1>
+<p>
+    Жоден автотест не пишеться ідеально з першого разу. Справжня майстерність автоматизатора — не в уникненні помилок, а в умінні швидко їх знаходити та "лікувати". У цьому модулі ми розберемо реальні помилки, з якими ми зіткнулися, і перетворимо їх на безцінний досвід.
+</p>
+
+<h3><i class="fa-solid fa-bug-slash"></i> Помилка №1: `NoSuchElementException`</h3>
+<p>
+    <strong>Симптом:</strong> Тест падає з повідомленням, що не може знайти елемент, хоча ви точно знаєте, що він є на сторінці.
+</p>
+<p>
+    <strong>Діагноз:</strong> Це класичний "стан гонитви" (Race Condition). Ваш скрипт на Python працює швидше, ніж браузер встигає завантажити та відмалювати всі елементи сторінки. Скрипт шукає кнопку, коли її ще фізично немає на екрані.
+</p>
+<p>
+    <strong>Ліки:</strong> "Розумні" очікування (Explicit Waits). Замість того, щоб шукати елемент одразу, ми даємо команду Selenium чекати до 10 секунд, поки елемент не стане готовим до взаємодії (наприклад, клікабельним).
+</p>
+<pre><code>
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+# Замість driver.find_element(...)
+# ми пишемо:
+wait = WebDriverWait(driver, 10)
+clickable_element = wait.until(
+    EC.element_to_be_clickable((By.ID, "myButton"))
+)
+clickable_element.click()
+</code></pre>
+
+<h3><i class="fa-solid fa-bug-slash"></i> Помилка №2: `AssertionError`</h3>
+<p>
+    <strong>Симптом:</strong> Тест виконує всі дії, але падає на останньому кроці — на рядку `assert`.
+</p>
+<p>
+    <strong>Діагноз:</strong> Це "хороша" помилка! Вона означає, що ваш тест працює правильно і знайшов реальну невідповідність. Фактичний результат роботи сайту не збігся з тим, що ви очікували. Як у нашому випадку, коли ми очікували заголовок "Модуль 1...", а отримали "Незабаром...".
+</p>
+<p>
+    <strong>Ліки:</strong> Аналіз і дебагінг. Потрібно дослідити, чому результат відрізняється. `Pytest` у звіті про помилку завжди показує обидва значення. Корисним інструментом є тимчасовий `print()` перед `assert`, щоб точно побачити, який текст ми отримали зі сторінки.
+</p>
+<pre><code>
+actual_title = course_page.get_module_title_text()
+
+# Тимчасовий рядок для дебагінгу
+print(f"DEBUG: Отримано заголовок: '{actual_title}'")
+
+assert actual_title == expected_title
+</code></pre>
+
+
+<h3><i class="fa-solid fa-bug-slash"></i> Помилка №3: `fixture '...' not found`</h3>
+<p>
+    <strong>Симптом:</strong> Тест не запускається, `pytest` скаржиться, що не може знайти фікстуру.
+</p>
+<p>
+    <strong>Діагноз:</strong> Ваш тест просить надати йому інструмент (фікстуру), але він не знає, де її взяти. Це сталося, коли ми винесли фікстуру `driver` з файлу тесту.
+</p>
+<p>
+    <strong>Ліки:</strong> Централізація фікстур у файлі `conftest.py`. Цей файл є "спільним складом інструментів" для всіх тестів. `pytest` автоматично знаходить його і робить фікстури доступними для всіх тестів у проєкті, вирішуючи проблему раз і назавжди.
+</p>
+
+<hr>
+
+<h2>Інтерактивний Тест до Модуля 10</h2>
+<div class="quiz-container">
+    <div class="quiz-questions-wrapper">
+        
+        <div class="quiz-question">
+            <h3>Ваш тест впав з помилкою `NoSuchElementException`. Що, найімовірніше, сталося?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Неправильний логін або пароль.</div>
+                <div class="answer-btn" data-correct="true">Скрипт спрацював швидше, ніж завантажився елемент на сторінці.</div>
+                <div class="answer-btn" data-correct="false">У вас немає доступу до Інтернету.</div>
+            </div>
+            <div class="explanation" style="display: none;">
+                <p><i class="fa-solid fa-otter"></i> Це класична проблема "стану гонитви" (Race Condition), яку вирішують за допомогою явних очікувань (WebDriverWait).</p>
+            </div>
+        </div>
+
+        <div class="quiz-question">
+            <h3>Якщо тест падає з `AssertionError`, це означає, що:</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">У вашому коді є синтаксична помилка.</div>
+                <div class="answer-btn" data-correct="true">Тест знайшов розбіжність між очікуваним та фактичним результатом.</div>
+                <div class="answer-btn" data-correct="false">Драйвер браузера застарів.</div>
+            </div>
+            <div class="explanation" style="display: none;">
+                <p><i class="fa-solid fa-otter"></i> `AssertionError` — це успіх для тестувальника! Це означає, що тест виконав свою роботу і виявив, що поведінка програми не відповідає вимогам.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="quiz-navigation">
+        <button class="prev-question" disabled>&lt; Назад</button>
+        <span class="question-counter">Питання 1 / N</span>
+        <button class="next-question">Вперед &gt;</button>
+    </div>
+</div>

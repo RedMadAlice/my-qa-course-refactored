@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=Jura:wght@400;700&family=Montserrat:wght@400;500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@0;1&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Playfair+Display+SC&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@400;700&family=Cinzel:wght@700&family=EB+Garamond:wght@400;700&family=Inter:wght@400;500;700&display=swap');
 /* --- Скидання стилів (CSS Reset) --- */
 * {
   margin: 0;
@@ -42,9 +42,9 @@ html, body {
     --color-explanation-border: var(--color-primary-accent);
 
     /* --- Налаштування Шрифтів --- */
-    --font-family-headers: 'Jura', sans-serif;
-    --font-family-text: 'Montserrat', sans-serif;
-    --font-family-code: "Fira Code Light", monospace;
+    --font-family-headers: 'Alegreya Sans SC', sans-serif;
+    --font-family-text: 'Inter', serif;
+    --font-family-code: 'Fira Code Light', monospace;
     --font-size-text: 18px;
     --font-size-header: 22px;
 }
@@ -271,9 +271,9 @@ body .module-container.active {
   left: 45%;            /* <--- Зміщуємо трохи вліво, бо дерево тепер справа */
   transform: translateX(-50%); 
   
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Alegreya Sans SC', sans-serif;
   font-size: 1.8em;
-  font-style: serif;
+  font-style: sans-serif;
   max-width: 600px;
   width: 90%;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
@@ -281,30 +281,33 @@ body .module-container.active {
 
 .module-links-container {
     position: absolute;
-    top: 57%;           /* <--- Посунемо нижче, під символ QA */
-    left: 68.5%;          /* <--- Зміщуємо вправо, в зону стовбура (бо дерево справа) */
+    top: 57%;
+    left: 68.5%;
     transform: translateX(-50%);
-    width: 30%;         /* <--- Робимо сам контейнер вужчим */
-    max-width: 400px;   /* <--- Обмежуємо максимальну ширину */
+    width: 30%;
+    max-width: 400px;
+
+    /* Нові властивості для сітки */
+    display: grid;
+    /* Створити 2 колонки однакової ширини */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 10px 25px; /* 10px по вертикалі, 25px по горизонталі */
     
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px 15px; /* 10px по вертикалі, 15px по горизонталі */
 }
 
 .module-link {
-  font-family: 'Ginzel', serif;
+  font-family: 'Alegreya Sans SC', sans-serif;
   color: white;
   text-decoration: none;
   font-size: 1.1em;
   opacity: 0.7;
   transition: all 0.3s ease;
+  line-height: 1.0; /* Спробуйте значення від 1.1 до 1.4, щоб знайти ідеальне */
 }
 
 .module-link:hover {
   opacity: 1;
-  text-shadow: 0 0 8px #fff, 0 0 15px #fff;
+  text-shadow: 0 0 8px #d4fbff, 0 0 15px #b7fdff;
   transform: scale(1.05);
 }
 
@@ -423,7 +426,7 @@ body .module-container.active {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px);
   z-index: 2000;
   display: flex;
   justify-content: center;
@@ -443,7 +446,7 @@ body .module-container.active {
   position: relative;
   width: 90%;
   max-width: 500px;
-  background-color: rgba(13, 32, 44, 0.85); /* Темний, майже непрозорий фон */
+  background-color: rgba(28, 87, 96, 0.442); /* Темний, майже непрозорий фон */
   color: #FFFFE2;
   padding: 30px;
   border-radius: 10px;
@@ -454,7 +457,7 @@ body .module-container.active {
 }
 
 #blitz-window h3 {
-  font-family: 'Jura', sans-serif;
+  font-family: 'Alegreya Sans SC', sans-serif;
   color: #fff;
   font-size: 24px;
 }
@@ -469,10 +472,10 @@ body .module-container.active {
   width: 100%;
   padding: 12px;
   margin-bottom: 20px;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(37, 62, 58, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 5px;
-  color: #fff;
+  color: #fcfef0;
   font-size: 16px;
   text-align: center;
 }
@@ -483,19 +486,19 @@ body .module-container.active {
 /* Кнопка "Перевірити" */
 #blitz-submit-btn {
   background: none;
-  border: 1px solid #ffd700;
-  color: #ffd700;
+  border: 1px solid #5bb46a;
+  color: #5bb46a;
   padding: 10px 25px;
   border-radius: 5px;
   cursor: pointer;
-  font-family: 'Jura', sans-serif;
+  font-family: 'Alegreya Sans SC', sans-serif;
   font-size: 16px;
   transition: all 0.3s ease;
 }
 #blitz-submit-btn:hover {
-  background-color: #ffd700;
-  color: #134611;
-  box-shadow: 0 0 15px #ffd700;
+  background-color: #5bb46a;
+  color: #13461181;
+  box-shadow: 0 0 15px #5bb46a;
 }
 
 /* Кнопка закриття (хрестик) */
@@ -505,7 +508,7 @@ body .module-container.active {
     right: 15px;
     background: none;
     border: none;
-    color: #fff;
+    color: #fcfef0;
     font-size: 28px;
     cursor: pointer;
     opacity: 0.7;
@@ -533,21 +536,21 @@ body .module-container.active {
     width: 100%;
     max-width: 350px; /* Обмежуємо ширину, щоб не розтягувався */
 
-    background-color: rgba(13, 32, 44, 0.75);
+    background-color: rgba(22, 77, 103, 0.304);
     color: #FFFFE2;
     padding: 20px;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(64, 112, 131, 0.2);
     backdrop-filter: blur(5px);
     text-align: center;
-    font-family: var(--font-family-text);
+    font-family: 'Alegreya Sans SC', sans-serif;
 }
 
 #blitz-widget h4 {
     margin-top: 0;
-    font-family: var(--font-family-headers);
+    font-family: 'Alegreya Sans SC', sans-serif;
     color: #fff;
-    font-size: 20px;
+    font-size: 18px;
     margin-bottom: 15px;
 }
 
@@ -561,7 +564,7 @@ body .module-container.active {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(18, 75, 103, 0.225);
     border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 5px;
     color: #fff;
@@ -575,20 +578,20 @@ body .module-container.active {
 #blitz-widget #blitz-submit-btn {
   /* Стилі для кнопки залишаються майже такими ж */
   background: none;
-  border: 1px solid #ffd700;
-  color: #ffd700;
+  border: 1px solid #7acce3;
+  color: #7acce3;
   padding: 10px 25px;
   border-radius: 5px;
   cursor: pointer;
-  font-family: 'Jura', sans-serif;
+  font-family: 'Alegreya Sans SC', sans-serif;
   font-size: 16px;
   transition: all 0.3s ease;
   width: 100%; /* Розтягнемо на всю ширину віджета */
 }
 #blitz-widget #blitz-submit-btn:hover {
-    background-color: #ffd700;
+    background-color: #7acce3;
     color: #134611;
-    box-shadow: 0 0 15px #ffd700;
+    box-shadow: 0 0 15px #7acce3;
 }
 
 #blitz-widget #blitz-feedback {
