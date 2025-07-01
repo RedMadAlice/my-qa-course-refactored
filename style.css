@@ -416,186 +416,136 @@ body .module-container.active {
     transform: scale(1.1);
 }
 
-/* --- СТИЛІ ДЛЯ ВІКНА БЛІЦ-ПИТАННЯ --- */
+/* --- СТИЛІ ДЛЯ АНІМОВАНОГО ВІДЖЕТУ --- */
 
-/* Напівпрозорий фон на всю сторінку */
-#blitz-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
-  z-index: 2000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-#blitz-overlay:not(.hidden) {
-  opacity: 1;
-  pointer-events: all;
-}
-
-/* Саме вікно */
-#blitz-window {
-  position: relative;
-  width: 90%;
-  max-width: 500px;
-  background-color: rgba(28, 87, 96, 0.442); /* Темний, майже непрозорий фон */
-  color: #FFFFE2;
-  padding: 30px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
-  text-align: center;
-  font-family: var(--font-family-text);
-}
-
-#blitz-window h3 {
-  font-family: 'Alegreya Sans SC', sans-serif;
-  color: #fff;
-  font-size: 24px;
-}
-
-#blitz-window p {
-  font-size: 18px;
-  margin: 15px 0;
-}
-
-/* Поле для вводу */
-#blitz-answer-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
-  background-color: rgba(37, 62, 58, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 5px;
-  color: #fcfef0;
-  font-size: 16px;
-  text-align: center;
-}
-#blitz-answer-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-/* Кнопка "Перевірити" */
-#blitz-submit-btn {
-  background: none;
-  border: 1px solid #5bb46a;
-  color: #5bb46a;
-  padding: 10px 25px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: 'Alegreya Sans SC', sans-serif;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-#blitz-submit-btn:hover {
-  background-color: #5bb46a;
-  color: #13461181;
-  box-shadow: 0 0 15px #5bb46a;
-}
-
-/* Кнопка закриття (хрестик) */
-#blitz-close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: none;
-    border: none;
-    color: #fcfef0;
-    font-size: 28px;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
-}
-#blitz-close-btn:hover {
-    opacity: 1;
-}
-
-/* Відгук про відповідь */
-#blitz-feedback {
-    margin-top: 15px;
-    font-weight: bold;
-    min-height: 24px;
-}
-
-/* --- СТИЛІ ДЛЯ ВІДЖЕТУ БЛІЦ-ПИТАННЯ --- */
 #blitz-widget {
-    position: absolute; /* Позиціонування відносно батьківського .hero-content */
-
-    /* Ось тут ви будете гратись в F12, щоб знайти ідеальне місце! */
-    bottom: 30px; 
-    left: 30px;
-
+    position: absolute;
+    top: 50px;
+    left: 50px;
     width: 100%;
-    max-width: 350px; /* Обмежуємо ширину, щоб не розтягувався */
-
-    background-color: rgba(22, 77, 103, 0.304);
-    color: #FFFFE2;
+    max-width: 320px; /* Зробимо його трохи вужчим */
+    background-color: rgba(44, 82, 49, 0.211);
     padding: 20px;
     border-radius: 8px;
-    border: 1px solid rgba(64, 112, 131, 0.2);
+    border: 1px solid rgba(86, 155, 96, 0.219);
     backdrop-filter: blur(5px);
-    text-align: center;
-    font-family: 'Alegreya Sans SC', sans-serif;
-}
-
-#blitz-widget h4 {
-    margin-top: 0;
-    font-family: 'Alegreya Sans SC', sans-serif;
-    color: #fff;
-    font-size: 18px;
-    margin-bottom: 15px;
 }
 
 #blitz-widget p {
-    font-size: 16px;
-    margin: 10px 0;
-    min-height: 40px; /* Резервуємо місце, щоб віджет не "стрибав" */
+    font-family: 'Alegreya Sans SC', sans-serif;
+    font-size: 1.1em;
+    text-align: center;
+    min-height: 50px;
+    margin-bottom: 15px;
+}
+
+/* Обгортка для поля вводу та кнопки */
+.answer-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 #blitz-widget #blitz-answer-input {
-    width: 100%;
+    flex-grow: 1; /* Поле займає весь доступний простір */
     padding: 10px;
-    margin-bottom: 15px;
-    background-color: rgba(18, 75, 103, 0.225);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    background-color: rgba(29, 56, 48, 0.211);
+    border: 1px solid rgba(32, 59, 44, 0.211);
     border-radius: 5px;
-    color: #fff;
+    color: #98d3c0;
     font-size: 16px;
-    text-align: center;
-}
-#blitz-widget #blitz-answer-input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
 }
 
+/* Нова кнопка-іконка */
 #blitz-widget #blitz-submit-btn {
-  /* Стилі для кнопки залишаються майже такими ж */
-  background: none;
-  border: 1px solid #7acce3;
-  color: #7acce3;
-  padding: 10px 25px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: 'Alegreya Sans SC', sans-serif;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  width: 100%; /* Розтягнемо на всю ширину віджета */
+    flex-shrink: 0; /* Кнопка не буде стискатись */
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: 1px solid #285547;
+    color: #285547;
+    border-radius: 50%; /* Робимо її круглою */
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    display: grid;
+    place-items: center;
 }
 #blitz-widget #blitz-submit-btn:hover {
-    background-color: #7acce3;
-    color: #134611;
-    box-shadow: 0 0 15px #7acce3;
+    background-color: #285547;
+    color: #285547;
+    transform: scale(1.1);
 }
 
-#blitz-widget #blitz-feedback {
-    margin-top: 15px;
-    font-weight: bold;
-    min-height: 22px;
+/* --- Змінюємо колір тексту запитання у віджеті --- */
+#blitz-question-text {
+    color: #285547; /* <--- Замініть цей колір на бажаний */
+}
+
+/* --- Анімації --- */
+
+/* 1. Стилі для анімованих елементів (поки вони приховані) */
+#animated-bird, #animated-spider {
+    position: fixed;
+    z-index: 3000;
+    font-size: 30px;
+    color: #285547;
+    text-shadow: 0 0 10px #285547;
+    pointer-events: none; /* Щоб не можна було клікнути */
+    opacity: 0; /* Повністю прозорі */
+    transition: opacity 0.2s ease;
+}
+
+/* 2. Анімація польоту пташки */
+@keyframes fly-away-animation {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        /* Рухаємо вправо і вгору, ніби до дерева */
+        transform: translate(40vw, -60vh) scale(0.3); 
+    }
+}
+
+.fly-away {
+    animation: fly-away-animation 2s ease-in forwards;
+}
+
+/* 3. Анімація падіння павука */
+@keyframes drop-down-animation {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(150px); /* Падає вниз на 150px */
+    }
+}
+
+.drop-down {
+    animation: drop-down-animation 1.5s ease-in-out forwards;
+}
+
+/* --- Кастомні стилі для поля вводу віджета --- */
+
+/* 1. Стиль при активності (коли ви клікаєте на поле) */
+#blitz-widget #blitz-answer-input:focus {
+    outline: none; /* Забираємо стандартну обводку браузера */
+    border-color: #165f53; /* Робимо колір рамки золотим, як у кнопки */
+    box-shadow: 0 0 10px rgba(12, 96, 102, 0.5); /* Додаємо м'яке золоте світіння */
+}
+
+/* 2. Стиль для ПРАВИЛЬНОЇ відповіді */
+#blitz-widget #blitz-answer-input.correct-answer {
+    border-color: #18694d; /* Спокійний зелений колір */
+    box-shadow: 0 0 10px rgba(10, 49, 26, 0.5); /* Зелене світіння */
+}
+
+/* 3. Стиль для НЕПРАВИЛЬНОЇ відповіді */
+#blitz-widget #blitz-answer-input.incorrect-answer {
+    border-color: #794518; /* Глибокий помаранчевий замість червоного */
+    box-shadow: 0 0 10px rgba(107, 58, 15, 0.5); /* Помаранчеве світіння */
 }

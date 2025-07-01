@@ -157,31 +157,27 @@ sidebarModuleLinks.forEach(link => {
 });
 
 
-// --- ЛОГІКА ДЛЯ ВІДЖЕТУ БЛІЦ-ПИТАННЯ ---
+// --- ЛОГІКА ДЛЯ АНІМОВАНОГО ВІДЖЕТУ ---
 
 const blitzQuestionText = document.getElementById('blitz-question-text');
 const blitzAnswerInput = document.getElementById('blitz-answer-input');
 const blitzSubmitBtn = document.getElementById('blitz-submit-btn');
-const blitzFeedback = document.getElementById('blitz-feedback');
+const animatedBird = document.getElementById('animated-bird');
+const animatedSpider = document.getElementById('animated-spider');
 
 let blitzQuestions = [];
 let currentBlitzAnswer = "";
+let isChecking = false; // Прапорець, щоб уникнути подвійних кліків
 
-// Функція, яка завантажує нове випадкове питання у віджет
 function loadNewBlitzQuestion() {
-    if (blitzQuestions.length === 0) {
-        blitzQuestionText.textContent = "Не вдалося завантажити питання.";
-        return;
-    }
+    if (blitzQuestions.length === 0) return;
     
-    // Скидаємо все до початкового стану
-    blitzFeedback.textContent = "";
     blitzAnswerInput.value = "";
     blitzAnswerInput.style.borderColor = "";
     blitzAnswerInput.disabled = false;
     blitzSubmitBtn.disabled = false;
+    isChecking = false;
 
-    // Вибираємо і показуємо нове питання
     const randomIndex = Math.floor(Math.random() * blitzQuestions.length);
     const randomQuestion = blitzQuestions[randomIndex];
     
@@ -189,41 +185,64 @@ function loadNewBlitzQuestion() {
     blitzQuestionText.textContent = randomQuestion.question;
 }
 
-// Функція для перевірки відповіді
 function checkBlitzAnswer() {
+    if (isChecking) return;
     const userAnswer = blitzAnswerInput.value.trim().toLowerCase();
+    if (!userAnswer) return;
 
-    if (!userAnswer) return; // Нічого не робити, якщо поле пусте
+    isChecking = true;
+    blitzAnswerInput.disabled = true;
+    blitzSubmitBtn.disabled = true;
+
+    const btnRect = blitzSubmitBtn.getBoundingClientRect();
+
+    // Видаляємо класи перед новою перевіркою
+    blitzAnswerInput.classList.remove('correct-answer', 'incorrect-answer');
 
     if (userAnswer === currentBlitzAnswer) {
-        blitzFeedback.textContent = "Правильно! Наступне питання...";
-        blitzFeedback.style.color = "#96E072";
-        blitzAnswerInput.style.borderColor = "#96E072";
-        blitzAnswerInput.disabled = true; // Блокуємо поле на час
-        blitzSubmitBtn.disabled = true;
+        // ПРАВИЛЬНА ВІДПОВІДЬ
+        blitzAnswerInput.classList.add('correct-answer'); // <-- ЗМІНЕНО
 
-        // Автоматично завантажуємо нове питання через 2 секунди
-        setTimeout(loadNewBlitzQuestion, 2000); 
+        animatedBird.style.left = `${btnRect.left + 10}px`;
+        animatedBird.style.top = `${btnRect.top + 5}px`;
+        animatedBird.classList.add('fly-away');
+
+        setTimeout(() => {
+            animatedBird.classList.remove('fly-away');
+            loadNewBlitzQuestion();
+        }, 2000);
+
     } else {
-        blitzFeedback.textContent = "Не зовсім. Спробуй ще раз!";
-        blitzFeedback.style.color = "#F58594";
-        blitzAnswerInput.style.borderColor = "#F58594";
+        // НЕПРАВИЛЬНА ВІДПОВІДЬ
+        blitzAnswerInput.classList.add('incorrect-answer'); // <-- ЗМІНЕНО
+
+        const widgetRect = document.getElementById('blitz-widget').getBoundingClientRect();
+        animatedSpider.style.left = `${widgetRect.left + widgetRect.width / 2 - 15}px`;
+        animatedSpider.style.top = `${widgetRect.bottom}px`;
+        animatedSpider.classList.add('drop-down');
+
+        setTimeout(() => {
+            animatedSpider.classList.remove('drop-down');
+            isChecking = false;
+            blitzAnswerInput.disabled = false;
+            blitzSubmitBtn.disabled = false;
+        }, 1500);
     }
 }
 
-// Завантажуємо питання з файлу і одразу ж показуємо перше
+// Завантаження питань з файлу (залишається без змін)
 fetch('questions.json')
     .then(response => response.json())
     .then(data => {
         blitzQuestions = data;
-        loadNewBlitzQuestion(); // <-- Запускаємо вперше
+        loadNewBlitzQuestion();
     })
     .catch(error => {
         console.error("Не вдалося завантажити питання:", error);
         blitzQuestionText.textContent = "Помилка завантаження питань.";
     });
 
-// Обробники подій
+// Обробники подій (залишаються без змін)
 blitzSubmitBtn.addEventListener('click', checkBlitzAnswer);
 blitzAnswerInput.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') {
