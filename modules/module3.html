@@ -1,81 +1,74 @@
-<h1>Модуль 3: Перші кроки в Автоматизації (Selenium)</h1>
-            <p>
-                Маючи "абетку" Python, ми можемо нарешті почати писати автотести. Для цього нам потрібен головний
-                інструмент
-                — бібліотека <strong>Selenium</strong>.
-            </p>
-            <p>
-                <strong>Selenium WebDriver</strong> — це як універсальний "пульт керування" для браузера. Наш Python-код
-                за
-                допомогою цього пульта віддає команди (відкрити сайт, знайти кнопку, клікнути), а браузер їх виконує.
-            </p>
+<h1>Модуль 3: Перший Контакт — Керуємо Браузером з Selenium</h1>
+<p>
+    Ми вивчили основи Python. Тепер час дати йому "руки" і "очі", щоб він міг взаємодіяти з вебом. Нашим головним інструментом для цього буде <strong>Selenium WebDriver</strong>.
+</p>
+<p>
+    <strong>Аналогія:</strong> Уявіть, що Selenium WebDriver — це універсальний пульт керування, а браузер (Chrome, Firefox) — це робот. Наш Python-код надсилає команди на пульт ("їдь вперед", "натисни кнопку"), а робот-браузер їх слухняно виконує на веб-сторінці.
+</p>
 
-            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> Ключові концепції нашого першого тесту</h3>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-flag-checkered"></i> Наша Перша Місія: Автоматизувати Логін</h3>
+<p>
+    Наша задача — написати скрипт, який відкриє сторінку логіну, введе дані, натисне кнопку і перевірить, що вхід відбувся успішно. Ось як виглядає повний код місії. Не лякайтеся, зараз ми розберемо кожен рядок.
+</p>
+<pre><code>
+# === КРОК 1: ІМПОРТИ ===
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+import time
 
-            <h4>1. WebDriver та WebDriver Manager</h4>
-            <p>Щоб почати роботу, ми створюємо "водія" і автоматично завантажуємо для нього правильну версію за
-                допомогою
-                `webdriver-manager`.</p>
-            <pre><code>driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))</code></pre>
+# === КРОК 2: ІНІЦІАЛІЗАЦІЯ ===
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+driver.maximize_window()
 
-            <h4>2. Пошук елементів (`find_element`)</h4>
-            <p>Щоб взаємодіяти з чимось на сторінці, це спершу треба знайти. Ми використовуємо різні стратегії пошуку
-                (локатори), які ми імпортуємо з `By`.</p>
-            <pre><code># Пошук за унікальним ID
-driver.find_element(By.ID, "username")
+# === КРОК 3: ОСНОВНІ ДІЇ ===
+driver.get("https://the-internet.herokuapp.com/login")
 
-# Пошук за іменем атрибута 'name'
-driver.find_element(By.NAME, "search_query")
+driver.find_element(By.ID, "username").send_keys("tomsmith")
+driver.find_element(By.ID, "password").send_keys("SuperSecretPassword!")
+driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
 
-# Пошук за допомогою CSS-селектора
-driver.find_element(By.CSS_SELECTOR, "button[type='submit']")</code></pre>
+# === КРОК 4: ПЕРЕВІРКА (ASSERTION) ===
+success_message_element = driver.find_element(By.ID, "flash")
+assert "You logged into a secure area!" in success_message_element.text
+print("✅ Тест успішний!")
 
-            <h4>3. Дії з елементами</h4>
-            <p>Коли елемент знайдено, ми можемо виконувати з ним дії, ніби ми — користувач.</p>
-            <pre><code># Ввести текст
-element.send_keys("якийсь текст")
+# === КРОК 5: ОЧИЩЕННЯ ===
+time.sleep(2) # Невелика пауза, щоб побачити результат
+driver.quit()
+</code></pre>
 
-# Натиснути на елемент
-element.click()
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-magnifying-glass"></i> Розбір Місії: Що тут відбувається?</h3>
+<h4>Крок 1-2: Підготовка до запуску</h4>
+<p>
+    Ми імпортуємо потрібні інструменти та створюємо об'єкт `driver`. Зверніть увагу на `ChromeDriverManager().install()`. Це надзвичайно корисна річ, яка позбавляє нас головного болю: вона автоматично завантажує версію "посередника" (chromedriver), яка ідеально підходить до версії вашого браузера Chrome. `driver.maximize_window()` розгортає вікно, щоб уникнути проблем з мобільною версією сайту.
+</p>
+<h4>Крок 3: Навігація та Дії</h4>
+<p>
+    `driver.get(...)` — це команда "відкрий цей сайт". Далі починається найцікавіше: пошук елементів. Щоб щось зробити з кнопкою, її спершу треба знайти. Для цього ми використовуємо `driver.find_element()` та <strong>локатори</strong>.
+</p>
+<p>
+    <strong>Стратегія вибору локаторів (дуже важливо!):</strong>
+</p>
+<ol>
+    <li><strong>`By.ID`</strong>: Найкращий вибір. ID має бути унікальним на сторінці. Це найшвидший і найнадійніший локатор. Завжди використовуйте його, якщо є можливість.</li>
+    <li><strong>`By.CSS_SELECTOR`</strong>: Дуже потужний і гнучкий. Дозволяє будувати складні "адреси" до елементів. Швидший за XPath. Наприклад, `button[type='submit']` знаходить кнопку з атрибутом type="submit".</li>
+    <li><strong>`By.NAME`, `By.CLASS_NAME`, `By.TAG_NAME`</strong>: Корисні, але часто не унікальні.</li>
+    <li><strong>`By.XPATH`</strong>: Найпотужніший, але й найповільніший та найкрихкіший локатор. Використовуйте його, коли інші способи не допомогли.</li>
+</ol>
+<p>Після знаходження елемента ми виконуємо дії: `.send_keys()` для введення тексту, `.click()` для натискання.</p>
 
-# Отримати текст елемента
-element.text</code></pre>
+<h4>Крок 4: Перевірка</h4>
+<p>
+    Тест без перевірки — це не тест, а просто скрипт. Рядок `assert` — це серце нашого тесту. Він перевіряє, чи є умова правдивою (`True`). Якщо так — тест продовжується. Якщо ні (`False`) — тест падає з помилкою `AssertionError`. Ми перевіряємо, чи містить текст елемента з повідомленням очікувану фразу.
+</p>
+<h4>Крок 5: Очищення</h4>
+<p>
+    Команда `driver.quit()` повністю закриває браузер і всі пов'язані процеси. Це обов'язковий крок, щоб не залишати "висячі" процеси в системі. <strong>Нюанс:</strong> є також команда `driver.close()`, яка закриває лише поточну вкладку, а не весь браузер.
+</p>
+<hr>
 
-            <h4>4. "Розумні" очікування (`WebDriverWait`)</h4>
-            <p>Сайти не завжди завантажуються миттєво. Замість "сліпих" пауз `time.sleep()`, ми використовуємо "розумні"
-                очікування, які чекають на певну умову (наприклад, поки елемент не стане клікабельним) до 10 секунд.</p>
-            <pre><code>wait = WebDriverWait(driver, 10)
-button = wait.until(EC.element_to_be_clickable((By.ID, "myButton")))</code></pre>
-
-            <h4>5. Перевірки (`assert`)</h4>
-            <p>Це серце будь-якого тесту. Ми "стверджуємо", що певна умова є правдивою. Якщо ні — тест падає з помилкою.
-            </p>
-            <pre><code>assert "Очікуваний текст" in driver.title</code></pre>
-
-            <hr>
-            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> Уроки, винесені з "битви" з YouTube</h3>
-            <p>Наш шлях не був простим. У спробах автоматизувати складний сайт ми на практиці дізналися про реальні
-                проблеми, які ми перемогли:</p>
-            <ul>
-                <li><strong>Проблема респонсивного дизайну:</strong> сайт виглядає по-різному залежно від розміру вікна,
-                    і
-                    елементи можуть зникати. Рішення: `driver.maximize_window()`.</li>
-                <li><strong>Проблема cookie-банерів:</strong> спливаючі вікна можуть перекривати елементи. Рішення:
-                    обробка
-                    через `try-except` і пошук надійного локатора.</li>
-                <li><strong>Проблема нестабільних локаторів:</strong> локатори, що залежать від тексту, можуть ламатись
-                    через зміну мови. Рішення: шукати елементи за `ID`, унікальними `class` або атрибутами `aria-label`.
-                </li>
-                <li><strong>Проблема "застарілих" елементів (`StaleElementReferenceException`):</strong> на динамічних
-                    сайтах елементи можуть оновлюватись, поки скрипт працює. Рішення: знаходити елемент і одразу
-                    виконувати
-                    дію.</li>
-                <li><strong>Проблема неінтерактивних елементів (`ElementNotInteractableException`):</strong> елемент є,
-                    але
-                    на нього не можна клікнути. Рішення: імітувати дії через JavaScript (`driver.execute_script`).</li>
-            </ul>
-
-            <hr>
 
             
 

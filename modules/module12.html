@@ -1,0 +1,151 @@
+<h1>Модуль 12: Все Разом: CI/CD та Професійні Звіти</h1>
+<p>
+    Вітаю на вершині нашої гори! Ти навчився писати надійні тести для UI та API, використовувати Git та Pytest, і налаштовувати професійне оточення. Тепер фінальний крок — змусити все це працювати разом, автоматично і без твоєї участі. Це і є світ <strong>CI/CD</strong>.
+</p>
+<p>
+    <strong>Аналогія:</strong> Уяви, що твої тести — це система контролю якості на заводі. CI/CD — це повністю автоматизований конвеєр. Як тільки інженер додає нову деталь (`git push`), конвеєр сам збирає виріб, проводить його через твої тести, і якщо все добре — дає зелене світло. Якщо ні — зупиняє лінію і б'є на сполох.
+</p>
+
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-robot"></i> CI/CD: Автопілот для твоїх тестів</h3>
+<p>
+    <strong>CI/CD (Continuous Integration / Continuous Deployment)</strong> — це практика автоматичного запуску збірки, тестів та, іноді, розгортання проєкту при кожній зміні в коді. Ми будемо використовувати <strong>GitHub Actions</strong>, бо це вбудовано прямо в GitHub і дуже легко налаштовується.
+</p>
+<p>
+    Ми робимо це за допомогою YAML-файлу, який описує наш "конвеєр". Давай ще раз подивимось на файл з нашої практики і розберемо його детальніше.
+</p>
+<h5>Файл: <code>.github/workflows/run-tests.yml</code></h5>
+<pre><code class="language-yaml">
+# Назва нашого процесу
+name: Run Python Tests
+
+# Тригери: коли запускати цей процес?
+on:
+  # При кожному push в гілку main
+  push:
+    branches: [ "main" ]
+  # А також при створенні Pull Request в гілку main
+  pull_request:
+    branches: [ "main" ]
+
+# Завдання, які потрібно виконати
+jobs:
+  # Назва завдання (може бути будь-яка)
+  run-tests:
+    # На якій операційній системі запускати?
+    # ubuntu-latest — стандартний вибір
+    runs-on: ubuntu-latest
+
+    # Кроки, що виконуються послідовно
+    steps:
+      # Крок 1: Клонування твого репозиторію
+      # `uses` означає використання готової дії від спільноти
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Крок 2: Налаштування Python потрібної версії
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      # Крок 3: Встановлення твоїх бібліотек
+      # `run` означає виконання команди в терміналі
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      # Крок 4: Запуск тестів!
+      - name: Run Pytest
+        run: pytest -v
+</code></pre>
+
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-chart-pie"></i> Allure: Звіти, які не соромно показати менеджеру</h3>
+<p>
+    Стандартний вивід `pytest` — для тебе. Але коли потрібно показати результати команді або менеджеру, потрібен красивий, інтерактивний звіт. Для цього існує фреймворк <strong>Allure</strong>.
+</p>
+<p>
+    Allure перетворює результати тестів на повноцінний веб-сайт з дашбордами, графіками та історією запусків.
+</p>
+<h4>Ключові можливості Allure:</h4>
+<ul>
+    <li><strong>Кроки в тесті:</strong> Ти можеш розмітити свій тест на кроки, і вони будуть відображені у звіті.
+        <pre><code>
+import allure
+
+@allure.step("Відкриваємо сторінку логіну")
+def open_login_page(driver):
+    driver.get("/login")
+        </code></pre>
+    </li>
+    <li><strong>Вкладення:</strong> Allure може автоматично додавати скріншоти до тестів, що впали. Це неймовірно корисно для дебагінгу.</li>
+    <li><strong>Групування:</strong> Можна групувати тести за функціоналом (Epic, Feature, Story), що робить звіт зрозумілим для бізнесу.</li>
+</ul>
+<h4>Як це працює:</h4>
+<ol>
+    <li>Встановлюєш плагін: `pip install allure-pytest`.</li>
+    <li>Запускаєш тести, вказавши папку для результатів: `pytest --alluredir=./allure-results`.</li>
+    <li>Генеруєш звіт: `allure serve ./allure-results`.</li>
+</ol>
+<p>Поєднання CI/CD та Allure Reports — це те, що відрізняє професійного автоматизатора. Твої тести не просто існують, а стають надійним "вартовим якості", який працює 24/7 і надає зрозумілі звіти про стан проєкту.</p>
+
+<hr>
+
+<div class="quiz-container">
+    <div class="quiz-questions-wrapper">
+        
+        <div class="quiz-question">
+            <h3>Яка головна мета CI/CD в контексті тестування?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Написання коду без помилок.</div>
+                <div class="answer-btn" data-correct="true">Автоматичний запуск тестів при кожній зміні коду для раннього виявлення багів.</div>
+                <div class="answer-btn" data-correct="false">Створення красивих звітів.</div>
+            </div>
+            <div class="explanation" style="display: none;">
+                <p><i class="fa-solid fa-otter"></i> CI/CD дозволяє перетворити твої тести на "систему сигналізації", яка миттєво повідомляє, якщо нова зміна щось зламала. Це запобігає потраплянню багів у основну версію продукту.</p>
+            </div>
+        </div>
+
+        <div class="quiz-question">
+            <h3>Що таке `uses` в синтаксисі GitHub Actions?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="true">Використання готової, створеної кимось дії (напр., для налаштування Python).</div>
+                <div class="answer-btn" data-correct="false">Виклик звичайної команди терміналу.</div>
+                <div class="answer-btn" data-correct="false">Оголошення змінної.</div>
+            </div>
+            <div class="explanation" style="display: none;">
+                <p><i class="fa-solid fa-otter"></i> GitHub Actions має величезний маркетплейс готових дій. `uses: actions/checkout@v4` означає: "Візьми готову дію 'checkout' від спільноти 'actions' версії 4". Це дозволяє не писати складні скрипти власноруч.</p>
+            </div>
+        </div>
+
+        <div class="quiz-question">
+            <h3>Чим звіти Allure принципово кращі за стандартний вивід `pytest`?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Вони працюють швидше.</div>
+                <div class="answer-btn" data-correct="false">Вони знаходять більше багів.</div>
+                <div class="answer-btn" data-correct="true">Вони інтерактивні, візуальні та зрозумілі нетехнічним спеціалістам.</div>
+            </div>
+            <div class="explanation" style="display: none;">
+                <p><i class="fa-solid fa-otter"></i> Головна перевага Allure — це презентація даних. Графіки, історія запусків, групування за фічами — все це робить звіт корисним інструментом для всієї команди, а не лише для тебе.</p>
+            </div>
+        </div>
+
+        <div class="quiz-question">
+            <h3>Який декоратор Allure використовується для того, щоб розбити тест на логічні кроки у звіті?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="true">`@allure.step`</div>
+                <div class="answer-btn" data-correct="false">`@allure.test`</div>
+                <div class="answer-btn" data-correct="false">`@pytest.fixture`</div>
+            </div>
+            <div class="explanation" style="display: none;">
+                <p><i class="fa-solid fa-otter"></i> Декоратор `@allure.step("Опис кроку")` дозволяє обернути будь-яку функцію або метод, і цей крок з твоїм описом з'явиться у звіті, роблячи його надзвичайно читабельним.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="quiz-navigation">
+        <button class="prev-question" disabled>&lt; Назад</button>
+        <span class="question-counter">Питання 1 / N</span>
+        <button class="next-question">Вперед &gt;</button>
+    </div>
+</div>

@@ -1,0 +1,104 @@
+<h1>Практика №16: Робота з формами: дропдауни та чекбокси</h1>
+<hr>
+
+<h2>Мета</h2>
+<p>Закріпити навички роботи з елементами форм (`select`, `checkbox`) та застосувати патерн Page Object Model для їх автоматизації.</p>
+
+<h2>Очікуваний результат</h2>
+<p>Два окремі тести для сайту <a href="http://the-internet.herokuapp.com/" target="_blank">The Internet</a>, які перевіряють роботу випадаючого списку та чекбоксів з використанням РОМ.</p>
+
+<h2>Покрокова інструкція</h2>
+<ol>
+    <li>
+        <strong>Аналіз сторінок.</strong>
+        <p>Відкрий сторінки <a href="http://the-internet.herokuapp.com/dropdown" target="_blank">Dropdown</a> та <a href="http://the-internet.herokuapp.com/checkboxes" target="_blank">Checkboxes</a>. Вивчи їх структуру за допомогою DevTools. Зверни увагу на теги та атрибути елементів.</p>
+    </li>
+    <li>
+        <strong>Створення Page Objects.</strong>
+        <p>Створи два окремі файли: <code>dropdown_page.py</code> та <code>checkboxes_page.py</code>. У кожному з них опиши відповідну сторінку: локатори та методи для взаємодії.</p>
+    </li>
+    <li>
+        <strong>Написання тестів.</strong>
+        <p>Створи файл <code>test_forms.py</code>, в якому будуть два тести: <code>test_dropdown_selection</code> та <code>test_checkbox_toggle</code>. Кожен тест має імпортувати відповідний Page Object і використовувати його для виконання дій та перевірок.</p>
+    </li>
+</ol>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <h3>Файл 1: <code>dropdown_page.py</code></h3>
+        <pre><code class="language-python">
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
+
+class DropdownPage:
+    DROPDOWN_LIST = (By.ID, "dropdown")
+
+    def __init__(self, driver):
+        self.driver = driver
+
+    def open(self):
+        self.driver.get("http://the-internet.herokuapp.com/dropdown")
+        return self
+
+    def _get_dropdown_select(self):
+        return Select(self.driver.find_element(*self.DROPDOWN_LIST))
+
+    def select_option_by_text(self, visible_text):
+        self._get_dropdown_select().select_by_visible_text(visible_text)
+
+    def get_selected_option_text(self):
+        return self._get_dropdown_select().first_selected_option.text
+        </code></pre>
+        
+        <h3>Файл 2: <code>checkboxes_page.py</code></h3>
+        <pre><code class="language-python">
+from selenium.webdriver.common.by import By
+
+class CheckboxesPage:
+    CHECKBOX_1 = (By.CSS_SELECTOR, "form#checkboxes input:nth-of-type(1)")
+    CHECKBOX_2 = (By.CSS_SELECTOR, "form#checkboxes input:nth-of-type(2)")
+
+    def __init__(self, driver):
+        self.driver = driver
+
+    def open(self):
+        self.driver.get("http://the-internet.herokuapp.com/checkboxes")
+        return self
+
+    def click_checkbox_1(self):
+        self.driver.find_element(*self.CHECKBOX_1).click()
+
+    def is_checkbox_1_selected(self):
+        return self.driver.find_element(*self.CHECKBOX_1).is_selected()
+        </code></pre>
+
+        <h3>Файл 3: <code>test_forms.py</code> (Потребує `conftest.py` з фікстурою `driver`)</h3>
+        <pre><code class="language-python">
+from pages.dropdown_page import DropdownPage
+from pages.checkboxes_page import CheckboxesPage
+
+def test_dropdown_selection(driver):
+    dropdown_page = DropdownPage(driver).open()
+    
+    option_to_select = "Option 2"
+    dropdown_page.select_option_by_text(option_to_select)
+    
+    selected_option = dropdown_page.get_selected_option_text()
+    assert selected_option == option_to_select
+
+def test_checkbox_toggle(driver):
+    checkboxes_page = CheckboxesPage(driver).open()
+    
+    # За замовчуванням він не вибраний
+    assert not checkboxes_page.is_checkbox_1_selected()
+    
+    checkboxes_page.click_checkbox_1()
+    
+    # Після кліку - вибраний
+    assert checkboxes_page.is_checkbox_1_selected()
+        </code></pre>
+    </div>
+</div>

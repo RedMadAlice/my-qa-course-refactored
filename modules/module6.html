@@ -1,36 +1,87 @@
+<h1>Модуль 6: Тестування API — Замовляємо напряму з "кухні"</h1>
+<p>
+    Досі ми тестували сайт через графічний інтерфейс (UI) — це як робити замовлення в ресторані через красиве меню. Це працює, але це повільно, і якщо офіціант (браузер) повільний або щось наплутав, ми не знаємо, чия це провина — його чи кухні.
+</p>
+<p>
+    <strong>API (Application Programming Interface)</strong> — це та сама "кухня". Це набір правил, за якими програми спілкуються між собою. Тестуючи API, ми відправляємо замовлення напряму на кухню, минаючи офіціанта.
+</p>
+<p>
+    <strong>Чому це круто?</strong>
+</p>
+<ul>
+    <li><strong>Швидкість:</strong> API-тести в десятки, а то й сотні разів швидші за UI-тести.</li>
+    <li><strong>Надійність:</strong> Вони не залежать від верстки, повільного завантаження чи анімацій. Якщо тест впав — проблема точно в логіці "кухні".</li>
+    <li><strong>Раннє виявлення багів:</strong> Ти можеш тестувати логіку ще до того, як дизайнери намалювали інтерфейс.</li>
+</ul>
+<p>Наш інструмент для цього — потужна бібліотека <strong><code>requests</code></strong>.</p>
 
-    <h1>Модуль 6: Тестування API — Запити до "Серця" Програми</h1>
-    <p>Ми переходимо від тестування видимого інтерфейсу (UI) до тестування "мозку" додатку — його API. Якщо UI — це зал ресторану, то API — це кухня, куди ми будемо робити замовлення напряму. Для цього ми використовуємо потужну бібліотеку Python — `requests`.</p>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-utensils"></i> Наше "Меню": CRUD та HTTP-методи</h3>
+<p>В основі більшості API лежить концепція CRUD (Create, Read, Update, Delete), яка реалізується через HTTP-методи:</p>
+<ul>
+    <li><strong><code>GET</code> (Read):</strong> "Дайте мені, будь ласка, інформацію про користувача з ID 5".</li>
+    <li><strong><code>POST</code> (Create):</strong> "Ось дані, створіть, будь ласка, нового користувача".</li>
+    <li><strong><code>PUT</code> / <code>PATCH</code> (Update):</strong> "Оновіть, будь ласка, дані користувача з ID 5". (Нюанс: `PUT` замінює весь об'єкт, `PATCH` — лише зазначені поля).</li>
+    <li><strong><code>DELETE</code> (Delete):</strong> "Видаліть, будь ласка, користувача з ID 5".</li>
+</ul>
 
-    <h3 style="margin-top: 20px;"><i class="fa-solid fa-server"></i> Основи API: CRUD та HTTP-методи</h3>
-    <p>В основі більшості API лежить концепція CRUD (Create, Read, Update, Delete), яка реалізується через HTTP-методи:</p>
-    <ul>
-        <li><strong>Create (Створити):</strong> Метод `POST`. Відправляємо дані на сервер для створення нового об'єкта.</li>
-        <li><strong>Read (Прочитати):</strong> Метод `GET`. Запитуємо існуючі дані з сервера.</li>
-        <li><strong>Update (Оновити):</strong> Метод `PUT`. Повністю замінюємо існуючий об'єкт новими даними.</li>
-        <li><strong>Delete (Видалити):</strong> Метод `DELETE`. Видаляємо об'єкт з сервера.</li>
-    </ul>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-receipt"></i> Повний цикл запиту та відповіді</h3>
+<p>Давай подивимось, як це виглядає в коді на прикладі отримання даних про одного користувача з <a href="https://jsonplaceholder.typicode.com/" target="_blank">JSONPlaceholder</a>.</p>
 
-    <h3 style="margin-top: 20px;"><i class="fa-solid fa-key"></i> Аутентифікація: API-ключі</h3>
-    <p>Більшість API захищені. Найпростіший спосіб аутентифікації — це API-ключ. Це унікальний "пропуск", який ми додаємо до наших запитів, щоб сервер знав, хто ми, і чи є у нас дозвіл на отримання даних.</p>
-    <pre><code>
-# Приклад передачі ключа як параметра запиту
-api_key = "ВАШ_СЕКРЕТНИЙ_КЛЮЧ"
-params = {
-  "q": "Kyiv",
-  "appid": api_key 
-}
-response = requests.get("https://api.openweathermap.org/...", params=params)
-    </code></pre>
+<pre><code>
+import requests
+import json
 
-    <h3 style="margin-top: 20px;"><i class="fa-solid fa-traffic-light"></i> Коди статусу HTTP</h3>
-    <p>Кожна відповідь від сервера містить код статусу, який показує результат операції:</p>
-    <ul>
-        <li><strong>2xx (Успіх):</strong> `200 OK` (Все добре), `201 Created` (Створено новий ресурс).</li>
-        <li><strong>4xx (Помилка клієнта):</strong> `400 Bad Request` (Неправильний запит), `401 Unauthorized` (Проблема з ключем), `404 Not Found` (Не знайдено).</li>
-        <li><strong>5xx (Помилка сервера):</strong> `500 Internal Server Error` (Щось зламалось на сервері).</li>
-    </ul>
-    <hr>
+# 1. Формуємо запит
+user_id = 1
+url = f"https://jsonplaceholder.typicode.com/users/{user_id}"
+
+# 2. Відправляємо GET-запит
+response = requests.get(url)
+
+# 3. Аналізуємо відповідь
+print(f"Код статусу: {response.status_code}") # Має бути 200
+
+# Перетворюємо текст відповіді (JSON) на Python-словник
+user_data = response.json()
+
+print("Дані користувача:")
+# Використовуємо json.dumps для красивого виводу
+print(json.dumps(user_data, indent=2))
+
+# 4. Робимо перевірки (asserts)
+assert response.status_code == 200
+assert user_data["id"] == user_id
+assert user_data["name"] == "Leanne Graham"
+assert "@" in user_data["email"]
+
+print("\n✅ Тест успішний!")
+</code></pre>
+
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-traffic-light"></i> Коди статусу: "Світлофор" від сервера</h3>
+<p>Кожна відповідь від сервера містить код статусу. Це як сигнал світлофора, що показує результат операції:</p>
+<ul>
+    <li><strong style="color: green;">2xx (Успіх):</strong>
+        <ul>
+            <li><code>200 OK</code> (Все добре, ось твої дані).</li>
+            <li><code>201 Created</code> (Твій запит на створення виконано, ось посилання на новий об'єкт).</li>
+        </ul>
+    </li>
+    <li><strong style="color: orange;">4xx (Помилка на твоїй стороні):</strong>
+        <ul>
+            <li><code>400 Bad Request</code> (Ти відправив щось не те, перевір дані).</li>
+            <li><code>401 Unauthorized</code> (Ти не представився, потрібен логін/ключ).</li>
+            <li><code>403 Forbidden</code> (Я знаю, хто ти, але тобі сюди не можна).</li>
+            <li><code>404 Not Found</code> (Те, що ти шукаєш, тут немає).</li>
+        </ul>
+    </li>
+    <li><strong style="color: red;">5xx (Помилка на нашій стороні):</strong>
+        <ul>
+            <li><code>500 Internal Server Error</code> (Ой, у нас на кухні щось вибухнуло. Спробуй пізніше).</li>
+        </ul>
+    </li>
+</ul>
+<hr>
+
     
     <div class="quiz-container">
         <div class="quiz-questions-wrapper">

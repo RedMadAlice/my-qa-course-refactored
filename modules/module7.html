@@ -1,41 +1,51 @@
+<h1>Модуль 7: Pytest — Твій особистий менеджер тестів</h1>
+<p>
+    Коли тестів стає більше одного, запускати їх вручну по черзі (`python test_1.py`, `python test_2.py`...) — погана ідея. Нам потрібен інструмент, який би автоматично знаходив всі тести, запускав їх, збирав результати і показував гарний звіт.
+</p>
+<p>
+    <strong>Аналогія:</strong> Уяви, що `pytest` — це твій особистий асистент або менеджер. Ти просто даєш йому папку з документами (тестами), а він сам знає, як їх організувати, перевірити і доповісти тобі про результати.
+</p>
 
-    <h1>Модуль 7: Pytest — Професійний Підхід до Тестів</h1>
-    <p>Коли тестів стає багато, запускати їх по одному незручно. Нам потрібен фреймворк, який автоматизує запуск тестів та надає зручні звіти. Найпопулярніший фреймворк для Python — це `pytest`.</p>
-    
-    <h3 style="margin-top: 20px;"><i class="fa-solid fa-magic-wand-sparkles"></i> Основи Pytest: Автоматичний пошук</h3>
-    <p>`pytest` сам знаходить і запускає тести, якщо дотримуватись простих правил:</p>
-    <ul>
-        <li>Назви файлів з тестами мають починатись з `test_` (напр., `test_api.py`).</li>
-        <li>Назви функцій з тестами всередині цих файлів теж мають починатись з `test_` (напр., `def test_status_code():`).</li>
-    </ul>
-    <p>Після цього достатньо в терміналі написати одну команду, і `pytest` зробить всю роботу:</p>
-    <pre><code>pytest -v</code></pre>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-magnifying-glass-arrow-right"></i> Магія №1: Автоматичний пошук (Test Discovery)</h3>
+<p>Тобі не потрібно вказувати `pytest`, які файли запускати. Він сам просканує твій проєкт і знайде всі тести, якщо ти дотримуєшся простих правил іменування:</p>
+<ul>
+    <li>Файли з тестами мають називатись: <strong><code>test_*.py</code></strong> або <strong><code>*_test.py</code></strong>.</li>
+    <li>Функції з тестами всередині них: <strong><code>def test_*():</code></strong>.</li>
+</ul>
+<p>Після цього ти просто заходиш у термінал в папку проєкту і пишеш одну команду:</p>
+<pre><code>pytest</code></pre>
+<p>І `pytest` зробить всю роботу за тебе!</p>
 
-    <h3 style="margin-top: 20px;"><i class="fa-solid fa-key"></i> Фікстури: Уникаємо повторення коду (DRY)</h3>
-    <p>Фікстури — це найпотужніша риса `pytest`. Це функції, які готують дані або стан для наших тестів. Якщо кілька тестів роблять одну й ту саму підготовчу дію (наприклад, роблять API-запит), ми можемо винести цю дію в фікстуру.</p>
-    <pre><code>
-import pytest
-import requests
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-square-check"></i> Магія №2: "Розумні" асерти</h3>
+<p>Тобі більше не потрібні складні конструкції з `unittest`. `pytest` використовує звичайний `assert` з Python, але "прокачує" його. Якщо перевірка падає, `pytest` дає максимально детальний звіт, показуючи, що саме не так.</p>
 
-# Створюємо фікстуру, яка робить запит
-@pytest.fixture
-def api_response():
-    response = requests.get("https://.../users/1")
-    return response
+<h4>❌ Старий підхід (без pytest)</h4>
+<pre><code>
+# ... код ...
+if result == expected:
+    print("OK")
+else:
+    print(f"FAIL! Expected {expected}, but got {result}")
+</code></pre>
 
-# Тепер тести можуть "просити" цю фікстуру
-def test_status_code(api_response):
-    assert api_response.status_code == 200
+<h4>✅ Підхід з pytest</h4>
+<pre><code>
+# ... код ...
+assert result == expected # І все!
+</code></pre>
+<p>Якщо тест впаде, `pytest` сам напише тобі в консолі щось на кшталт: `AssertionError: assert 'Apple' == 'Orange'`. Це набагато зручніше.</p>
 
-def test_user_name(api_response):
-    assert api_response.json()["name"] == "Leanne Graham"
-    </code></pre>
-    
-    <h3 style="margin-top: 20px;"><i class="fa-solid fa-file-invoice"></i> HTML-звіти</h3>
-    <p>За допомогою плагіну `pytest-html` ми можемо створювати красиві звіти про результати наших тестів. Після встановлення (`pip install pytest-html`), тести запускаються командою:</p>
-    <pre><code>pytest --html=report.html</code></pre>
-    
-    <hr>
+<h3 style="margin-top: 20px;"><i class="fa-solid-right-left"></i> Магія №3: Корисні прапорці командного рядка</h3>
+<p>Ти можеш керувати роботою `pytest` за допомогою прапорців:</p>
+<ul>
+    <li><strong><code>pytest -v</code></strong> (`--verbose`): Показує детальний звіт з назвою кожного тесту і статусом `PASSED` або `FAILED`.</li>
+    <li><strong><code>pytest -s</code></strong>: Показує вивід твоїх `print()` під час виконання тесту. Дуже корисно для дебагінгу!</li>
+    <li><strong><code>pytest -k "login"</code></strong>: Запускає лише ті тести, в назві яких є слово "login". Ідеально, щоб запустити конкретну групу тестів.</li>
+    <li><strong><code>pytest --html=report.html</code></strong>: Якщо встановлено плагін `pytest-html`, ця команда створить красивий HTML-звіт, який можна показати менеджеру.</li>
+</ul>
+<p>Наступний крок — фікстури, найпотужніша магія `pytest`, яку ми розберемо в окремому модулі.</p>
+<hr>
+
     
     <div class="quiz-container">
         <div class="quiz-questions-wrapper">

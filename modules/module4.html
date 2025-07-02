@@ -1,201 +1,200 @@
-<h1>Модуль 4: Page Object Model (POM)</h1>
-            <p>
-                У попередньому модулі ми написали наш перший робочий тест. Це чудово! Але в ньому все було перемішано:
-                локатори, дії, перевірки. Якщо тестів стане багато, підтримувати такий код буде дуже важко.
-            </p>
-            <p>
-                Для вирішення цієї проблеми існує професійний підхід — дизайн-паттерн <strong>Page Object Model
-                    (POM)</strong>.
-            </p>
+<h1>Модуль 4: Page Object Model (POM) — Від хаосу до порядку</h1>
+<p>
+    У попередньому модулі ми написали наш перший тест. Він працює, і це чудово! Але уяви, що у нас буде 100 таких тестів. Твій код перетвориться на хаос: локатори елементів будуть розкидані по всіх файлах, а логіка тестів буде перемішана з технічними деталями. Якщо на сайті зміниться ID однієї кнопки, тобі доведеться шукати і виправляти його в десятках місць.
+</p>
+<p>
+    <strong>Проблема:</strong> Код важко читати, підтримувати та перевикористовувати.
+</p>
+<p>
+    <strong>Рішення:</strong> Професійний патерн проектування <strong>Page Object Model (POM)</strong>.
+</p>
 
-            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> Головна ідея: Створюємо "Карти"</h3>
-            <p>
-                Уявіть, що для кожної веб-сторінки ми створюємо окрему "карту". Ця карта описує всі важливі місця на
-                сторінці і як з ними взаємодіяти.
-            </p>
-            <ul>
-                <li><strong>Клас Сторінки (Page Object):</strong> Це окремий Python-файл (наприклад,
-                    <code>login_page.py</code>), який є нашою "картою". Він містить всі локатори елементів і методи для
-                    дій
-                    на цій сторінці (напр., "ввести логін", "натиснути кнопку").
-                </li>
-                <li><strong>Тест:</strong> Сам тест стає дуже простим і читабельним. Він лише каже: "Візьми карту
-                    сторінки
-                    логіну і виконай такі-то дії". Він не знає нічого про локатори чи кліки.</li>
-            </ul>
-            <p>
-                <strong>Перевага:</strong> Якщо на сайті щось зміниться (наприклад, ID кнопки), нам потрібно буде
-                оновити
-                лише "карту" в одному місці, а всі тести, що її використовують, продовжать працювати.
-            </p>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-map-location-dot"></i> Головна ідея: Створюємо "карти" для сайту</h3>
+<p>
+    <strong>Аналогія:</strong> Уяви, що ти пояснюєш другу, як дістатися до твого будинку.
+</p>
+<ul>
+    <li><strong>Підхід без POM:</strong> "Вийди з метро, поверни ліворуч біля зеленого кіоску, пройди 100 метрів до дуба, потім праворуч..." Якщо кіоск перефарбують, твоя інструкція застаріє.</li>
+    <li><strong>Підхід з POM:</strong> Ти даєш другу GPS-навігатор (це наш <strong>Page Object</strong>). Навігатор сам знає всі адреси, вулиці та оптимальні шляхи. Ти лише кажеш навігатору: "Проклади маршрут до 'будинку Олени'". Якщо вулицю перейменують, компанія-розробник навігатора оновить карти, а для тебе нічого не зміниться. Ти все ще просто кажеш "їдь до Олени".</li>
+</ul>
 
-            <hr>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-code-compare"></i> Контраст: "До" і "Після"</h3>
+<p>Давай подивимось на наш тест з минулого модуля і відчуємо різницю.</p>
 
-            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> Приклад нашого рефакторингу</h3>
-            <p>Ось як ми перетворили наш тест для <code>the-internet.herokuapp.com/login</code>, використовуючи POM.</p>
+<h4>❌ "До": Все в одному файлі</h4>
+<pre><code>
+# ... імпорти та ініціалізація ...
+driver.get("https://the-internet.herokuapp.com/login")
 
-            <h4>1. Карта для сторінки логіну (login_page.py)</h4>
-            <pre><code>
+# Локатори перемішані з діями
+driver.find_element(By.ID, "username").send_keys("tomsmith")
+driver.find_element(By.ID, "password").send_keys("SuperSecretPassword!")
+driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+
+# Перевірка теж тут
+success_message_element = driver.find_element(By.ID, "flash")
+assert "You logged into a secure area!" in success_message_element.text
+
+driver.quit()
+</code></pre>
+<p>Все працює, але це хаос. А тепер подивись, як елегантно це виглядає з POM.</p>
+
+<h4>✅ "Після": Чистота і порядок</h4>
+<p>Ми створюємо два файли: один для "карти" сторінки, інший для тесту.</p>
+
+<h5>Файл 1: <code>login_page.py</code> (Наша "карта" або "навігатор")</h5>
+<pre><code>
 from selenium.webdriver.common.by import By
 
 class LoginPage:
+    # Конструктор. "self" - це посилання на сам об'єкт, щоб він міг працювати зі своїми даними
     def __init__(self, driver):
+        # Зберігаємо драйвер всередині об'єкта, щоб мати до нього доступ
         self.driver = driver
-    
-    # --- Локатори ---
-    USERNAME_INPUT = (By.ID, "username")
-    PASSWORD_INPUT = (By.ID, "password")
-    LOGIN_BUTTON = (By.CSS_SELECTOR, "button[type='submit']")
+        # Оголошуємо всі локатори як змінні класу. Це зручно.
+        self.USERNAME_INPUT = (By.ID, "username")
+        self.PASSWORD_INPUT = (By.ID, "password")
+        self.LOGIN_BUTTON = (By.CSS_SELECTOR, "button[type='submit']")
 
-    # --- Дії ---
+    # Описуємо дії, які можна зробити на сторінці
+    def open(self):
+        self.driver.get("https://the-internet.herokuapp.com/login")
+        return self # Повертаємо себе, щоб можна було робити ланцюжки викликів
+
     def enter_username(self, username):
+        # Зірочка (*) розпаковує наш кортеж.
+        # Замість find_element(By.ID, "username") код стає find_element(*self.USERNAME_INPUT)
         self.driver.find_element(*self.USERNAME_INPUT).send_keys(username)
-        
+        return self
+
     def enter_password(self, password):
         self.driver.find_element(*self.PASSWORD_INPUT).send_keys(password)
-        
+        return self
+
     def click_login_button(self):
         self.driver.find_element(*self.LOGIN_BUTTON).click()
-    </code></pre>
+        # Після логіну ми очікуємо потрапити на іншу сторінку,
+        # тому повертаємо об'єкт тієї сторінки. Це просунута техніка!
+        from secure_page import SecurePage # імпортуємо прямо тут
+        return SecurePage(self.driver)
+</code></pre>
 
-            <h4>2. Карта для сторінки після логіну (secure_page.py)</h4>
-            <pre><code>
-from selenium.webdriver.common.by import By
-
-class SecurePage:
-    def __init__(self, driver):
-        self.driver = driver
-
-    SUCCESS_MESSAGE = (By.CSS_SELECTOR, "div#flash")
-
-    def get_success_message_text(self):
-        return self.driver.find_element(*self.SUCCESS_MESSAGE).text
-    </code></pre>
-
-            <h4>3. Фінальний, чистий тест (main.py)</h4>
-            <pre><code>
-# Імпортуємо інструменти
+<h5>Файл 2: <code>test_login.py</code> (Сам тест)</h5>
+<pre><code>
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
+from login_page import LoginPage # Імпортуємо нашу "карту"
 
-# Імпортуємо наші власні "карти"!
-from login_page import LoginPage
-from secure_page import SecurePage
-
-# --- Основна частина тесту ---
-driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-driver.maximize_window()
-driver.get("http://the-internet.herokuapp.com/login")
+driver = webdriver.Chrome()
 
 login_page = LoginPage(driver)
 
-login_page.enter_username("tomsmith")
-login_page.enter_password("SuperSecretPassword!")
-login_page.click_login_button()
+# Подивись, наскільки читабельним став тест!
+# Він описує бізнес-логіку, а не технічні деталі
+secure_page = login_page.open() \
+                        .enter_username("tomsmith") \
+                        .enter_password("SuperSecretPassword!") \
+                        .click_login_button()
 
-secure_page = SecurePage(driver)
-
-success_text = secure_page.get_success_message_text()
-assert "You logged into a secure area!" in success_text
-
+# Тепер перевірку робимо через об'єкт сторінки secure_page
+assert "You logged into a secure area!" in secure_page.get_success_message_text()
 print("✅ Тест пройдено успішно!")
+
 driver.quit()
-    </code></pre>
+</code></pre>
 
-            <hr>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-graduation-cap"></i> Правила хорошого тону в POM</h3>
+<ul>
+    <li><strong>Один клас = одна сторінка.</strong> Не змішуй в одному класі елементи з різних сторінок.</li>
+    <li><strong>Жодних `assert` в Page Object.</strong> Клас сторінки лише надає доступ до елементів і дій. Всі перевірки (`assert`) живуть у файлі тесту.</li>
+    <li><strong>Називай методи по-людськи.</strong> Наприклад, метод `login_as(user)` краще, ніж `fill_username_and_password_and_click_submit()`.</li>
+</ul>
+<hr>
+<div class="quiz-container">
+    <div class="quiz-questions-wrapper">
+        <div class="quiz-question">
+            <h3>Що таке `__init__(self, driver)` у класі Page Object?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Це звичайний метод для кліку на кнопку.</div>
+                <div class="answer-btn" data-correct="true">Це конструктор, який приймає драйвер і зберігає
+                    його
+                    для використання всередині класу.</div>
+                <div class="answer-btn" data-correct="false">Це метод, який запускає тест.</div>
+            </div>
+            <div class="explanation" style="display: none;">
 
-            
+                <p><i class="fa-solid fa-otter"></i> `__init__` — це спеціальний метод в Python, який
+                    автоматично викликається при створенні об'єкта класу. В РОМ ми використовуємо його, щоб
+                    "передати" наш `driver` всередину "карти" сторінки.</p>
+            </div>
+        </div>
 
-            <div class="quiz-container">
 
-                <div class="quiz-questions-wrapper">
-                    <div class="quiz-question">
-                        <h3>Що таке `__init__(self, driver)` у класі Page Object?</h3>
-                        <div class="answers-container">
-                            <div class="answer-btn" data-correct="false">Це звичайний метод для кліку на кнопку.</div>
-                            <div class="answer-btn" data-correct="true">Це конструктор, який приймає драйвер і зберігає
-                                його
-                                для використання всередині класу.</div>
-                            <div class="answer-btn" data-correct="false">Це метод, який запускає тест.</div>
-                        </div>
-                        <div class="explanation" style="display: none;">
+        <div class="quiz-question">
+            <h3>Чому в тесті, написаному за POM, немає `driver.find_element(...)`?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Тому що POM не використовує Selenium.</div>
+                <div class="answer-btn" data-correct="true">Тому що всі виклики `find_element` "заховані"
+                    всередині
+                    методів Page Object.</div>
+                <div class="answer-btn" data-correct="false">Тому що цей метод застарів.</div>
+            </div>
+            <div class="explanation" style="display: none;">
 
-                            <p><i class="fa-solid fa-otter"></i> `__init__` — це спеціальний метод в Python, який
-                                автоматично викликається при створенні об'єкта класу. В РОМ ми використовуємо його, щоб
-                                "передати" наш `driver` всередину "карти" сторінки.</p>
-                        </div>
-                    </div>
+                <p><i class="fa-solid fa-otter"></i> Тест стає "клієнтом" для Page Object. Він лише каже:
+                    `login_page.enter_username(...)`, а вже сам метод `enter_username` всередині класу
+                    `LoginPage`
+                    знає, як знайти потрібний елемент і що з ним робити.</p>
+            </div>
+        </div>
+
+        <div class="quiz-question">
+            <h3>Якщо ID кнопки "Login" зміниться на сайті, скільки файлів тобі доведеться змінити в твоєму
+                проєкті з
+                РОМ?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Всі файли тестів, які використовують цю кнопку.
                 </div>
+                <div class="answer-btn" data-correct="true">Лише один файл: `login_page.py`.</div>
+                <div class="answer-btn" data-correct="false">Лише один файл: `test_login.py`.</div>
+            </div>
+            <div class="explanation" style="display: none;">
 
+                <p><i class="fa-solid fa-otter"></i> І в цьому вся краса Page Object Model. Ти міняєш локатор в
+                    одному місці (в `LOGIN_BUTTON` всередині класу `LoginPage`), і всі тести автоматично
+                    починають
+                    використовувати новий локатор. Це і є легкість підтримки.</p>
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h3>Де в архітектурі РОМ мають знаходитись перевірки (`assert`)?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Всередині методів Page Object.</div>
+                <div class="answer-btn" data-correct="true">У файлі тесту, після виклику методів.</div>
+                <div class="answer-btn" data-correct="false">В окремому файлі для асертів.</div>
+            </div>
+            <div class="explanation" style="display: none;">
+                <h4>Пояснення</h4>
+                <p><b>Правильно.</b> Page Object не повинен нічого перевіряти. Його задача — лише надавати доступ до елементів і дій. Вся логіка перевірок (`assert`) належить тесту. Це дозволяє використовувати один і той самий Page Object для різних тестів (і позитивних, і негативних).</p>
+            </div>
+        </div>
 
-                <div class="quiz-question">
-                    <h3>Чому в тесті, написаному за POM, немає `driver.find_element(...)`?</h3>
-                    <div class="answers-container">
-                        <div class="answer-btn" data-correct="false">Тому що POM не використовує Selenium.</div>
-                        <div class="answer-btn" data-correct="true">Тому що всі виклики `find_element` "заховані"
-                            всередині
-                            методів Page Object.</div>
-                        <div class="answer-btn" data-correct="false">Тому що цей метод застарів.</div>
-                    </div>
-                    <div class="explanation" style="display: none;">
-
-                        <p><i class="fa-solid fa-otter"></i> Тест стає "клієнтом" для Page Object. Він лише каже:
-                            `login_page.enter_username(...)`, а вже сам метод `enter_username` всередині класу
-                            `LoginPage`
-                            знає, як знайти потрібний елемент і що з ним робити.</p>
-                    </div>
-                </div>
-
-                <div class="quiz-question">
-                    <h3>Якщо ID кнопки "Login" зміниться на сайті, скільки файлів нам доведеться змінити в нашому
-                        проєкті з
-                        РОМ?</h3>
-                    <div class="answers-container">
-                        <div class="answer-btn" data-correct="false">Всі файли тестів, які використовують цю кнопку.
-                        </div>
-                        <div class="answer-btn" data-correct="true">Лише один файл: `login_page.py`.</div>
-                        <div class="answer-btn" data-correct="false">Лише один файл: `main.py`.</div>
-                    </div>
-                    <div class="explanation" style="display: none;">
-
-                        <p><i class="fa-solid fa-otter"></i> І в цьому вся краса Page Object Model. Ми міняємо локатор в
-                            одному місці (в `LOGIN_BUTTON` всередині класу `LoginPage`), і всі тести автоматично
-                            починають
-                            використовувати новий локатор. Це і є легкість підтримки.</p>
-                    </div>
-                </div>
-                <div class="quiz-question">
-    <h3>Де в архітектурі РОМ мають знаходитись перевірки (`assert`)?</h3>
-    <div class="answers-container">
-        <div class="answer-btn" data-correct="false">Всередині методів Page Object.</div>
-        <div class="answer-btn" data-correct="true">У файлі тесту (напр., `main.py`), після виклику методів.</div>
-        <div class="answer-btn" data-correct="false">В окремому файлі для асертів.</div>
+        <div class="quiz-question">
+            <h3>Навіщо методам у Page Object (напр., `enter_username`) потрібен `self` як перший аргумент?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="true">Щоб мати доступ до інших властивостей і методів цього ж об'єкта (напр., до `self.driver`).</div>
+                <div class="answer-btn" data-correct="false">Щоб приймати дані від тесту.</div>
+                <div class="answer-btn" data-correct="false">Це вимога Selenium для всіх методів.</div>
+            </div>
+            <div class="explanation" style="display: none;">
+                <h4>Пояснення</h4>
+                <p><b>Так, це ключовий концепт ООП!</b> `self` — це посилання на сам екземпляр класу (наш об'єкт `login_page`). Завдяки `self` метод `enter_username` може доступитись до `self.driver`, який ми зберегли в `__init__`, і до локаторів, як-от `self.USERNAME_INPUT`.</p>
+            </div>
+        </div>
     </div>
-    <div class="explanation" style="display: none;">
-        <h4>Пояснення</h4>
-        <p><b>Правильно.</b> Page Object не повинен нічого перевіряти. Його задача — лише надавати доступ до елементів і дій. Вся логіка перевірок (`assert`) належить тесту. Це дозволяє використовувати один і той самий Page Object для різних тестів (і позитивних, і негативних).</p>
+
+    <div class="quiz-navigation">
+        <button class="prev-question" disabled>&lt; Назад</button>
+        <span class="question-counter">Питання 1 / N</span>
+        <button class="next-question">Вперед &gt;</button>
     </div>
 </div>
-
-<div class="quiz-question">
-    <h3>Навіщо методам у Page Object (напр., `enter_username`) потрібен `self` як перший аргумент?</h3>
-    <div class="answers-container">
-        <div class="answer-btn" data-correct="true">Щоб мати доступ до інших властивостей і методів цього ж об'єкта (напр., до `self.driver`).</div>
-        <div class="answer-btn" data-correct="false">Щоб приймати дані від тесту.</div>
-        <div class="answer-btn" data-correct="false">Це вимога Selenium для всіх методів.</div>
-    </div>
-    <div class="explanation" style="display: none;">
-        <h4>Пояснення</h4>
-        <p><b>Так, це ключовий концепт ООП!</b> `self` — це посилання на сам екземпляр класу (наш об'єкт `login_page`). Завдяки `self` метод `enter_username` може доступитись до `self.driver`, який ми зберегли в `__init__`, і до локаторів, як-от `self.USERNAME_INPUT`.</p>
-    </div>
-</div>
-
-
-
-                <div class="quiz-navigation">
-                    <button class="prev-question" disabled>&lt; Назад</button>
-                    <span class="question-counter">Питання 1 / N</span>
-                    <button class="next-question">Вперед &gt;</button>
-
-                </div>

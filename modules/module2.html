@@ -1,76 +1,86 @@
-<h1>Модуль 2: Python — База для Автоматизатора</h1>
-            <p>
-                Теорія — це важливо, але справжня магія починається з коду. У цьому модулі ми вивчимо "абетку" мови
-                Python —
-                ті основні інструменти, які потрібні кожному автоматизатору щодня.
-            </p>
+<h1>Модуль 2: Python — Наша "чарівна паличка"</h1>
+<p>
+    Якщо Selenium — це автомобіль, то Python — це двигун, який ним керує. Нам не потрібно знати всю інженерію, але розуміти основи роботи двигуна — обов'язково. У цьому модулі ми вивчимо "абетку" Python, яка потрібна автоматизатору щодня.
+</p>
 
-            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> 1. Змінні та Типи Даних</h3>
-            <p>
-                <strong>Змінна</strong> — це як підписана коробочка, в яку ми можемо покласти якусь інформацію. Основні
-                типи
-                інформації (даних), які ми використовуємо:
-            </p>
-            <ul>
-                <li><strong>Рядок (string, str):</strong> Будь-який текст у лапках. Наприклад:
-                    <code>"Привіт, світ!"</code>.
-                </li>
-                <li><strong>Ціле число (integer, int):</strong> Числа без дробової частини. Наприклад: <code>101</code>.
-                </li>
-                <li><strong>Булевий тип (boolean, bool):</strong> Дуже важливий для тестів! Має лише два значення:
-                    <code>True</code> (правда) або <code>False</code> (хибність).
-                </li>
-            </ul>
-            <pre><code>
-# Створюємо змінні
-test_name = "Перевірка логіну"
-test_id = 5
-is_passed = True
-    </code></pre>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-box"></i> 1. Змінні та Типи Даних: "Коробки" для інформації</h3>
+<p>
+    <strong>Змінна</strong> — це як підписана коробка, в яку ми кладемо інформацію. Залежно від типу інформації, Python використовує різні "коробки".
+</p>
+<ul>
+    <li><strong>Рядок (string, <code>str</code>):</strong> Текст у лапках. <br>
+        <code>expected_title = "Your Profile"</code></li>
+    <li><strong>Ціле число (integer, <code>int</code>):</strong> Числа без дробової частини.<br>
+        <code>items_in_cart = 5</code></li>
+    <li><strong>Булевий тип (boolean, <code>bool</code>):</strong> "Так" або "Ні". Дуже важливий для перевірок. <br>
+        <code>is_user_logged_in = True</code></li>
+    <li><strong>Список (list, <code>list</code>):</strong> Впорядкований набір елементів у квадратних дужках. Можна змінювати.<br>
+        <code>locators = ["#username", "#password", "#login-button"]</code></li>
+    <li><strong>Словник (dictionary, <code>dict</code>):</strong> Набір пар "ключ:значення" у фігурних дужках. <strong>Критично важливий для API-тестування</strong>, бо ідеально відповідає формату JSON.<br>
+        <code>user_data = {"name": "Olena", "role": "QA"}</code></li>
+</ul>
 
-            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> 2. Умови (if / else)</h3>
-            <p>
-                Дозволяють нашій програмі приймати рішення. "<strong>Якщо</strong> умова правдива — роби це, **інакше**
-                —
-                роби щось інше".
-            </p>
-            <pre><code>
-if is_passed == True:
-    print("Тест успішний! ✅")
+<h3 style="margin-top: 20px;"><i class="fa-solid-right-left"></i> 2. Умови (if / else): Розвилки на дорозі</h3>
+<p>
+    Дозволяють програмі приймати рішення. "<strong>Якщо</strong> умова правдива — роби це, <strong>інакше</strong> — роби щось інше".
+</p>
+<pre><code>
+actual_title = driver.title # Отримали заголовок сторінки
+
+if actual_title == "Welcome Page":
+    print("✅ Перевірка успішна: ми на правильній сторінці.")
 else:
-    print("Тест провалено! ❌")
-    </code></pre>
+    print(f"❌ Помилка! Очікували 'Welcome Page', а отримали '{actual_title}'.")
+</code></pre>
 
-            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> 3. Цикли (for)</h3>
-            <p>
-                Дозволяють повторювати одну й ту саму дію багато разів. Наприклад, перевірити кожен елемент у списку.
-            </p>
-            <pre><code>
-# Створюємо список (list)
-browsers = ["Chrome", "Firefox", "Safari"]
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-repeat"></i> 3. Цикли (for): Робимо рутину</h3>
+<p>
+    Дозволяють повторювати дію для кожного елемента у списку. Незамінні для перевірки таблиць, списків товарів тощо.
+</p>
+<pre><code>
+# Список очікуваних посилань у меню
+expected_links = ["Home", "Products", "Contacts"]
 
-# Цикл, що пройдеться по кожному елементу
-for browser in browsers:
-    print(f"Запускаю тест у браузері {browser}...")
-    </code></pre>
+# Знаходимо всі реальні посилання на сайті
+actual_links = driver.find_elements(By.CSS_SELECTOR, ".menu-item")
 
-            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> 4. Функції (def)</h3>
-            <p>
-                Це як створити власний інструмент. Ми "упаковуємо" шматок коду, даємо йому ім'я і можемо потім викликати
-                його багато разів. Це слідує принципу <strong>DRY (Don't Repeat Yourself - Не повторюй себе)</strong>.
-            </p>
-            <pre><code>
-# Оголошуємо функцію
-def print_separator():
-    print("---===---")
+for link_element in actual_links:
+    # Перевіряємо, чи текст кожного посилання є в нашому списку очікувань
+    assert link_element.text in expected_links
+    print(f"Перевірено посилання: {link_element.text}")
+</code></pre>
 
-# Викликаємо функцію
-print("Початок тесту")
-print_separator()
-print("Кінець тесту")
-    </code></pre>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-wrench"></i> 4. Функції (def): Створюємо власні інструменти</h3>
+<p>
+    Це основа принципу <strong>DRY (Don't Repeat Yourself - Не повторюй себе)</strong>. Ми "упаковуємо" шматок коду, який часто використовується, даємо йому ім'я і можемо потім викликати його багато разів.
+</p>
+<h4>До: Повторення коду</h4>
+<pre><code>
+# --- Тест 1 ---
+print("---=== Початок тесту логіну ===---")
+# ... код тесту ...
+print("---=== Кінець тесту логіну ===---")
 
-            <hr>
+# --- Тест 2 ---
+print("---=== Початок тесту реєстрації ===---")
+# ... код тесту ...
+print("---=== Кінець тесту реєстрації ===---")
+</code></pre>
+
+<h4>Після: Використання функції</h4>
+<pre><code>
+# Оголошуємо функцію з аргументом
+def run_test(test_name, test_function):
+    print(f"---=== Початок тесту: {test_name} ===---")
+    test_function() # Викликаємо передану функцію
+    print(f"---=== Кінець тесту: {test_name} ===---")
+
+# Викликаємо нашу обгортку для кожного тесту
+run_test("Логін", login_test_logic)
+run_test("Реєстрація", registration_test_logic)
+</code></pre>
+<hr>
+
 
             
 
