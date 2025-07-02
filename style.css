@@ -281,8 +281,8 @@ body .module-container.active {
 
 .module-links-container {
     position: absolute;
-    top: 60%;
-    left: 68%;
+    top: 65%;
+    left: 74%;
     transform: translateX(-50%);
     width: 30%;
     max-width: 400px;
@@ -512,7 +512,7 @@ body .module-container.active {
     flex-grow: 1; /* Поле займає весь доступний простір */
     padding: 10px;
     background-color: rgba(29, 56, 48, 0.211);
-    border: 1px solid rgba(32, 59, 44, 0.211);
+    border: 1px solid rgba(223, 252, 250, 0.211);
     border-radius: 5px;
     color: #e4feff;
     font-size: 16px;
@@ -524,8 +524,8 @@ body .module-container.active {
     width: 40px;
     height: 40px;
     background: none;
-    border: 1px solid #285551;
-    color: #285455;
+    border: 1px solid #e4feff;
+    color: #e4feff;
     border-radius: 50%; /* Робимо її круглою */
     cursor: pointer;
     font-size: 16px;
@@ -534,14 +534,19 @@ body .module-container.active {
     place-items: center;
 }
 #blitz-widget #blitz-submit-btn:hover {
-    background-color: #285547;
-    color: #285547;
+    /* Додаємо світіння потрібного кольору за допомогою тіні */
+    box-shadow: 0 0 12px rgba(40, 85, 81, 0.8); /* rgba(40, 85, 81, 0.8) - це твій колір #285551 з прозорістю */
+
+    /* Можна також трохи освітлити рамку для кращого ефекту */
+    border-color: #65c9c1;
+    
+    /* Збільшення залишаємо, це гарний ефект */
     transform: scale(1.1);
 }
 
 /* --- Змінюємо колір тексту запитання у віджеті --- */
 #blitz-question-text {
-    color: #28554e; /* <--- Замініть цей колір на бажаний */
+    color: #e4feff; /* <--- Замініть цей колір на бажаний */
 }
 
 /* --- Анімації --- */
@@ -551,8 +556,8 @@ body .module-container.active {
     position: fixed;
     z-index: 3000;
     font-size: 30px;
-    color: #285551;
-    text-shadow: 0 0 10px #285553;
+    color: #e4feff;
+    text-shadow: 0 0 10px #e4feff;
     pointer-events: none; /* Щоб не можна було клікнути */
     opacity: 0; /* Повністю прозорі */
     transition: opacity 0.2s ease;
@@ -596,13 +601,13 @@ body .module-container.active {
 /* 1. Стиль при активності (коли ви клікаєте на поле) */
 #blitz-widget #blitz-answer-input:focus {
     outline: none; /* Забираємо стандартну обводку браузера */
-    border-color: #165f53; /* Робимо колір рамки золотим, як у кнопки */
+    border-color: #65c9c1; /* Робимо колір рамки золотим, як у кнопки */
     box-shadow: 0 0 10px rgba(12, 96, 102, 0.5); /* Додаємо м'яке золоте світіння */
 }
 
 /* 2. Стиль для ПРАВИЛЬНОЇ відповіді */
 #blitz-widget #blitz-answer-input.correct-answer {
-    border-color: #18694d; /* Спокійний зелений колір */
+    border-color: #65c9c1; /* Спокійний зелений колір */
     box-shadow: 0 0 10px rgba(10, 49, 26, 0.5); /* Зелене світіння */
 }
 
@@ -772,7 +777,7 @@ body .module-container.active {
 /* ============================================== */
 
 /* Застосовуємо ці стилі для екранів шириною до 1024px (стандартний iPad в ландшафтній орієнтації) */
-@media (max-width: 1024px) {
+@media (max-width: 1366px) {
 
     /* --- Головний контейнер з посиланнями на модулі --- */
     .module-links-container {
@@ -838,11 +843,17 @@ body .module-container.active {
         /* Робимо відступи меншими на вузьких екранах */
         padding: 20px 25px;
     }
+
+     /* --- ВИПРАВЛЕННЯ ДЛЯ ФОНУ МОДУЛІВ --- */
+    #modules-wrapper {
+        background-repeat: contain;
+        background-repeat: no-repeat;
+    }
 }
 
 
 /* Додаткові налаштування для портретної орієнтації (високий і вузький екран) */
-@media (max-width: 834px) and (orientation: portrait) {
+@media (max-width: 1024px) and (orientation: portrait) {
     .module-links-container {
         /* На вертикальному екрані знову ставимо посилання в один стовпчик */
         grid-template-columns: 1fr; 
@@ -852,6 +863,7 @@ body .module-container.active {
         position: static; /* Повертаємо в потік документа */
         transform: none;
         margin-top: 5vh; /* Зменшуємо верхній відступ */
+        margin: 5vh auto 0;
     }
 
     #hero-section {
