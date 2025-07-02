@@ -802,7 +802,7 @@ body .module-container.active {
     }
 
     .module-link {
-        font-size: 1.2em; /* Трохи збільшимо шрифт для зручності */
+        font-size: 1em; /* Трохи збільшимо шрифт для зручності */
         width: 100%;
         text-align: center;
         padding: 5px;
@@ -811,7 +811,7 @@ body .module-container.active {
     /* Змінюємо сітку посилань на 2 колонки, щоб було компактніше */
     .module-links-container {
         grid-template-columns: repeat(2, 1fr);
-        gap: 15px 20px; /* Змінюємо відступи */
+        gap: 10px 10px; /* Змінюємо відступи */
         width: 90%;
         max-width: 600px;
         margin-top: 15vh; /* Трохи піднімемо */
@@ -823,13 +823,14 @@ body .module-container.active {
     
     /* --- Віджет з бліц-питаннями --- */
     #blitz-widget {
+        font-size: 16px;
         /* Прибираємо жорстку прив'язку до кута */
         position: relative; /* Робимо його частиною загального потоку */
         left: auto;
         top: auto;
         
         /* Центруємо його і даємо відступи */
-        margin: 10vh auto 20px auto; 
+        margin: 1vh auto 20px auto; 
         max-width: 350px;
     }
 
@@ -857,13 +858,13 @@ body .module-container.active {
     .module-links-container {
         /* На вертикальному екрані знову ставимо посилання в один стовпчик */
         grid-template-columns: 1fr; 
-        width: 80%;
+        width: 90%;
         max-width: 400px;
         top: auto; /* Скасовуємо прив'язку до верху */
         position: static; /* Повертаємо в потік документа */
         transform: none;
         margin-top: 5vh; /* Зменшуємо верхній відступ */
-        margin: 5vh auto 0;
+        margin: 10vh auto 0;
     }
 
     #hero-section {
