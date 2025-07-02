@@ -2,7 +2,7 @@
     <h1>Модуль 6: Тестування API — Запити до "Серця" Програми</h1>
     <p>Ми переходимо від тестування видимого інтерфейсу (UI) до тестування "мозку" додатку — його API. Якщо UI — це зал ресторану, то API — це кухня, куди ми будемо робити замовлення напряму. Для цього ми використовуємо потужну бібліотеку Python — `requests`.</p>
 
-    <h3><i class="fa-solid fa-server"></i> Основи API: CRUD та HTTP-методи</h3>
+    <h3 style="margin-top: 20px;"><i class="fa-solid fa-server"></i> Основи API: CRUD та HTTP-методи</h3>
     <p>В основі більшості API лежить концепція CRUD (Create, Read, Update, Delete), яка реалізується через HTTP-методи:</p>
     <ul>
         <li><strong>Create (Створити):</strong> Метод `POST`. Відправляємо дані на сервер для створення нового об'єкта.</li>
@@ -11,7 +11,7 @@
         <li><strong>Delete (Видалити):</strong> Метод `DELETE`. Видаляємо об'єкт з сервера.</li>
     </ul>
 
-    <h3><i class="fa-solid fa-key"></i> Аутентифікація: API-ключі</h3>
+    <h3 style="margin-top: 20px;"><i class="fa-solid fa-key"></i> Аутентифікація: API-ключі</h3>
     <p>Більшість API захищені. Найпростіший спосіб аутентифікації — це API-ключ. Це унікальний "пропуск", який ми додаємо до наших запитів, щоб сервер знав, хто ми, і чи є у нас дозвіл на отримання даних.</p>
     <pre><code>
 # Приклад передачі ключа як параметра запиту
@@ -23,7 +23,7 @@ params = {
 response = requests.get("https://api.openweathermap.org/...", params=params)
     </code></pre>
 
-    <h3><i class="fa-solid fa-traffic-light"></i> Коди статусу HTTP</h3>
+    <h3 style="margin-top: 20px;"><i class="fa-solid fa-traffic-light"></i> Коди статусу HTTP</h3>
     <p>Кожна відповідь від сервера містить код статусу, який показує результат операції:</p>
     <ul>
         <li><strong>2xx (Успіх):</strong> `200 OK` (Все добре), `201 Created` (Створено новий ресурс).</li>
@@ -31,7 +31,7 @@ response = requests.get("https://api.openweathermap.org/...", params=params)
         <li><strong>5xx (Помилка сервера):</strong> `500 Internal Server Error` (Щось зламалось на сервері).</li>
     </ul>
     <hr>
-    <h2>Інтерактивний Тест до Модуля 6</h2>
+    
     <div class="quiz-container">
         <div class="quiz-questions-wrapper">
             <div class="quiz-question">
@@ -58,6 +58,29 @@ response = requests.get("https://api.openweathermap.org/...", params=params)
                     <div class="answer-btn" data-correct="true">Requests</div>
                 </div>
             </div>
+            <div class="quiz-question">
+                        <h3>Що таке JSON?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="false">Мова програмування для серверів.</div>
+                            <div class="answer-btn" data-correct="true">Текстовий формат для обміну даними, який легко читається і людиною, і машиною.</div>
+                            <div class="answer-btn" data-correct="false">Спеціальний тип API-ключа.</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+                            <p><i class="fa-solid fa-otter"></i> JSON (JavaScript Object Notation) — це стандарт де-факто для передачі даних в API. Коли ми отримуємо відповідь від сервера, ми зазвичай перетворюємо її в Python-словник за допомогою методу `.json()`, щоб зручно працювати з даними.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h3>Якщо ви відправляєте `PUT` запит на `/posts/1`, що ви очікуєте?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="false">Створення нового поста з ID 2.</div>
+                            <div class="answer-btn" data-correct="true">Повне оновлення (заміна) існуючого поста з ID 1.</div>
+                            <div class="answer-btn" data-correct="false">Часткове оновлення лише одного поля в пості з ID 1.</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+                            <p><i class="fa-solid fa-otter"></i> Метод `PUT` є ідемпотентним і призначений для повної заміни ресурсу. Якщо вам потрібно оновити лише одне поле (наприклад, тільки заголовок), для цього краще підходить метод `PATCH`.</p>
+                        </div>
+                    </div>
         </div>
         <div class="quiz-navigation">
             <button class="prev-question" disabled>&lt; Назад</button>

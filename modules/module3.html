@@ -10,7 +10,7 @@
                 допомогою цього пульта віддає команди (відкрити сайт, знайти кнопку, клікнути), а браузер їх виконує.
             </p>
 
-            <h3><i class="fa-solid fa-cat"></i> Ключові концепції нашого першого тесту</h3>
+            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> Ключові концепції нашого першого тесту</h3>
 
             <h4>1. WebDriver та WebDriver Manager</h4>
             <p>Щоб почати роботу, ми створюємо "водія" і автоматично завантажуємо для нього правильну версію за
@@ -53,7 +53,7 @@ button = wait.until(EC.element_to_be_clickable((By.ID, "myButton")))</code></pre
             <pre><code>assert "Очікуваний текст" in driver.title</code></pre>
 
             <hr>
-            <h3><i class="fa-solid fa-cat"></i> Уроки, винесені з "битви" з YouTube</h3>
+            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> Уроки, винесені з "битви" з YouTube</h3>
             <p>Наш шлях не був простим. У спробах автоматизувати складний сайт ми на практиці дізналися про реальні
                 проблеми, які ми перемогли:</p>
             <ul>
@@ -77,7 +77,7 @@ button = wait.until(EC.element_to_be_clickable((By.ID, "myButton")))</code></pre
 
             <hr>
 
-            <h2>Інтерактивний Тест до Модуля 3</h2>
+            
 
             <div class="quiz-container">
 
@@ -131,6 +131,31 @@ button = wait.until(EC.element_to_be_clickable((By.ID, "myButton")))</code></pre
                         </p>
                     </div>
                 </div>
+                <div class="quiz-question">
+    <h3>Тест впав з помилкою `StaleElementReferenceException`. Що це найімовірніше означає?</h3>
+    <div class="answers-container">
+        <div class="answer-btn" data-correct="false">Елемент не знайдено на сторінці.</div>
+        <div class="answer-btn" data-correct="true">Елемент був знайдений, але сторінка оновилась, і посилання на нього стало "застарілим".</div>
+        <div class="answer-btn" data-correct="false">Ми намагаємось клікнути на елемент, який перекритий іншим.</div>
+    </div>
+    <div class="explanation" style="display: none;">
+        <h4>Пояснення</h4>
+        <p><b>Точно!</b> Це наша знайома проблема з динамічними сайтами. Ми знайшли елемент, але JavaScript встиг "перемалювати" сторінку. Наше посилання на старий елемент тепер веде в нікуди. Лікується повторним пошуком елемента перед взаємодією.</p>
+    </div>
+</div>
+
+<div class="quiz-question">
+    <h3>Для чого ми використовували бібліотеку `webdriver-manager`?</h3>
+    <div class="answers-container">
+        <div class="answer-btn" data-correct="false">Щоб писати чистіший код за POM.</div>
+        <div class="answer-btn" data-correct="false">Щоб робити "розумні" очікування.</div>
+        <div class="answer-btn" data-correct="true">Щоб автоматично завантажувати і налаштовувати правильну версію chromedriver.</div>
+    </div>
+    <div class="explanation" style="display: none;">
+        <h4>Пояснення</h4>
+        <p><b>Так!</b> Це професійний інструмент, який позбавляє нас від головного болю — ручного завантаження `chromedriver.exe` і слідкування за тим, щоб його версія співпадала з версією нашого браузера Chrome.</p>
+    </div>
+</div>
 
 
 

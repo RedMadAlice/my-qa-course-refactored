@@ -8,7 +8,7 @@
                     (POM)</strong>.
             </p>
 
-            <h3><i class="fa-solid fa-cat"></i> Головна ідея: Створюємо "Карти"</h3>
+            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> Головна ідея: Створюємо "Карти"</h3>
             <p>
                 Уявіть, що для кожної веб-сторінки ми створюємо окрему "карту". Ця карта описує всі важливі місця на
                 сторінці і як з ними взаємодіяти.
@@ -31,7 +31,7 @@
 
             <hr>
 
-            <h3><i class="fa-solid fa-cat"></i> Приклад нашого рефакторингу</h3>
+            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> Приклад нашого рефакторингу</h3>
             <p>Ось як ми перетворили наш тест для <code>the-internet.herokuapp.com/login</code>, використовуючи POM.</p>
 
             <h4>1. Карта для сторінки логіну (login_page.py)</h4>
@@ -105,7 +105,7 @@ driver.quit()
 
             <hr>
 
-            <h2>Інтерактивний Тест до Модуля 4</h2>
+            
 
             <div class="quiz-container">
 
@@ -165,6 +165,31 @@ driver.quit()
                             використовувати новий локатор. Це і є легкість підтримки.</p>
                     </div>
                 </div>
+                <div class="quiz-question">
+    <h3>Де в архітектурі РОМ мають знаходитись перевірки (`assert`)?</h3>
+    <div class="answers-container">
+        <div class="answer-btn" data-correct="false">Всередині методів Page Object.</div>
+        <div class="answer-btn" data-correct="true">У файлі тесту (напр., `main.py`), після виклику методів.</div>
+        <div class="answer-btn" data-correct="false">В окремому файлі для асертів.</div>
+    </div>
+    <div class="explanation" style="display: none;">
+        <h4>Пояснення</h4>
+        <p><b>Правильно.</b> Page Object не повинен нічого перевіряти. Його задача — лише надавати доступ до елементів і дій. Вся логіка перевірок (`assert`) належить тесту. Це дозволяє використовувати один і той самий Page Object для різних тестів (і позитивних, і негативних).</p>
+    </div>
+</div>
+
+<div class="quiz-question">
+    <h3>Навіщо методам у Page Object (напр., `enter_username`) потрібен `self` як перший аргумент?</h3>
+    <div class="answers-container">
+        <div class="answer-btn" data-correct="true">Щоб мати доступ до інших властивостей і методів цього ж об'єкта (напр., до `self.driver`).</div>
+        <div class="answer-btn" data-correct="false">Щоб приймати дані від тесту.</div>
+        <div class="answer-btn" data-correct="false">Це вимога Selenium для всіх методів.</div>
+    </div>
+    <div class="explanation" style="display: none;">
+        <h4>Пояснення</h4>
+        <p><b>Так, це ключовий концепт ООП!</b> `self` — це посилання на сам екземпляр класу (наш об'єкт `login_page`). Завдяки `self` метод `enter_username` може доступитись до `self.driver`, який ми зберегли в `__init__`, і до локаторів, як-от `self.USERNAME_INPUT`.</p>
+    </div>
+</div>
 
 
 

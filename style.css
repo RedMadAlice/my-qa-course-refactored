@@ -20,25 +20,25 @@ html, body {
 
 :root {
     /* --- Налаштування Кольорів --- */
-    --color-background: #f1ffe2; /* Колір фону всієї сторінки */
+    --color-background: #e4feff; /* Колір фону всієї сторінки */
     --color-text-main: #152a14; /* Основний колір тексту */
     --color-text-header: #181127; /* Колір заголовків */
     --color-primary-accent: #152a14; /* Головний акцентний колір (бузковий) */
 
     /* Кольори для кнопок-відповідей */
-    --color-btn-normal-bg: #f1ffe2;
+    --color-btn-normal-bg: #e4feff;
     --color-btn-normal-border: #181127;
-    --color-btn-hover-bg: #d8efb2;
+    --color-btn-hover-bg: #c7f8fa;
     
-    --color-btn-correct-bg: #7fe5bb; /* Зелений */
-    --color-btn-correct-border: #181127;
-    --color-btn-correct-text: #181127;
+    --color-btn-correct-bg: #7fe5d7; /* Зелений */
+    --color-btn-correct-border: #173238;
+    --color-btn-correct-text: #173238;
 
-    --color-btn-incorrect-bg: #e2909b; /* Червоний */
-    --color-btn-incorrect-border: #612940;
-    --color-btn-incorrect-text: #612940;
+    --color-btn-incorrect-bg: #e290c2; /* Червоний */
+    --color-btn-incorrect-border: #61294e;
+    --color-btn-incorrect-text: #61294e;
     
-    --color-explanation-bg: #f1ffe2;
+    --color-explanation-bg: #e4feff;
     --color-explanation-border: var(--color-primary-accent);
 
     /* --- Налаштування Шрифтів --- */
@@ -267,7 +267,7 @@ body .module-container.active {
 
 #quote-text {
   position: absolute;
-  top: 25%;             /* <--- Можеш погратись (20%, 30%) */
+  top: 23%;             /* <--- Можеш погратись (20%, 30%) */
   left: 45%;            /* <--- Зміщуємо трохи вліво, бо дерево тепер справа */
   transform: translateX(-50%); 
   
@@ -281,8 +281,8 @@ body .module-container.active {
 
 .module-links-container {
     position: absolute;
-    top: 57%;
-    left: 68.5%;
+    top: 60%;
+    left: 68%;
     transform: translateX(-50%);
     width: 30%;
     max-width: 400px;
@@ -392,6 +392,68 @@ body .module-container.active {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
+/*права панель туть*/
+/* --- СТИЛІ ДЛЯ ПРАВОЇ ПАНЕЛІ ЕКЗАМЕНІВ --- */
+#exams-sidebar {
+  position: fixed;
+  right: -300px; /* Початково схована праворуч */
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  background-color: rgb(38 62 80 / 42%);
+  backdrop-filter: blur(8px);
+  padding: 70px 20px 20px 20px;
+  box-shadow: -3px 0 15px rgba(0,0,0,0.4); /* Тінь зліва */
+  transition: right 0.4s ease-in-out;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Цей клас буде додавати JavaScript, щоб показати панель */
+#exams-sidebar.visible {
+  right: 0; 
+}
+
+#exams-sidebar h4 {
+    font-family: var(--font-family-headers);
+    color: #FFFFE2;
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+#exams-sidebar hr {
+  width: 100%;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  margin: 10px 0;
+}
+
+#exams-sidebar .exams-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#exams-sidebar .exam-link, 
+#exams-sidebar .practice-link {
+  color: #FFFFE2;
+  text-decoration: none;
+  font-family: var(--font-family-headers);
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+
+#exams-sidebar .exam-link:hover,
+#exams-sidebar .practice-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+/*права панель закінчилась туть*/
+
 /* Кнопка-бургер */
 #menu-toggle {
     position: fixed;
@@ -399,10 +461,10 @@ body .module-container.active {
     left: 20px;
     z-index: 1001; /* Вище, ніж панель */
     cursor: pointer;
-    background: var(--color-text-header);
-    color: var(--color-background);
-    border: none;
+    background-color: rgba(17, 65, 70, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
+    color: #e4feff;
     width: 50px;
     height: 50px;
     font-size: 24px;
@@ -452,7 +514,7 @@ body .module-container.active {
     background-color: rgba(29, 56, 48, 0.211);
     border: 1px solid rgba(32, 59, 44, 0.211);
     border-radius: 5px;
-    color: #98d3c0;
+    color: #e4feff;
     font-size: 16px;
 }
 
@@ -462,8 +524,8 @@ body .module-container.active {
     width: 40px;
     height: 40px;
     background: none;
-    border: 1px solid #285547;
-    color: #285547;
+    border: 1px solid #285551;
+    color: #285455;
     border-radius: 50%; /* Робимо її круглою */
     cursor: pointer;
     font-size: 16px;
@@ -479,7 +541,7 @@ body .module-container.active {
 
 /* --- Змінюємо колір тексту запитання у віджеті --- */
 #blitz-question-text {
-    color: #285547; /* <--- Замініть цей колір на бажаний */
+    color: #28554e; /* <--- Замініть цей колір на бажаний */
 }
 
 /* --- Анімації --- */
@@ -489,8 +551,8 @@ body .module-container.active {
     position: fixed;
     z-index: 3000;
     font-size: 30px;
-    color: #285547;
-    text-shadow: 0 0 10px #285547;
+    color: #285551;
+    text-shadow: 0 0 10px #285553;
     pointer-events: none; /* Щоб не можна було клікнути */
     opacity: 0; /* Повністю прозорі */
     transition: opacity 0.2s ease;
@@ -548,4 +610,159 @@ body .module-container.active {
 #blitz-widget #blitz-answer-input.incorrect-answer {
     border-color: #794518; /* Глибокий помаранчевий замість червоного */
     box-shadow: 0 0 10px rgba(107, 58, 15, 0.5); /* Помаранчеве світіння */
+}
+
+/* --- СТИЛІ ДЛЯ КНОПКИ ТА МЕНЮ ЕКЗАМЕНІВ --- */
+
+/* 1. Кнопка на головній сторінці */
+/* --- ОНОВЛЕНІ СТИЛІ ДЛЯ КНОПКИ ЕКЗАМЕНІВ --- */
+/* --- Стиль кнопки екзаменів --- */
+#exams-menu-btn {
+    position: fixed; /* Робимо її прикріпленою до екрана */
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(17, 65, 70, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: #e4feff;
+    font-size: 22px;
+    cursor: pointer;
+    /* Спочатку ховаємо її, поки ми на головному екрані */
+    display: none; 
+    place-items: center;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+#exams-menu-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(173, 216, 230, 0.5);
+}
+
+/* 2. Стилі для спливаючого меню (схожі на віджет) */
+#exams-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+#exams-overlay:not(.hidden) {
+    opacity: 1;
+    pointer-events: all;
+}
+
+#exams-window {
+    position: relative;
+    background-color: rgba(13, 32, 44, 0.9);
+    color: #FFFFE2;
+    padding: 30px 40px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-align: center;
+}
+#exams-window h4 {
+    margin-top: 0;
+    font-family: var(--font-family-headers);
+    font-size: 22px;
+    margin-bottom: 25px;
+}
+
+#exams-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 28px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+/* 3. Список посилань на екзамени */
+.exams-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.exam-link {
+    color: #a2d2ff;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.2s ease;
+}
+.exam-link:hover {
+    color: #fff;
+}
+
+/* Стиль для підзаголовків у бічній панелі практикумів*/
+.sidebar-subheader {
+  display: block;
+  padding: 15px 10px 5px 10px;
+  color: #ccc;
+  font-family: var(--font-family-headers);
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+/* --- СТИЛІ ДЛЯ БЛОКУ "ПОКАЗАТИ РІШЕННЯ" --- */
+
+.solution-container {
+    margin-top: 30px;
+    border: 1px dashed var(--color-primary-accent);
+    border-radius: 8px;
+    overflow: hidden; /* Важливо для анімації */
+}
+
+.solution-toggle {
+    padding: 10px 15px;
+    background-color: rgba(21, 42, 20, 0.05);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    user-select: none; /* Щоб текст не виділявся при кліці */
+}
+
+.solution-toggle:hover {
+    background-color: rgba(21, 42, 20, 0.1);
+}
+
+.solution-toggle h4 {
+    margin: 0;
+    color: var(--color-primary-accent);
+}
+
+.solution-toggle h4 i {
+    margin-right: 10px;
+}
+
+.solution-content {
+    /* Робимо плавне "виїжджання" блоку */
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.3s ease-in, padding 0.3s ease;
+    padding: 0 20px; /* Прибираємо вертикальні відступи, коли блок прихований */
+}
+
+/* Цей клас буде додавати JavaScript, щоб показати блок */
+.solution-container.open .solution-content {
+    max-height: 1500px; /* Встановіть достатньо велике значення */
+    opacity: 1;
+    padding: 20px 20px; /* Повертаємо відступи */
 }

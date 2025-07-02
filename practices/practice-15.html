@@ -1,0 +1,65 @@
+<h1>Практика №15: API-тестування з авторизацією</h1>
+<hr>
+
+<h2>Мета</h2>
+<p>Навчитися тестувати захищені ендпоінти API, які вимагають токен доступу (Bearer Token) для авторизації. Це стандартна практика для більшості сучасних API.</p>
+
+<h2>Очікуваний результат</h2>
+<p>Ви напишете `pytest`-тест, який успішно відправляє запит до захищеного ресурсу, передаючи токен у заголовках (headers), та перевіряє успішну відповідь.</p>
+
+<h2>Покрокова інструкція</h2>
+<ol>
+    <li>
+        <strong>Отримання токену доступу.</strong>
+        <p>Ми будемо використовувати тестовий сервіс <strong><a href="https://gorest.co.in/" target="_blank">GoRest</a></strong>. Зареєструйтесь на сайті та перейдіть на головну сторінку після логіну. Там буде ваш унікальний токен доступу (Access Token). Скопіюйте його.</p>
+    </li>
+    <li>
+        <strong>Передача токену.</strong>
+        <p>Токен зазвичай передається у HTTP-заголовку `Authorization` у форматі `Bearer ВАШ_ТОКЕН`. Бібліотека `requests` дозволяє легко додавати власні заголовки до запиту.</p>
+    </li>
+    <li>
+        <strong>Створення тесту.</strong>
+        <p>Ми напишемо тест, який робить GET-запит до ендпоінту <code>/public/v2/users</code>, передаючи наш токен. Якщо токен правильний, ми повинні отримати статус-код 200 та список користувачів.</p>
+    </li>
+     <li>
+        <strong>Безпека.</strong>
+        <p><strong>Важливо:</strong> Ніколи не зберігайте токени, паролі та інші секретні дані прямо в коді, який ви публікуєте. У реальних проектах для цього використовують змінні оточення (environment variables) або спеціальні сервіси (vaults).</p>
+    </li>
+</ol>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <h3>Файл: <code>test_gorest_api.py</code></h3>
+        <pre><code class="language-python">
+import requests
+
+# ВАЖЛИВО: Замініть 'YOUR_TOKEN_HERE' на ваш реальний токен з сайту gorest.co.in
+AUTH_TOKEN = "YOUR_TOKEN_HERE"
+BASE_URL = "https://gorest.co.in/public/v2"
+
+def test_get_users_with_auth():
+    # 1. Створюємо словник з заголовками (headers)
+    headers = {
+        "Authorization": f"Bearer {AUTH_TOKEN}"
+    }
+
+    # 2. Відправляємо GET-запит, передаючи заголовки
+    response = requests.get(f"{BASE_URL}/users", headers=headers)
+
+    # 3. Перевіряємо, що авторизація пройшла успішно
+    assert response.status_code == 200
+    print(f"\nСтатус-код: {response.status_code} (OK)")
+
+    # 4. Перевіряємо, що тіло відповіді містить дані
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) > 0
+
+    print(f"Успішно отримано {len(data)} користувачів.")
+    print("Приклад користувача:", data[0])
+        </code></pre>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+<h1>Практика №8: Тестування API. Створення ресурсу (POST)</h1>
+<hr>
+
+<h2>Мета</h2>
+<p>Навчитися створювати нові ресурси за допомогою POST-запитів. Ми відправимо дані на сервер, щоб створити нового користувача, і перевіримо, що сервер підтвердив створення.</p>
+
+<h2>Очікуваний результат</h2>
+<p>Скрипт, який створює новий пост на сервері JSONPlaceholder, перевіряє успішний статус-код (201 Created) та дані, які повернув сервер.</p>
+
+<h2>Покрокова інструкція</h2>
+<ol>
+    <li>
+        <strong>Об'єкт тестування.</strong>
+        <p>Ми продовжимо роботу з <strong><a href="https://jsonplaceholder.typicode.com/" target="_blank">JSONPlaceholder</a></strong>. Цього разу ми будемо створювати новий пост, відправляючи дані на ендпоінт `/posts`.</p>
+    </li>
+    <li>
+        <strong>Підготовка даних (Payload).</strong>
+        <p>Для створення поста нам потрібно відправити дані. Зазвичай це JSON. В Python ми можемо представити його як словник.</p>
+    </li>
+    <li>
+        <strong>Написання коду.</strong>
+        <pre><code class="language-python">
+import requests
+import json
+
+BASE_URL = "https://jsonplaceholder.typicode.com"
+
+def test_create_new_post():
+    # 1. Готуємо дані (payload) для відправки
+    payload = {
+        "title": "My amazing new post",
+        "body": "This is the body of the post. Automation is fun!",
+        "userId": 1
+    }
+
+    # 2. Відправляємо POST-запит
+    # requests.post(url, json=payload)
+    response = requests.post(f"{BASE_URL}/posts", json=payload)
+
+    # 3. Перевіряємо статус-код. 201 означає "Created"
+    assert response.status_code == 201
+    print(f"Статус-код: {response.status_code} (Created)")
+
+    # 4. Отримуємо відповідь від сервера
+    response_data = response.json()
+    
+    # Виводимо відповідь для аналізу
+    print("Відповідь сервера:")
+    print(json.dumps(response_data, indent=2))
+
+    # 5. Перевіряємо, що сервер повернув наші дані
+    # (JSONPlaceholder повертає відправлені дані + новий id)
+    assert response_data["title"] == payload["title"]
+    assert response_data["body"] == payload["body"]
+    assert response_data["userId"] == payload["userId"]
+    assert "id" in response_data # Перевіряємо, що сервер присвоїв id
+
+    print("Тест успішний! Новий пост створено.")
+
+test_create_new_post()
+        </code></pre>
+    </li>
+    <li>
+        <strong>Аналіз результату.</strong>
+        <p>Після запуску ви побачите, що сервер відповів статус-кодом 201 і повернув JSON з вашими даними, до яких додав поле `"id"`. Це стандартна поведінка для REST API при створенні нового ресурсу.</p>
+    </li>
+</ol>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <pre><code class="language-python">
+import requests
+import json
+
+BASE_URL = "https://jsonplaceholder.typicode.com"
+
+def test_create_new_post():
+    # 1. Готуємо дані (payload) для відправки
+    payload = {
+        "title": "My amazing new post",
+        "body": "This is the body of the post. Automation is fun!",
+        "userId": 1
+    }
+
+    # 2. Відправляємо POST-запит
+    response = requests.post(f"{BASE_URL}/posts", json=payload)
+
+    # 3. Перевіряємо статус-код
+    assert response.status_code == 201
+    print(f"Статус-код: {response.status_code} (Created)")
+
+    # 4. Отримуємо відповідь від сервера
+    response_data = response.json()
+    
+    print("Відповідь сервера:")
+    print(json.dumps(response_data, indent=2))
+
+    # 5. Перевіряємо, що сервер повернув наші дані та додав id
+    assert response_data["title"] == payload["title"]
+    assert response_data["body"] == payload["body"]
+    assert response_data["userId"] == payload["userId"]
+    assert "id" in response_data
+
+    print("Тест успішний! Новий пост створено.")
+
+test_create_new_post()
+        </code></pre>
+    </div>
+</div>

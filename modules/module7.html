@@ -2,7 +2,7 @@
     <h1>Модуль 7: Pytest — Професійний Підхід до Тестів</h1>
     <p>Коли тестів стає багато, запускати їх по одному незручно. Нам потрібен фреймворк, який автоматизує запуск тестів та надає зручні звіти. Найпопулярніший фреймворк для Python — це `pytest`.</p>
     
-    <h3><i class="fa-solid fa-magic-wand-sparkles"></i> Основи Pytest: Автоматичний пошук</h3>
+    <h3 style="margin-top: 20px;"><i class="fa-solid fa-magic-wand-sparkles"></i> Основи Pytest: Автоматичний пошук</h3>
     <p>`pytest` сам знаходить і запускає тести, якщо дотримуватись простих правил:</p>
     <ul>
         <li>Назви файлів з тестами мають починатись з `test_` (напр., `test_api.py`).</li>
@@ -11,7 +11,7 @@
     <p>Після цього достатньо в терміналі написати одну команду, і `pytest` зробить всю роботу:</p>
     <pre><code>pytest -v</code></pre>
 
-    <h3><i class="fa-solid fa-key"></i> Фікстури: Уникаємо повторення коду (DRY)</h3>
+    <h3 style="margin-top: 20px;"><i class="fa-solid fa-key"></i> Фікстури: Уникаємо повторення коду (DRY)</h3>
     <p>Фікстури — це найпотужніша риса `pytest`. Це функції, які готують дані або стан для наших тестів. Якщо кілька тестів роблять одну й ту саму підготовчу дію (наприклад, роблять API-запит), ми можемо винести цю дію в фікстуру.</p>
     <pre><code>
 import pytest
@@ -31,12 +31,12 @@ def test_user_name(api_response):
     assert api_response.json()["name"] == "Leanne Graham"
     </code></pre>
     
-    <h3><i class="fa-solid fa-file-invoice"></i> HTML-звіти</h3>
+    <h3 style="margin-top: 20px;"><i class="fa-solid fa-file-invoice"></i> HTML-звіти</h3>
     <p>За допомогою плагіну `pytest-html` ми можемо створювати красиві звіти про результати наших тестів. Після встановлення (`pip install pytest-html`), тести запускаються командою:</p>
     <pre><code>pytest --html=report.html</code></pre>
     
     <hr>
-    <h2>Інтерактивний Тест до Модуля 7</h2>
+    
     <div class="quiz-container">
         <div class="quiz-questions-wrapper">
             <div class="quiz-question">
@@ -55,6 +55,29 @@ def test_user_name(api_response):
                     <div class="answer-btn" data-correct="false">Фінальний звіт про тестування.</div>
                 </div>
             </div>
+            <div class="quiz-question">
+                        <h3>Що робить прапорець `-v` в команді `pytest -v`?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="true">Вмикає "verbose" (детальний) режим, показуючи назву кожного тесту окремо.</div>
+                            <div class="answer-btn" data-correct="false">Запускає лише тести, які впали минулого разу.</div>
+                            <div class="answer-btn" data-correct="false">Створює HTML-звіт.</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+                            <p><i class="fa-solid fa-otter"></i> Прапорець `-v` (або `--verbose`) робить вивід `pytest` більш інформативним. Замість крапочок для успішних тестів, він показує повну назву кожної тестової функції та її статус (PASSED або FAILED), що дуже зручно для аналізу.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h3>Що таке `scope` в декораторі `@pytest.fixture(scope="...")`?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="false">Назва самої фікстури.</div>
+                            <div class="answer-btn" data-correct="true">Час життя фікстури (як часто вона буде виконуватись: для кожної функції, модуля, сесії).</div>
+                            <div class="answer-btn" data-correct="false">Список тестів, для яких ця фікстура буде працювати.</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+                            <p><i class="fa-solid fa-otter"></i> Параметр `scope` контролює, як часто `pytest` буде запускати фікстуру. Наприклад, `scope="function"` (за замовчуванням) запускає її перед кожним тестом. А `scope="module"` запускає її лише один раз перед усіма тестами в файлі, що ідеально для економії часу, якщо підготовка є довгою (напр., запит до API або запуск браузера).</p>
+                        </div>
+                    </div>
         </div>
         <div class="quiz-navigation">
             <button class="prev-question" disabled>&lt; Назад</button>

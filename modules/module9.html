@@ -3,12 +3,12 @@
     Написати тест — це половина справи. Професійний тест має бути чистим, читабельним і не повторювати код. У цьому модулі ми опануємо найпотужніший інструмент `pytest` — фікстури, які дозволяють елегантно вирішувати задачі підготовки та очищення тестового середовища.
 </p>
 
-<h3><i class="fa-solid fa-wand-magic-sparkles"></i> Проблема: Повторення коду (WET)</h3>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-wand-magic-sparkles"></i> Проблема: Повторення коду (WET)</h3>
 <p>
     Уявіть, що у нас є 10 тестів, і кожен з них потребує запуску браузера перед початком і його закриття після завершення. Писати цей код в кожному тесті — погана ідея. Це порушує принцип <strong>DRY (Don't Repeat Yourself)</strong>. Нам потрібен спосіб "винести" цю логіку в одне місце.
 </p>
 
-<h3><i class="fa-solid fa-wand-magic-sparkles"></i> Рішення: Фікстури (@pytest.fixture)</h3>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-wand-magic-sparkles"></i> Рішення: Фікстури (@pytest.fixture)</h3>
 <p>
     <strong>Фікстура</strong> — це функція, яка готує для тесту певні дані або стан системи (наприклад, створює об'єкт драйвера, підключається до бази даних) і, за потреби, виконує очищення після тесту.
 </p>
@@ -32,7 +32,7 @@ def driver():
     driver.quit()
 </code></pre>
 
-<h3><i class="fa-solid fa-wand-magic-sparkles"></i> "Чарівний" файл: conftest.py</h3>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-wand-magic-sparkles"></i> "Чарівний" файл: conftest.py</h3>
 <p>
     Але де зберігати фікстури, щоб їх бачили всі тести? Для цього `pytest` має спеціальний файл — <strong>`conftest.py`</strong>. Його не потрібно нікуди імпортувати. Просто створіть його в папці `tests`, і `pytest` автоматично знайде його і зробить усі фікстури з нього доступними для всіх тестів у цій папці.
 </p>
@@ -52,7 +52,7 @@ def test_full_navigation_flow(driver): # Тест просто просить 'd
 
 <hr>
 
-<h2>Інтерактивний Тест до Модуля 9</h2>
+
 <div class="quiz-container">
     <div class="quiz-questions-wrapper">
         
@@ -103,6 +103,29 @@ def test_full_navigation_flow(driver): # Тест просто просить 'd
                 <p><i class="fa-solid fa-otter"></i> `conftest.py` — це спеціальне ім'я файлу, яке `pytest` автоматично розпізнає і завантажує з нього фікстури, роблячи їх глобально доступними для тестів без необхідності імпортів.</p>
             </div>
         </div>
+        <div class="quiz-question">
+    <h3>Що таке "scope" (область видимості) фікстури?</h3>
+    <div class="answers-container">
+        <div class="answer-btn" data-correct="true">Це параметр, що контролює, як часто фікстура виконується (наприклад, один раз на сесію).</div>
+        <div class="answer-btn" data-correct="false">Це назва фікстури.</div>
+        <div class="answer-btn" data-correct="false">Це кількість тестів, які можуть використовувати фікстуру.</div>
+    </div>
+    <div class="explanation" style="display: none;">
+        <p><i class="fa-solid fa-otter"></i> Параметр `scope` (напр., `@pytest.fixture(scope="session")`) дозволяє оптимізувати тести, виконуючи "важкі" фікстури (як запуск браузера) лише один раз для всіх тестів, а не для кожного окремо.</p>
+    </div>
+</div>
+
+<div class="quiz-question">
+    <h3>Чи можна використовувати одну фікстуру всередині іншої?</h3>
+    <div class="answers-container">
+        <div class="answer-btn" data-correct="false">Ні, це викличе циклічну залежність.</div>
+        <div class="answer-btn" data-correct="true">Так, це поширена практика для створення складних сценаріїв підготовки.</div>
+        <div class="answer-btn" data-correct="false">Тільки якщо вони знаходяться в одному файлі.</div>
+    </div>
+    <div class="explanation" style="display: none;">
+        <p><i class="fa-solid fa-otter"></i> Ви можете передати одну фікстуру в іншу як аргумент. Це дозволяє будувати ланцюжки залежностей, наприклад, фікстура "увійти в систему" може використовувати фікстуру "відкрити браузер".</p>
+    </div>
+</div>
 
     </div>
 

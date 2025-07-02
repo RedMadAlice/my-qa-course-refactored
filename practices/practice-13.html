@@ -1,0 +1,80 @@
+<h1>Практика №13: Фікстури Pytest для Setup/Teardown</h1>
+<hr>
+
+<h2>Мета</h2>
+<p>Освоїти фікстури (fixtures) в `pytest` для керування станом тесту. Фікстури ідеально підходять для дій, які потрібно виконати до та після тесту (або групи тестів), наприклад, запуск та закриття браузера.</p>
+
+<h2>Очікуваний результат</h2>
+<p>Ви створите фікстуру, яка буде керувати життєвим циклом веб-драйвера, і застосуєте її до тесту з POM. Ваш тест стане ще чистішим, оскільки логіка `setup` та `teardown` буде винесена.</p>
+
+<h2>Покрокова інструкція</h2>
+<ol>
+    <li>
+        <strong>Файл `conftest.py`.</strong>
+        <p>`pytest` автоматично знаходить і використовує фікстури, визначені у файлі з назвою <code>conftest.py</code>. Цей файл робить фікстури доступними для всіх тестів у тій самій папці та підпапках. Створіть його.</p>
+    </li>
+    <li>
+        <strong>Створення фікстури.</strong>
+        <p>Ми створимо фікстуру <code>driver</code>. Вона буде:</p>
+        <ol>
+            <li>Запускати браузер перед тестом.</li>
+            <li>Передавати об'єкт драйвера в тест за допомогою <code>yield</code>.</li>
+            <li>Закривати браузер після того, як тест завершився.</li>
+        </ol>
+    </li>
+    <li>
+        <strong>Використання фікстури в тесті.</strong>
+        <p>Щоб використати фікстуру, достатньо вказати її назву як аргумент у тестовій функції. `pytest` сам підставить потрібний об'єкт.</p>
+    </li>
+</ol>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <h3>Файл 1: <code>conftest.py</code></h3>
+        <pre><code class="language-python">
+import pytest
+from selenium import webdriver
+
+@pytest.fixture
+def driver():
+    # --- Setup ---
+    # Цей код виконається перед кожним тестом, що використовує фікстуру
+    print("\nЗапускаємо браузер...")
+    driver = webdriver.Chrome()
+    driver.implicitly_wait(5) # Додамо неявне очікування
+
+    # Передаємо керування та об'єкт драйвера тесту
+    yield driver
+
+    # --- Teardown ---
+    # Цей код виконається після завершення тесту
+    print("\nЗакриваємо браузер...")
+    driver.quit()
+        </code></pre>
+        
+        <h3>Файл 2: <code>test_login_with_pom_and_fixture.py</code></h3>
+        <pre><code class="language-python">
+from login_page import LoginPage # Використовуємо той самий Page Object
+
+# Тестова функція тепер приймає фікстуру 'driver' як аргумент
+def test_successful_login(driver):
+    # Логіка запуску та закриття драйвера тепер у фікстурі.
+    # Ми просто використовуємо готовий об'єкт 'driver'.
+    
+    login_pg = LoginPage(driver)
+
+    login_pg.open()
+    login_pg.enter_username("tomsmith")
+    login_pg.enter_password("SuperSecretPassword!")
+    login_pg.click_login()
+
+    message = login_pg.get_success_message_text()
+    assert "You logged into a secure area!" in message
+    print("Тест з фікстурою успішний!")
+
+        </code></pre>
+    </div>
+</div>

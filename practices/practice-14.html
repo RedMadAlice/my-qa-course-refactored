@@ -1,0 +1,86 @@
+<h1>Практика №14: CI/CD з GitHub Actions</h1>
+<hr>
+
+<h2>Мета</h2>
+<p>Навчитися автоматизувати запуск тестів за допомогою GitHub Actions. Це ключова частина процесу CI/CD (Continuous Integration / Continuous Deployment), що дозволяє автоматично перевіряти якість коду при кожній зміні.</p>
+
+<h2>Очікуваний результат</h2>
+<p>Ви створите workflow-файл, який буде автоматично запускати ваші `pytest` API-тести кожного разу, коли ви відправляєте зміни (push) у ваш GitHub-репозиторій.</p>
+
+<h2>Покрокова інструкція</h2>
+<ol>
+    <li>
+        <strong>Створення репозиторію на GitHub.</strong>
+        <p>Якщо у вас його ще немає, створіть новий репозиторій на GitHub і завантажте туди ваш проект з тестами (напр., з Практики №12).</p>
+    </li>
+    <li>
+        <strong>Структура папок.</strong>
+        <p>GitHub Actions шукає файли конфігурації у спеціальній папці. У корені вашого проекту створіть папку <code>.github</code>, а всередині неї — папку <code>workflows</code>.</p>
+    </li>
+     <li>
+        <strong>Створення файлу `requirements.txt`.</strong>
+        <p>Щоб GitHub знав, які бібліотеки встановити для запуску тестів, створіть у корені проекту файл <code>requirements.txt</code>.</p>
+    </li>
+    <li>
+        <strong>Створення workflow-файлу.</strong>
+        <p>Всередині <code>.github/workflows/</code> створіть файл, наприклад, <code>run-tests.yml</code>. Це YAML-файл, який описує, що і коли потрібно робити.</p>
+    </li>
+    <li>
+        <strong>Push та перевірка.</strong>
+        <p>Зробіть `git add`, `git commit` та `git push` для цих нових файлів. Потім відкрийте ваш репозиторій на GitHub, перейдіть у вкладку "Actions", і ви побачите, як ваш workflow автоматично запустився і виконав тести.</p>
+    </li>
+</ol>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <h3>Файл 1: <code>requirements.txt</code></h3>
+        <pre><code>
+pytest
+requests
+        </code></pre>
+
+        <h3>Файл 2: <code>.github/workflows/run-tests.yml</code></h3>
+        <pre><code class="language-yaml">
+# Назва нашого workflow, буде відображатись у GitHub
+name: Run Python Tests
+
+# Тригер: запускати при кожному push в гілку main
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# Завдання, які потрібно виконати
+jobs:
+  build:
+    # Тип віртуальної машини для запуску
+    runs-on: ubuntu-latest
+
+    # Кроки, що виконуються послідовно
+    steps:
+      # 1. Крок: Клонування репозиторію на віртуальну машину
+      - uses: actions/checkout@v4
+
+      # 2. Крок: Налаштування Python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      # 3. Крок: Встановлення залежностей
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      # 4. Крок: Запуск тестів за допомогою pytest
+      - name: Run tests
+        run: |
+          pytest
+        </code></pre>
+    </div>
+</div>

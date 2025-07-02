@@ -1,0 +1,103 @@
+<h1>Практика №4: Робота з динамічними елементами</h1>
+<hr>
+<h2>Мета</h2>
+<p>Навчитися працювати з елементами, які з'являються на сторінці не одразу, а з затримкою. Це типова ситуація для сучасних веб-додатків. Ми освоїмо механізм явних очікувань (Explicit Waits) в Selenium.</p>
+
+<h2>Очікуваний результат</h2>
+<p>Скрипт, який стабільно працює зі сторінкою, де елементи завантажуються динамічно, і не падає через помилку "Element Not Found".</p>
+
+<h2>Покрокова інструкція</h2>
+<ol>
+    <li>
+        <strong>Об'єкт тестування.</strong>
+        <p>Ми будемо працювати зі сторінкою <strong><a href="https://the-internet.herokuapp.com/dynamic_loading/2" target="_blank">Dynamic Loading Example 2</a></strong>. На цій сторінці після натискання на кнопку "Start" з'являється текст "Hello World!", але лише через 5 секунд.</p>
+    </li>
+    <li>
+        <strong>Проблема: звичайний підхід не працює.</strong>
+        <p>Якщо просто написати `driver.find_element`, тест впаде, бо скрипт спробує знайти текст ще до того, як він з'явиться. Нам потрібно "попросити" Selenium почекати.</p>
+    </li>
+    <li>
+        <strong>Рішення: Явні очікування (Explicit Waits).</strong>
+        <p>Ми будемо використовувати `WebDriverWait` разом з `expected_conditions`, щоб чекати, доки елемент не стане видимим.</p>
+        <pre><code class="language-python">
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+driver = webdriver.Chrome()
+
+try:
+    driver.get("https://the-internet.herokuapp.com/dynamic_loading/2")
+
+    # Знаходимо кнопку "Start" і клікаємо
+    start_button = driver.find_element(By.CSS_SELECTOR, "#start button")
+    start_button.click()
+
+    # Створюємо об'єкт WebDriverWait
+    # Ми чекатимемо максимум 10 секунд
+    wait = WebDriverWait(driver, 10)
+
+    # Вказуємо умову очікування:
+    # Чекати, доки елемент з id 'finish' не стане видимим (visible)
+    hello_world_text = wait.until(
+        EC.visibility_of_element_located((By.ID, "finish"))
+    )
+
+    # Робимо перевірку
+    assert "Hello World!" in hello_world_text.text
+    print("Тест успішний! Елемент 'Hello World!' був знайдений.")
+
+except Exception as e:
+    print(f"Тест впав з помилкою: {e}")
+
+finally:
+    driver.quit()
+        </code></pre>
+    </li>
+    <li>
+        <strong>Запуск та аналіз.</strong>
+        <p>Запустіть скрипт. Ви побачите, що після кліку на "Start" скрипт не падає, а терпляче чекає появи тексту, і лише потім виконує перевірку. Це робить тест надійним та стабільним.</p>
+    </li>
+</ol>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <pre><code class="language-python">
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+driver = webdriver.Chrome()
+
+try:
+    driver.get("https://the-internet.herokuapp.com/dynamic_loading/2")
+
+    # Знаходимо кнопку "Start" і клікаємо
+    start_button = driver.find_element(By.CSS_SELECTOR, "#start button")
+    start_button.click()
+
+    # Створюємо об'єкт WebDriverWait
+    wait = WebDriverWait(driver, 10)
+
+    # Вказуємо умову очікування
+    hello_world_text = wait.until(
+        EC.visibility_of_element_located((By.ID, "finish"))
+    )
+
+    # Робимо перевірку
+    assert "Hello World!" in hello_world_text.text
+    print("Тест успішний! Елемент 'Hello World!' був знайдений.")
+
+except Exception as e:
+    print(f"Тест впав з помилкою: {e}")
+
+finally:
+    driver.quit()
+        </code></pre>
+    </div>
+</div>

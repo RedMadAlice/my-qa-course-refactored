@@ -3,7 +3,7 @@
     Жоден автотест не пишеться ідеально з першого разу. Справжня майстерність автоматизатора — не в уникненні помилок, а в умінні швидко їх знаходити та "лікувати". У цьому модулі ми розберемо реальні помилки, з якими ми зіткнулися, і перетворимо їх на безцінний досвід.
 </p>
 
-<h3><i class="fa-solid fa-bug-slash"></i> Помилка №1: `NoSuchElementException`</h3>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-bug-slash"></i> Помилка №1: `NoSuchElementException`</h3>
 <p>
     <strong>Симптом:</strong> Тест падає з повідомленням, що не може знайти елемент, хоча ви точно знаєте, що він є на сторінці.
 </p>
@@ -26,7 +26,7 @@ clickable_element = wait.until(
 clickable_element.click()
 </code></pre>
 
-<h3><i class="fa-solid fa-bug-slash"></i> Помилка №2: `AssertionError`</h3>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-bug-slash"></i> Помилка №2: `AssertionError`</h3>
 <p>
     <strong>Симптом:</strong> Тест виконує всі дії, але падає на останньому кроці — на рядку `assert`.
 </p>
@@ -46,7 +46,7 @@ assert actual_title == expected_title
 </code></pre>
 
 
-<h3><i class="fa-solid fa-bug-slash"></i> Помилка №3: `fixture '...' not found`</h3>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-bug-slash"></i> Помилка №3: `fixture '...' not found`</h3>
 <p>
     <strong>Симптом:</strong> Тест не запускається, `pytest` скаржиться, що не може знайти фікстуру.
 </p>
@@ -59,7 +59,7 @@ assert actual_title == expected_title
 
 <hr>
 
-<h2>Інтерактивний Тест до Модуля 10</h2>
+
 <div class="quiz-container">
     <div class="quiz-questions-wrapper">
         
@@ -86,6 +86,29 @@ assert actual_title == expected_title
                 <p><i class="fa-solid fa-otter"></i> `AssertionError` — це успіх для тестувальника! Це означає, що тест виконав свою роботу і виявив, що поведінка програми не відповідає вимогам.</p>
             </div>
         </div>
+        <div class="quiz-question">
+    <h3>Ви бачите помилку `StaleElementReferenceException`. Що це означає?</h3>
+    <div class="answers-container">
+        <div class="answer-btn" data-correct="true">Елемент, який ви знайшли, був видалений або оновлений на сторінці.</div>
+        <div class="answer-btn" data-correct="false">Ваш локатор елемента неправильний.</div>
+        <div class="answer-btn" data-correct="false">Елемент невидимий.</div>
+    </div>
+    <div class="explanation" style="display: none;">
+        <p><i class="fa-solid fa-otter"></i> Ця помилка виникає, коли ви зберігаєте елемент у змінну, а потім сторінка динамічно оновлюється (наприклад, через AJAX). Ваша змінна тепер посилається на "застарілий" елемент, якого більше не існує. Рішення — знайти елемент заново перед взаємодією.</p>
+    </div>
+</div>
+
+<div class="quiz-question">
+    <h3>Який прапор потрібно додати до команди `pytest`, щоб побачити вивід `print()` під час виконання тесту?</h3>
+    <div class="answers-container">
+        <div class="answer-btn" data-correct="false">`-v` (verbose)</div>
+        <div class="answer-btn" data-correct="true">`-s` (no-capture)</div>
+        <div class="answer-btn" data-correct="false">`--show-prints`</div>
+    </div>
+    <div class="explanation" style="display: none;">
+        <p><i class="fa-solid fa-otter"></i> За замовчуванням `pytest` "захоплює" весь вивід, щоб не засмічувати звіт. Прапор `-s` (або `--capture=no`) вимикає це захоплення, дозволяючи вам бачити результати ваших `print()` в реальному часі, що дуже корисно для дебагінгу.</p>
+    </div>
+</div>
 
     </div>
 

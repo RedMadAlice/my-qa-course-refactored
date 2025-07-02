@@ -1,43 +1,53 @@
-// --- ЛОГІКА ДИНАМІЧНОГО ЗАВАНТАЖЕННЯ МОДУЛІВ ---
+// --- ЛОГІКА ДИНАМІЧНОГО ЗАВАНТАЖЕННЯ (ОНОВЛЕНА ВЕРСІЯ) ---
 
-const moduleLinks = document.querySelectorAll('.module-link');
+// Знаходимо всі посилання, які мають завантажувати контент
+const contentLinks = document.querySelectorAll('.module-link, .sidebar-module-link');
 const heroSection = document.getElementById('hero-section');
 const modulesWrapper = document.getElementById('modules-wrapper');
 
-moduleLinks.forEach(link => {
+contentLinks.forEach(link => {
     link.addEventListener('click', (event) => {
         event.preventDefault();
 
-        const targetModuleId = link.dataset.target;
-        const moduleFileName = `${targetModuleId}.html`;
+        const target = link.dataset.target; // напр., "practice-1" або "module-6"
+        let folder = 'modules'; // Папка за замовчуванням
+        let fileName = target;
+
+        // Визначаємо правильну папку на основі префікса
+        if (target.startsWith('practice-')) {
+            folder = 'practices';
+            fileName = target.replace('practice-', 'practice-'); // залишаємо як є
+        } else if (target.startsWith('exam-')) {
+            folder = 'exams';
+            fileName = target.replace('exam-', 'exam-part'); // перетворюємо exam-1 на exam-part1
+        }
+        
+        const fullPath = `${folder}/${fileName}.html`;
+        console.log(`Trying to fetch: ${fullPath}`); // Допоміжний лог для дебагінгу
 
         // Завантажуємо контент модуля з файлу
-        fetch(`modules/${moduleFileName}`)
+        fetch(fullPath)
             .then(response => {
-                if (!response.ok) { // Якщо файл не знайдено (напр. module8.html ще не створено)
-                    throw new Error('Файл модуля ще не створено.');
+                if (!response.ok) {
+                    throw new Error(`Файл не знайдено за шляхом: ${fullPath}`);
                 }
                 return response.text();
             })
             .then(html => {
-                // Вставляємо HTML модуля в контейнер
                 modulesWrapper.innerHTML = `<div class="module-container active">${html}</div>`;
-
-                // Ховаємо стартовий екран і показуємо обгортку
                 heroSection.style.display = 'none';
                 modulesWrapper.style.display = 'block';
 
-                // Ініціалізуємо тест для щойно завантаженого контенту
                 const newModuleElement = modulesWrapper.querySelector('.module-container');
                 initializeQuiz(newModuleElement);
                 
-                // Прокручуємо сторінку наверх
+                
                 window.scrollTo(0, 0);
                 updateUIVisibility();
             })
             .catch(error => {
-                console.error('Помилка завантаження модуля:', error);
-                modulesWrapper.innerHTML = `<div class="module-container active"><h1>Незабаром...</h1><p>Цей модуль ще в розробці.</p></div>`;
+                console.error('Помилка завантаження контенту:', error);
+                modulesWrapper.innerHTML = `<div class="module-container active"><h1>Незабаром...</h1><p>Цей розділ ще в розробці.</p></div>`;
                 heroSection.style.display = 'none';
                 modulesWrapper.style.display = 'block';
                 updateUIVisibility();
@@ -124,13 +134,7 @@ const menuToggle = document.getElementById('menu-toggle');
 const homeLink = document.getElementById('home-link');
 const sidebarModuleLinks = document.querySelectorAll('.sidebar-module-link');
 
-function updateUIVisibility() {
-    if (heroSection.style.display === 'none') {
-        menuToggle.style.display = 'grid';
-    } else {
-        menuToggle.style.display = 'none';
-    }
-}
+
 
 menuToggle.addEventListener('click', () => {
     sidebar.classList.toggle('visible');
@@ -249,3 +253,145 @@ blitzAnswerInput.addEventListener('keyup', (e) => {
         checkBlitzAnswer();
     }
 });
+
+// --- ЛОГІКА ДЛЯ МЕНЮ ЕКЗАМЕНІВ ТА ОНОВЛЕННЯ UI ---
+
+const examsMenuBtn = document.getElementById('exams-menu-btn');
+const examsSidebar = document.getElementById('exams-sidebar');
+// Важливо: шукаємо посилання тепер всередині нової панелі #exams-sidebar
+const examLinks = document.querySelectorAll('#exams-sidebar .exam-link'); 
+
+// Функція, яка керує видимістю кнопок
+function updateUIVisibility() {
+    const isOnModulePage = heroSection.style.display === 'none';
+    
+    // Показуємо або ховаємо кнопку-бургер
+    if (menuToggle) {
+        menuToggle.style.display = isOnModulePage ? 'grid' : 'none';
+    }
+    // Показуємо або ховаємо кнопку екзаменів
+    if (examsMenuBtn) {
+        examsMenuBtn.style.display = 'grid'; // Завжди видима
+    }
+}
+
+// Функція для закриття правої панелі
+function closeExamsSidebar() {
+    if (examsSidebar) {
+        examsSidebar.classList.remove('visible');
+    }
+}
+
+// Клік на кнопку "Екзамени" (шапочка)
+if (examsMenuBtn) {
+    examsMenuBtn.addEventListener('click', (e) => {
+        // Зупиняємо "спливання" події, щоб клік по кнопці не закрив панель одразу
+        e.stopPropagation(); 
+        examsSidebar.classList.toggle('visible');
+    });
+}
+
+// Обробка кліків по посиланнях на екзамени
+examLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const examFileName = link.dataset.exam;
+
+        closeExamsSidebar(); // Спочатку закриваємо панель
+
+        // Завантажуємо екзамен з невеликою затримкою, щоб анімація закриття встигла спрацювати
+        setTimeout(() => {
+            fetch(`exams/${examFileName}.html`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Файл екзамену не знайдено.');
+                    return response.text();
+                })
+                .then(html => {
+                    modulesWrapper.innerHTML = `<div class="module-container active">${html}</div>`;
+                    heroSection.style.display = 'none';
+                    modulesWrapper.style.display = 'block';
+                    window.scrollTo(0, 0);
+                    initializeQuiz(modulesWrapper.querySelector('.module-container'));
+                    updateUIVisibility();
+                })
+                .catch(error => {
+                    console.error("Помилка завантаження екзамену:", error);
+                    modulesWrapper.innerHTML = `<div class="module-container active"><h1>Помилка</h1><p>Не вдалося завантажити екзамен.</p></div>`;
+                });
+        }, 300); // 300 мілісекунд
+    });
+});
+
+// Глобальний обробник кліків для закриття панелі при кліку поза нею
+document.addEventListener('click', (e) => {
+    if (examsSidebar && examsSidebar.classList.contains('visible')) {
+        // Перевіряємо, чи клік був не по самій панелі і не по кнопці, яка її викликає
+        if (!examsSidebar.contains(e.target) && !examsMenuBtn.contains(e.target)) {
+            closeExamsSidebar();
+        }
+    }
+});
+
+// Додай цей рядок в кінець файлу script.js
+document.addEventListener('DOMContentLoaded', updateUIVisibility);
+
+// --- ВСТАВТЕ ЦЕЙ НОВИЙ БЛОК В SCRIPT.JS ---
+
+// Обробка кліків по посиланнях на практикуми
+const practiceLinks = document.querySelectorAll('#exams-sidebar .practice-link');
+practiceLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const practiceFileName = link.dataset.target;
+
+        closeExamsSidebar(); // Закриваємо праву панель
+
+        setTimeout(() => {
+            fetch(`practices/${practiceFileName}.html`) // Завантажуємо з папки 'practices'
+                .then(response => {
+                    if (!response.ok) throw new Error('Файл практики не знайдено.');
+                    return response.text();
+                })
+                .then(html => {
+                    modulesWrapper.innerHTML = `<div class="module-container active">${html}</div>`;
+                    heroSection.style.display = 'none';
+                    modulesWrapper.style.display = 'block';
+                    window.scrollTo(0, 0);
+                    initializeQuiz(modulesWrapper.querySelector('.module-container'));
+                    initializeSolutions(); // <-- ОСЬ ТУТ викликаємо нашу нову функцію 
+                    updateUIVisibility();
+                })
+                .catch(error => {
+                    console.error("Помилка завантаження практики:", error);
+                    modulesWrapper.innerHTML = `<div class="module-container active"><h1>Незабаром...</h1><p>Цей розділ ще в розробці.</p></div>`;
+                });
+        }, 300);
+    });
+});
+
+function initializeSolutions() {
+    // Знаходимо всі кнопки-перемикачі на сторінці
+    const allToggles = document.querySelectorAll('.solution-toggle');
+
+    allToggles.forEach(toggle => {
+        // Додаємо обробник кліку
+        toggle.addEventListener('click', () => {
+            const container = toggle.closest('.solution-container');
+            const icon = toggle.querySelector('i');
+            const text = toggle.querySelector('h4');
+
+            // Перемикаємо клас 'open', який і відповідає за показ/приховування
+            container.classList.toggle('open');
+
+            // Змінюємо іконку та текст для кращого UX
+            if (container.classList.contains('open')) {
+                icon.className = 'fa-solid fa-eye-slash';
+                // Отримуємо текстовий вузол, щоб змінити лише текст, а не іконку
+                text.childNodes[1].nodeValue = ' Сховати рішення'; 
+            } else {
+                icon.className = 'fa-solid fa-eye';
+                text.childNodes[1].nodeValue = ' Показати рішення';
+            }
+        });
+    });
+}

@@ -2,10 +2,10 @@
     <h1>Модуль 8: Просунутий Selenium</h1>
     <p>Тепер, коли ми маємо стабільний сайт і професійний фреймворк, ми можемо поєднати ці знання і вивести нашу UI-автоматизацію на новий рівень.</p>
 
-    <h3><i class="fa-solid fa-hourglass-half"></i> Проблема "Стану гонитви" (Race Condition)</h3>
+    <h3 style="margin-top: 20px;"><i class="fa-solid fa-hourglass-half"></i> Проблема "Стану гонитви" (Race Condition)</h3>
     <p>Найпоширеніша проблема в UI-тестах: наш Selenium-скрипт працює значно швидше, ніж реагує веб-сторінка. Він намагається знайти кнопку, яка ще не встигла з'явитись після кліку. Це призводить до помилки `NoSuchElementException`.</p>
 
-    <h3><i class="fa-solid fa-clock"></i> Рішення: "Розумні" очікування (`WebDriverWait`)</h3>
+    <h3 style="margin-top: 20px;"><i class="fa-solid fa-clock"></i> Рішення: "Розумні" очікування (`WebDriverWait`)</h3>
     <p>Ми не використовуємо "сліпі" паузи `time.sleep()`. Замість цього ми кажемо Selenium: "Будь ласка, почекай до 10 секунд, поки не виконається певна умова". Це робиться за допомогою `WebDriverWait` та `expected_conditions`.</p>
     <pre><code>
 from selenium.webdriver.support.ui import WebDriverWait
@@ -21,7 +21,7 @@ header_text = header_element.text
     <p>Це робить наші тести стабільними і надійними, бо вони адаптуються до швидкості роботи сайту.</p>
     
     <hr>
-    <h2>Інтерактивний Тест до Модуля 8</h2>
+    
     <div class="quiz-container">
         <div class="quiz-questions-wrapper">
             <div class="quiz-question">
@@ -40,6 +40,29 @@ header_text = header_element.text
                     <div class="answer-btn" data-correct="true">WebDriverWait з Expected Conditions</div>
                 </div>
             </div>
+            <div class="quiz-question">
+                        <h3>Який метод `expected_conditions` найкраще підходить, щоб дочекатись, поки на кнопку можна буде натиснути?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="false">`visibility_of_element_located`</div>
+                            <div class="answer-btn" data-correct="true">`element_to_be_clickable`</div>
+                            <div class="answer-btn" data-correct="false">`presence_of_element_located`</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+                            <p><i class="fa-solid fa-otter"></i> `visibility_of_element_located` чекає, поки елемент просто стане видимим. Але він може бути видимим, але перекритим іншим елементом (напр., спливаючим вікном). `element_to_be_clickable` є найнадійнішим, бо він чекає, поки елемент і видимий, і активний (не має атрибуту `disabled`), і на нього можна фізично клікнути.</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h3>Що таке локатор в контексті Selenium?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="true">Це "адреса" елемента на сторінці (напр., його ID, CSS-селектор або XPath).</div>
+                            <div class="answer-btn" data-correct="false">Це назва змінної, в яку ми зберігаємо елемент.</div>
+                            <div class="answer-btn" data-correct="false">Це дія, яку ми виконуємо з елементом (напр., `click()`).</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+                            <p><i class="fa-solid fa-otter"></i> Локатор — це унікальний ідентифікатор, який ми використовуємо, щоб сказати Selenium, який саме елемент на сторінці нас цікавить. Вибір правильного і надійного локатора (наприклад, унікальний ID) — це 80% успіху в написанні стабільного UI-тесту.</p>
+                        </div>
+                    </div>
         </div>
         <div class="quiz-navigation">
             <button class="prev-question" disabled>&lt; Назад</button>

@@ -3,7 +3,7 @@
     Надійні тести вимагають надійного оточення. Недостатньо просто написати код — потрібно, щоб він виконувався в стабільних і правильних умовах. У цьому модулі ми розглянемо два ключові аспекти професійного середовища: як правильно "подавати" сайт для тестування і як ізолювати залежності проєкту.
 </p>
 
-<h3><i class="fa-solid fa-server"></i> Проблема №1: "Магія" протоколу `file:///`</h3>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-server"></i> Проблема №1: "Магія" протоколу `file:///`</h3>
 <p>
     <strong>Симптом:</strong> Ви відкриваєте `index.html` подвійним кліком — все працює. Тест відкриває той самий файл — сайт зламаний (наприклад, не завантажуються модулі).
 </p>
@@ -22,7 +22,7 @@ python -m http.server
 </code></pre>
 <p>Після цього в тестах ми використовуємо `driver.get("http://localhost:8000")`, що є набагато надійнішим підходом.</p>
 
-<h3><i class="fa-solid fa-box-archive"></i> Проблема №2: "На моєму комп'ютері все працювало!"</h3>
+<h3 style="margin-top: 20px;"><i class="fa-solid fa-box-archive"></i> Проблема №2: "На моєму комп'ютері все працювало!"</h3>
 <p>
     <strong>Симптом:</strong> Ви запускаєте тест — він падає з помилкою, що команда `pytest` не знайдена, хоча ви її встановлювали.
 </p>
@@ -44,7 +44,7 @@ python -m http.server
 
 <hr>
 
-<h2>Інтерактивний Тест до Модуля 11</h2>
+
 <div class="quiz-container">
     <div class="quiz-questions-wrapper">
         
@@ -83,6 +83,29 @@ python -m http.server
                 <p><i class="fa-solid fa-otter"></i> Всі пакети, встановлені в активному віртуальному середовищі, розміщуються всередині його папки (зазвичай в `.venv/Lib/site-packages`), не зачіпаючи глобальну систему.</p>
             </div>
         </div>
+        <div class="quiz-question">
+    <h3>Яка команда дозволяє створити файл `requirements.txt`, що містить список всіх залежностей з вашого `.venv`?</h3>
+    <div class="answers-container">
+        <div class="answer-btn" data-correct="true">`pip freeze > requirements.txt`</div>
+        <div class="answer-btn" data-correct="false">`pip save > requirements.txt`</div>
+        <div class="answer-btn" data-correct="false">`pip list --export > requirements.txt`</div>
+    </div>
+    <div class="explanation" style="display: none;">
+        <p><i class="fa-solid fa-otter"></i> Команда `pip freeze` виводить список встановлених пакетів у форматі, який можна зберегти у файл `requirements.txt`. Інший розробник потім може встановити всі ці пакети однією командою `pip install -r requirements.txt`.</p>
+    </div>
+</div>
+
+<div class="quiz-question">
+    <h3>Ви активували `.venv`, але після перезапуску комп'ютера термінал знову "не знає" команду `pytest`. Чому?</h3>
+    <div class="answers-container">
+        <div class="answer-btn" data-correct="false">`.venv` видалився після перезавантаження.</div>
+        <div class="answer-btn" data-correct="true">Активація віртуального середовища діє лише для поточної сесії терміналу.</div>
+        <div class="answer-btn" data-correct="false">Вам потрібно перевстановити `pytest`.</div>
+    </div>
+    <div class="explanation" style="display: none;">
+        <p><i class="fa-solid fa-otter"></i> Віртуальне середовище потрібно активувати щоразу, коли ви відкриваєте нову сесію терміналу для роботи з проєктом. Це гарантує, що ви працюєте саме з потрібним набором інструментів.</p>
+    </div>
+</div>
 
     </div>
 

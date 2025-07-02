@@ -1,0 +1,106 @@
+<h1>Практика №5: Взаємодія з таблицями</h1>
+<hr>
+
+<h2>Мета</h2>
+<p>Навчитися отримувати дані з HTML-таблиць. Це корисна навичка для перевірки даних, сортування, фільтрації та інших табличних операцій.</p>
+
+<h2>Очікуваний результат</h2>
+<p>Python-скрипт, який знаходить на сторінці таблицю, витягує з неї дані та виконує просту перевірку (наприклад, знаходить людину з найбільшим боргом).</p>
+
+<h2>Покрокова інструкція</h2>
+<ol>
+    <li>
+        <strong>Об'єкт тестування.</strong>
+        <p>Ми будемо працювати зі сторінкою <strong><a href="https://the-internet.herokuapp.com/tables" target="_blank">Data Tables</a></strong>. Наша задача — з першої таблиці знайти email користувача "Jason Doe".</p>
+    </li>
+    <li>
+        <strong>Стратегія.</strong>
+        <p>Ми не можемо просто знайти email, бо не знаємо, в якому він рядку. Стратегія така:</p>
+        <ol>
+            <li>Знайти всі рядки (<code>&lt;tr&gt;</code>) в тілі таблиці (<code>&lt;tbody&gt;</code>).</li>
+            <li>Перебрати кожен рядок в циклі.</li>
+            <li>В кожному рядку знайти всі комірки (<code>&lt;td&gt;</code>).</li>
+            <li>Перевірити, чи текст у другій комірці (First Name) дорівнює "Jason".</li>
+            <li>Якщо так, взяти текст з третьої комірки (Email) цього ж рядка.</li>
+        </ol>
+    </li>
+    <li>
+        <strong>Написання коду.</strong>
+        <pre><code class="language-python">
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+
+try:
+    driver.get("https://the-internet.herokuapp.com/tables")
+
+    target_email = ""
+    # Знаходимо всі рядки в тілі першої таблиці
+    table_rows = driver.find_elements(By.XPATH, "//*[@id='table1']/tbody/tr")
+
+    # Перебираємо рядки, починаючи з першого
+    for row in table_rows:
+        # В кожному рядку знаходимо всі комірки
+        cells = row.find_elements(By.TAG_NAME, "td")
+        
+        # Перевіряємо, чи в цьому рядку є потрібне нам ім'я
+        # cells[1] - це друга колонка (First Name), бо індексація з 0
+        if cells[1].text == "Jason":
+            # cells[2] - це третя колонка (Email)
+            target_email = cells[2].text
+            break # Виходимо з циклу, бо ми знайшли, що шукали
+
+    assert target_email == "jdoe@hotmail.com"
+    print(f"Тест успішний! Email для Jason Doe: {target_email}")
+
+except Exception as e:
+    print(f"Тест впав: {e}")
+
+finally:
+    driver.quit()
+        </code></pre>
+    </li>
+    <li>
+        <strong>Завдання для самостійної роботи.</strong>
+        <p>Спробуйте модифікувати скрипт так, щоб він знаходив у другій таблиці користувача з найбільшим боргом (колонка "Due") і виводив його прізвище.</p>
+    </li>
+</ol>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <pre><code class="language-python">
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+
+try:
+    driver.get("https://the-internet.herokuapp.com/tables")
+
+    target_email = ""
+    # Знаходимо всі рядки в тілі першої таблиці
+    table_rows = driver.find_elements(By.XPATH, "//*[@id='table1']/tbody/tr")
+
+    # Перебираємо рядки
+    for row in table_rows:
+        cells = row.find_elements(By.TAG_NAME, "td")
+        
+        if cells[1].text == "Jason":
+            target_email = cells[2].text
+            break
+
+    assert target_email == "jdoe@hotmail.com"
+    print(f"Тест успішний! Email для Jason Doe: {target_email}")
+
+except Exception as e:
+    print(f"Тест впав: {e}")
+
+finally:
+    driver.quit()
+        </code></pre>
+    </div>
+</div>

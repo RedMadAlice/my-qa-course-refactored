@@ -5,7 +5,7 @@
                 ті основні інструменти, які потрібні кожному автоматизатору щодня.
             </p>
 
-            <h3><i class="fa-solid fa-cat"></i> 1. Змінні та Типи Даних</h3>
+            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> 1. Змінні та Типи Даних</h3>
             <p>
                 <strong>Змінна</strong> — це як підписана коробочка, в яку ми можемо покласти якусь інформацію. Основні
                 типи
@@ -28,7 +28,7 @@ test_id = 5
 is_passed = True
     </code></pre>
 
-            <h3><i class="fa-solid fa-cat"></i> 2. Умови (if / else)</h3>
+            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> 2. Умови (if / else)</h3>
             <p>
                 Дозволяють нашій програмі приймати рішення. "<strong>Якщо</strong> умова правдива — роби це, **інакше**
                 —
@@ -41,7 +41,7 @@ else:
     print("Тест провалено! ❌")
     </code></pre>
 
-            <h3><i class="fa-solid fa-cat"></i> 3. Цикли (for)</h3>
+            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> 3. Цикли (for)</h3>
             <p>
                 Дозволяють повторювати одну й ту саму дію багато разів. Наприклад, перевірити кожен елемент у списку.
             </p>
@@ -54,7 +54,7 @@ for browser in browsers:
     print(f"Запускаю тест у браузері {browser}...")
     </code></pre>
 
-            <h3><i class="fa-solid fa-cat"></i> 4. Функції (def)</h3>
+            <h3 style="margin-top: 20px;"><i class="fa-solid fa-cat"></i> 4. Функції (def)</h3>
             <p>
                 Це як створити власний інструмент. Ми "упаковуємо" шматок коду, даємо йому ім'я і можемо потім викликати
                 його багато разів. Це слідує принципу <strong>DRY (Don't Repeat Yourself - Не повторюй себе)</strong>.
@@ -72,7 +72,7 @@ print("Кінець тесту")
 
             <hr>
 
-            <h2>Інтерактивний Тест до Модуля 2</h2>
+            
 
 
             <div class="quiz-container">
@@ -143,6 +143,32 @@ print("Кінець тесту")
                             плануєте написати пізніше.</p>
                     </div>
                 </div>
+
+                <div class="quiz-question">
+    <h3>Що виведе цей код: `my_list = ["a", "b", "c"]`, `print(my_list[0])`?</h3>
+    <div class="answers-container">
+        <div class="answer-btn" data-correct="true">a</div>
+        <div class="answer-btn" data-correct="false">b</div>
+        <div class="answer-btn" data-correct="false">Помилка, бо індекс має бути 1.</div>
+    </div>
+    <div class="explanation" style="display: none;">
+        <h4>Пояснення</h4>
+        <p><b>В яблучко!</b> В Python, як і в багатьох мовах програмування, індексація елементів у списках (та інших послідовностях) починається з 0. Тому перший елемент завжди має індекс `[0]`.</p>
+    </div>
+</div>
+
+<div class="quiz-question">
+    <h3>Для чого в коді використовується символ `#`?</h3>
+    <div class="answers-container">
+        <div class="answer-btn" data-correct="false">Для позначення ID елемента.</div>
+        <div class="answer-btn" data-correct="true">Для написання однорядкового коментаря, який ігнорується програмою.</div>
+        <div class="answer-btn" data-correct="false">Для створення нового блоку коду.</div>
+    </div>
+    <div class="explanation" style="display: none;">
+        <h4>Пояснення</h4>
+        <p><b>Абсолютно вірно.</b> Все, що написано в рядку після символу `#`, є коментарем. Інтерпретатор Python повністю ігнорує цей текст. Коментарі потрібні для пояснення коду іншим розробникам (або собі в майбутньому).</p>
+    </div>
+</div>
 
 
 

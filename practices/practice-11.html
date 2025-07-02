@@ -1,0 +1,98 @@
+<h1>Практика №11: Патерн Page Object Model (POM)</h1>
+<hr>
+
+<h2>Мета</h2>
+<p>Навчитися структурувати тестовий код за допомогою патерну Page Object Model (POM). Це дозволяє відокремити логіку тестів від опису веб-сторінок, роблячи код чистішим, легшим для підтримки та повторного використання.</p>
+
+<h2>Очікуваний результат</h2>
+<p>Ви рефакторите тест логіну з Практики №3, розділивши його на два файли: один для опису сторінки логіну (Page Object), а інший — для самого тесту. Це продемонструє переваги такого підходу.</p>
+
+<h2>Покрокова інструкція</h2>
+<ol>
+    <li>
+        <strong>Теоретична основа.</strong>
+        <p>Ідея POM проста: кожна сторінка вашого сайту представлена окремим класом у коді. Цей клас містить локатори всіх елементів на сторінці та методи для взаємодії з ними (напр., `enter_username()`, `click_login()`). Тест лише викликає ці методи, не знаючи нічого про внутрішню структуру сторінки (ID, XPath і т.д.).</p>
+    </li>
+    <li>
+        <strong>Створення файлу Page Object.</strong>
+        <p>Створіть файл `login_page.py`. У ньому ми опишемо клас для сторінки логіну.</p>
+    </li>
+    <li>
+        <strong>Створення файлу Тесту.</strong>
+        <p>Створіть файл `test_login_with_pom.py`. Цей файл буде імпортувати наш клас `LoginPage` і використовувати його для виконання тесту.</p>
+    </li>
+    <li>
+        <strong>Аналіз рішення.</strong>
+        <p>Нижче наведено код для обох файлів. Зверніть увагу, наскільки чистим і читабельним став тестовий файл: він описує дії бізнес-рівня ("залогінитись", "перевірити повідомлення"), а не технічні деталі.</p>
+    </li>
+</ol>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <h3>Файл 1: <code>login_page.py</code></h3>
+        <pre><code class="language-python">
+from selenium.webdriver.common.by import By
+
+class LoginPage:
+    # Конструктор класу, приймає об'єкт драйвера
+    def __init__(self, driver):
+        self.driver = driver
+        # Зберігаємо локатори як атрибути класу
+        self.username_input = (By.ID, "username")
+        self.password_input = (By.ID, "password")
+        self.login_button = (By.CSS_SELECTOR, "button[type='submit']")
+        self.success_message = (By.ID, "flash")
+
+    # Методи для взаємодії з елементами
+    def open(self):
+        self.driver.get("https://the-internet.herokuapp.com/login")
+
+    def enter_username(self, username):
+        self.driver.find_element(*self.username_input).send_keys(username)
+
+    def enter_password(self, password):
+        self.driver.find_element(*self.password_input).send_keys(password)
+
+    def click_login(self):
+        self.driver.find_element(*self.login_button).click()
+
+    def get_success_message_text(self):
+        return self.driver.find_element(*self.success_message).text
+
+        </code></pre>
+        
+        <h3>Файл 2: <code>test_login_with_pom.py</code></h3>
+        <pre><code class="language-python">
+from selenium import webdriver
+from login_page import LoginPage # Імпортуємо наш Page Object
+import time
+
+# Ініціалізуємо драйвер
+driver = webdriver.Chrome()
+
+try:
+    # Створюємо екземпляр нашої сторінки
+    login_pg = LoginPage(driver)
+
+    # Виконуємо дії через методи Page Object
+    login_pg.open()
+    login_pg.enter_username("tomsmith")
+    login_pg.enter_password("SuperSecretPassword!")
+    login_pg.click_login()
+
+    time.sleep(1)
+
+    # Перевіряємо результат
+    message = login_pg.get_success_message_text()
+    assert "You logged into a secure area!" in message
+    print("Тест з використанням POM успішний!")
+
+finally:
+    driver.quit()
+
+        </code></pre>
+    </div>
+</div>

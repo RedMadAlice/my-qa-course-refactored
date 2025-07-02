@@ -1,0 +1,117 @@
+<h1>Практика №3: Ваш перший автотест з Selenium</h1>
+<hr>
+
+<h2>Мета</h2>
+<p>Написати та запустити свій перший UI-автотест з використанням Python та бібліотеки Selenium. Ви навчитеся відкривати браузер, знаходити елементи на сторінці, взаємодіяти з ними та робити просту перевірку результату.</p>
+
+<h2>Очікуваний результат</h2>
+<p>Робочий Python-скрипт, який автоматично логіниться на тестовому сайті. Ви отримаєте практичний досвід роботи з основними командами Selenium.</p>
+
+<h2>Покрокова інструкція</h2>
+<ol>
+    <li>
+        <strong>Підготовка оточення.</strong>
+        <p>Переконайтесь, що у вас встановлено Python, бібліотека Selenium (`pip install selenium`) та веб-драйвер для вашого браузера (напр., ChromeDriver). Створіть новий файл, наприклад `first_test.py`.</p>
+    </li>
+    <li>
+        <strong>Написання коду.</strong>
+        <p>Ми автоматизуємо позитивний тест-кейс з Практики №1. Скопіюйте цей код у ваш файл.</p>
+        <pre><code class="language-python">
+# 1. Імпортуємо потрібні модулі
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
+
+# 2. Ініціалізуємо веб-драйвер
+# Selenium автоматично знайде ваш chromedriver, якщо він є в PATH
+driver = webdriver.Chrome()
+
+try:
+    # 3. Відкриваємо сторінку
+    driver.get("https://the-internet.herokuapp.com/login")
+
+    # 4. Знаходимо елементи та взаємодіємо з ними
+    # Знаходимо поле для імені користувача за його ID
+    username_field = driver.find_element(By.ID, "username")
+    username_field.send_keys("tomsmith")
+
+    # Знаходимо поле для пароля за його NAME
+    password_field = driver.find_element(By.NAME, "password")
+    password_field.send_keys("SuperSecretPassword!")
+
+    # Знаходимо кнопку логіну за її CSS селектором і клікаємо
+    login_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+    login_button.click()
+
+    # 5. Робимо перевірку (Assertion)
+    # Чекаємо трохи, щоб сторінка завантажилась
+    time.sleep(1)
+
+    # Знаходимо елемент з повідомленням про успіх
+    success_message = driver.find_element(By.ID, "flash")
+    
+    # Перевіряємо, чи текст повідомлення є правильним
+    assert "You logged into a secure area!" in success_message.text
+    print("Тест успішний! Авторизація пройшла вдало.")
+
+except Exception as e:
+    print(f"Тест впав з помилкою: {e}")
+
+finally:
+    # 6. Закриваємо браузер
+    time.sleep(3) # Залишимо вікно відкритим на 3 секунди
+    driver.quit()
+
+        </code></pre>
+    </li>
+    <li>
+        <strong>Запуск та аналіз.</strong>
+        <p>Відкрийте термінал у папці з вашим файлом та виконайте команду: `python first_test.py`. Спостерігайте, як браузер відкривається та виконує всі дії автоматично. В кінці ви побачите повідомлення про успіх у терміналі.</p>
+    </li>
+</ol>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <pre><code class="language-python">
+# 1. Імпортуємо потрібні модулі
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
+
+# 2. Ініціалізуємо веб-драйвер
+driver = webdriver.Chrome()
+
+try:
+    # 3. Відкриваємо сторінку
+    driver.get("https://the-internet.herokuapp.com/login")
+
+    # 4. Знаходимо елементи та взаємодіємо з ними
+    username_field = driver.find_element(By.ID, "username")
+    username_field.send_keys("tomsmith")
+
+    password_field = driver.find_element(By.NAME, "password")
+    password_field.send_keys("SuperSecretPassword!")
+
+    login_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+    login_button.click()
+
+    # 5. Робимо перевірку (Assertion)
+    time.sleep(1)
+    success_message = driver.find_element(By.ID, "flash")
+    
+    assert "You logged into a secure area!" in success_message.text
+    print("Тест успішний! Авторизація пройшла вдало.")
+
+except Exception as e:
+    print(f"Тест впав з помилкою: {e}")
+
+finally:
+    # 6. Закриваємо браузер
+    time.sleep(3)
+    driver.quit()
+        </code></pre>
+    </div>
+</div>

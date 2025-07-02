@@ -7,7 +7,7 @@
                 система у світі.
             </p>
 
-            <h3><i class="fa-solid fa-code-commit"></i> Що таке Git? Аналогія з "сейвами" в грі</h3>
+            <h3 style="margin-top: 20px;"><i class="fa-solid fa-code-commit"></i> Що таке Git? Аналогія з "сейвами" в грі</h3>
             <p>
                 <strong>Git</strong> — це програма на твоєму комп'ютері, яка відстежує всі зміни у файлах твого проєкту.
                 Уяви, що твій проєкт — це гра.
@@ -22,7 +22,7 @@
 
             <hr>
 
-            <h3><i class="fa-solid fa-terminal"></i> Локальний робочий цикл: "Свята трійця"</h3>
+            <h3 style="margin-top: 20px;"><i class="fa-solid fa-terminal"></i> Локальний робочий цикл: "Свята трійця"</h3>
             <p>90% щоденної роботи з Git — це цикл з трьох команд:</p>
             <ol>
                 <li><strong><code>git status</code></strong> — "Що змінилось?". Git показує тобі нові файли або файли зі
@@ -35,7 +35,7 @@
 
             <hr>
 
-            <h3><i class="fa-brands fa-github"></i> Що таке GitHub? Онлайн-сховище</h3>
+            <h3 style="margin-top: 20px;"><i class="fa-brands fa-github"></i> Що таке GitHub? Онлайн-сховище</h3>
             <p>
                 Якщо Git — це сама система збережень, то <strong>GitHub</strong> — це онлайн-сервіс, "хмара", де ти
                 можеш
@@ -61,7 +61,7 @@ git push -u origin main
     </code></pre>
             <hr>
 
-            <h2>Інтерактивний Тест до Модуля 5</h2>
+            
             <div class="quiz-container">
                 <div class="quiz-questions-wrapper">
 
@@ -112,6 +112,29 @@ git push -u origin main
                                 молоток). GitHub — це місце, де ти зберігаєш проєкти, зроблені цим інструментом
                                 (майстерня).
                             </p>
+                        </div>
+                    </div>
+                    <div class="quiz-question">
+                        <h3>Що робить команда `git add .`?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="false">Створює новий коміт з усіма змінами.</div>
+                            <div class="answer-btn" data-correct="true">Додає всі змінені та нові файли в поточній папці до "staging area" (підготовки до коміту).</div>
+                            <div class="answer-btn" data-correct="false">Відправляє всі зміни на GitHub.</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+                            <p><i class="fa-solid fa-otter"></i> Це другий крок у "святій трійці" Git. Команда `git add` готує зміни до збереження. Вона не робить сам "сейв" (коміт), а лише каже: "Я хочу, щоб ось ці зміни були включені в наступне збереження". Крапка (`.`) означає "всі файли в поточній директорії".</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h3>Яка команда використовується для відправки локальних комітів на віддалений репозиторій (напр., GitHub)?</h3>
+                        <div class="answers-container">
+                            <div class="answer-btn" data-correct="false">git commit</div>
+                            <div class="answer-btn" data-correct="false">git pull</div>
+                            <div class="answer-btn" data-correct="true">git push</div>
+                        </div>
+                        <div class="explanation" style="display: none;">
+                            <p><i class="fa-solid fa-otter"></i> Команда `git push` (дослівно "штовхати") бере всі коміти, які ви зробили локально, і відправляє їх на віддалений сервер, такий як GitHub, роблячи ваші зміни доступними для інших або просто створюючи резервну копію в хмарі.</p>
                         </div>
                     </div>
 

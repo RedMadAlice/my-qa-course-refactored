@@ -1,0 +1,92 @@
+<h1>Фінальний Екзамен (Частина 3/4): Техніки Тест-дизайну</h1>
+<p>Перевірка практичних навичок застосування технік для створення ефективних та оптимальних тест-кейсів.</p>
+<hr>
+<div class="quiz-container">
+    <div class="quiz-questions-wrapper">
+        <div class="quiz-question">
+            <h3>Поле для пароля має вимоги: від 8 до 16 символів. Який набір тест-кейсів найкраще покриває вимоги за технікою "Еквівалентного розбиття"?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">8, 12, 16.</div>
+                <div class="answer-btn" data-correct="true">7, 10, 17.</div>
+                <div class="answer-btn" data-correct="false">7, 8, 16, 17.</div>
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h3>Система надає знижку 10% для замовлень від 1000 грн. Для замовлень від 5000 грн — 20%. Яке значення є граничним для перевірки обох умов?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">999.</div>
+                <div class="answer-btn" data-correct="true">4999.99, 5000, 5000.01.</div>
+                <div class="answer-btn" data-correct="false">1000, 5000.</div>
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h3>Яка техніка тест-дизайну є найдоцільнішою для тестування складної бізнес-логіки з багатьма умовами (наприклад, розрахунок кредитного рейтингу)?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="true">Таблиці прийняття рішень (Decision Tables).</div>
+                <div class="answer-btn" data-correct="false">Аналіз граничних значень.</div>
+                <div class="answer-btn" data-correct="false">Діаграми переходів станів.</div>
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h3>Тестування статусу замовлення (Нове -> В обробці -> Відправлено -> Доставлено -> Завершено) найкраще моделюється за допомогою:</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Еквівалентного розбиття.</div>
+                <div class="answer-btn" data-correct="true">Діаграм переходів станів (State Transition Diagrams).</div>
+                <div class="answer-btn" data-correct="false">Таблиць прийняття рішень.</div>
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h3>Тестувальник, спираючись на свій досвід, припускає, що помилки найчастіше виникають при завантаженні файлів з кириличними іменами. Як називається ця техніка?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Дослідницьке тестування (Exploratory Testing).</div>
+                <div class="answer-btn" data-correct="true">Вгадування помилок (Error Guessing).</div>
+                <div class="answer-btn" data-correct="false">Аналіз граничних значень.</div>
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h3>Яка головна мета технік тест-дизайну?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="true">Досягти максимального тестового покриття з мінімальною кількістю тест-кейсів.</div>
+                <div class="answer-btn" data-correct="false">Знайти якомога більше багів за короткий час.</div>
+                <div class="answer-btn" data-correct="false">Спростити написання тестової документації.</div>
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h3>Ви тестуєте функцію, яка вимагає вибору країни та міста. Яка техніка допоможе перевірити різні комбінації?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Аналіз граничних значень.</div>
+                <div class="answer-btn" data-correct="true">Тестування попарних комбінацій (Pairwise Testing).</div>
+                <div class="answer-btn" data-correct="false">Діаграми переходів станів.</div>
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h3>Яка техніка НЕ належить до тестування "Чорної скриньки"?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="true">Тестування покриття коду (Code Coverage).</div>
+                <div class="answer-btn" data-correct="false">Еквівалентне розбиття.</div>
+                <div class="answer-btn" data-correct="false">Аналіз граничних значень.</div>
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h3>Що таке "дослідницьке тестування" (Exploratory Testing)?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Тестування без будь-якого плану.</div>
+                <div class="answer-btn" data-correct="true">Одночасне вивчення системи, дизайн тестів та їх виконання.</div>
+                <div class="answer-btn" data-correct="false">Тестування, яке проводять тільки досвідчені тестувальники.</div>
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h3>Ви перевіряєте поле, що приймає значення від -100 до 100. Скільки класів еквівалентності (valid and invalid) тут є?</h3>
+            <div class="answers-container">
+                <div class="answer-btn" data-correct="false">Один.</div>
+                <div class="answer-btn" data-correct="true">Три (менше -100, від -100 до 100, більше 100).</div>
+                <div class="answer-btn" data-correct="false">Два (валідний, невалідний).</div>
+            </div>
+        </div>
+    </div>
+    <div class="quiz-navigation">
+        <button class="prev-question" disabled>&lt; Назад</button>
+        <span class="question-counter">Питання 1 / 10</span>
+        <button class="next-question">Вперед &gt;</button>
+    </div>
+</div>

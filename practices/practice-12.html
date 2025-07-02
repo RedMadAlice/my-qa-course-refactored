@@ -1,0 +1,69 @@
+<h1>Практика №12: Початок роботи з Pytest</h1>
+<hr>
+
+<h2>Мета</h2>
+<p>Навчитися використовувати `pytest` — потужний та популярний фреймворк для тестування в Python. Ви зрозумієте, як він спрощує написання тестів та надає детальні звіти.</p>
+
+<h2>Очікуваний результат</h2>
+<p>Ви перетворите API-тест з Практики №7 на тест, сумісний з `pytest`, і запустите його через термінал, побачивши результат роботи фреймворку.</p>
+
+<h2>Покрокова інструкція</h2>
+<ol>
+    <li>
+        <strong>Встановлення.</strong>
+        <p>Якщо ви ще не встановили `pytest`, зробіть це: <code>pip install pytest</code>.</p>
+    </li>
+    <li>
+        <strong>Ключові правила `pytest`.</strong>
+        <ul>
+            <li>Файли з тестами мають називатися <code>test_*.py</code> або <code>*_test.py</code>.</li>
+            <li>Назви тестових функцій мають починатися з <code>test_</code>.</li>
+            <li>Для перевірок використовується стандартний `assert`, без потреби в `unittest.TestCase`.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Рефакторинг існуючого тесту.</strong>
+        <p>Візьмемо наш скрипт для перевірки API з Практики №7. Щоб перетворити його на `pytest`-сумісний тест, нам достатньо перейменувати файл на <code>test_api.py</code> і переконатись, що логіка знаходиться всередині функції з назвою <code>test_*</code>.</p>
+    </li>
+    <li>
+        <strong>Запуск з терміналу.</strong>
+        <p>Перейдіть у терміналі в папку з вашим файлом <code>test_api.py</code> та просто виконайте команду:</p>
+        <pre><code>pytest</code></pre>
+        <p>`pytest` автоматично знайде і запустить ваш тест. Ви побачите зелену крапку або напис "1 passed", що означає успішне проходження тесту.</p>
+    </li>
+</ol>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <h3>Файл: <code>test_api.py</code></h3>
+        <pre><code class="language-python">
+import requests
+
+# Тестова функція, яку знайде pytest
+def test_get_users_endpoint():
+    # 1. Відправляємо GET-запит
+    response = requests.get("https://jsonplaceholder.typicode.com/users")
+
+    # 2. Pytest використовує звичайний assert для перевірок
+    assert response.status_code == 200
+
+    # 3. Отримуємо дані
+    users = response.json()
+
+    # 4. Продовжуємо перевірки
+    assert isinstance(users, list)
+    assert len(users) > 0
+    
+    first_user = users[0]
+    assert "id" in first_user
+    assert "name" in first_user
+    assert "email" in first_user
+    
+    print(f"\nТест успішний: отримано {len(users)} користувачів.")
+
+        </code></pre>
+    </div>
+</div>

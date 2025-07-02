@@ -1,0 +1,177 @@
+<h1>Практика №6: Робота з Alert'ами</h1>
+<hr>
+
+<h2>Мета</h2>
+<p>Навчитися взаємодіяти з JavaScript Alerts. Це модальні вікна, які блокують взаємодію з рештою сторінки і не є звичайними HTML-елементами. Selenium має спеціальний інструментарій для роботи з ними.</p>
+
+<h2>Очікуваний результат</h2>
+<p>Скрипт, який може викликати різні типи alert'ів, отримувати з них текст, вводити дані та приймати (accept) або відхиляти (dismiss) їх.</p>
+
+<h2>Покрокова інструкція</h2>
+<ol>
+    <li>
+        <strong>Об'єкт тестування.</strong>
+        <p>Ми будемо використовувати сторінку <strong><a href="https://the-internet.herokuapp.com/javascript_alerts" target="_blank">JavaScript Alerts</a></strong>. Тут є три типи alert'ів.</p>
+    </li>
+    <li>
+        <strong>Робота з простим Alert'ом.</strong>
+        <p>Це найпростіший тип, який має лише повідомлення та кнопку "OK".</p>
+        <pre><code class="language-python">
+# ... (імпорти та ініціалізація драйвера)
+driver.get("https://the-internet.herokuapp.com/javascript_alerts")
+
+# Клікаємо на першу кнопку, щоб викликати alert
+driver.find_element(By.XPATH, "//button[text()='Click for JS Alert']").click()
+
+# Переключаємось на alert
+alert = driver.switch_to.alert
+
+# Перевіряємо текст і приймаємо
+assert alert.text == "I am a JS Alert"
+alert.accept() # Натискає "OK"
+
+# Перевіряємо результат
+result_text = driver.find_element(By.ID, "result").text
+assert result_text == "You successfully clicked an alert"
+print("Простий alert оброблено успішно!")
+        </code></pre>
+    </li>
+    <li>
+        <strong>Робота з Confirm Alert'ом.</strong>
+        <p>Цей тип має кнопки "OK" та "Cancel". Ми можемо як прийняти (`accept`), так і відхилити (`dismiss`).</p>
+        <pre><code class="language-python">
+# ...
+# Клікаємо на другу кнопку
+driver.find_element(By.XPATH, "//button[text()='Click for JS Confirm']").click()
+alert = driver.switch_to.alert
+
+# Відхиляємо alert
+alert.dismiss() # Натискає "Cancel"
+
+# Перевіряємо результат
+result_text = driver.find_element(By.ID, "result").text
+assert result_text == "You clicked: Cancel"
+print("Confirm alert оброблено успішно!")
+        </code></pre>
+    </li>
+     <li>
+        <strong>Робота з Prompt Alert'ом.</strong>
+        <p>Цей тип дозволяє вводити текст.</p>
+        <pre><code class="language-python">
+# ...
+# Клікаємо на третю кнопку
+driver.find_element(By.XPATH, "//button[text()='Click for JS Prompt']").click()
+alert = driver.switch_to.alert
+
+# Вводимо текст і приймаємо
+my_text = "Hello Automation"
+alert.send_keys(my_text)
+alert.accept()
+
+# Перевіряємо результат
+result_text = driver.find_element(By.ID, "result").text
+assert result_text == f"You entered: {my_text}"
+print("Prompt alert оброблено успішно!")
+# ... (finally block to quit driver)
+        </code></pre>
+    </li>
+</ol>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <pre><code class="language-python">
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
+
+driver = webdriver.Chrome()
+
+try:
+    driver.get("https://the-internet.herokuapp.com/javascript_alerts")
+
+    # --- 1. Робота з простим Alert'ом ---
+    driver.find_element(By.XPATH, "//button[text()='Click for JS Alert']").click()
+    time.sleep(1) # Пауза, щоб візуально побачити alert
+    alert = driver.switch_to.alert
+    assert alert.text == "I am a JS Alert"
+    alert.accept()
+    result_text = driver.find_element(By.ID, "result").text
+    assert result_text == "You successfully clicked an alert"
+    print("Простий alert оброблено успішно!")
+    time.sleep(1)
+
+    # --- 2. Робота з Confirm Alert'ом ---
+    driver.find_element(By.XPATH, "//button[text()='Click for JS Confirm']").click()
+    time.sleep(1)
+    alert = driver.switch_to.alert
+    alert.dismiss()
+    result_text = driver.find_element(By.ID, "result").text
+    assert result_text == "You clicked: Cancel"
+    print("Confirm alert оброблено успішно!")
+    time.sleep(1)
+
+    # --- 3. Робота з Prompt Alert'ом ---
+    driver.find_element(By.XPATH, "//button[text()='Click for JS Prompt']").click()
+    time.sleep(1)
+    alert = driver.switch_to.alert
+    my_text = "Hello Automation"
+    alert.send_keys(my_text)
+    alert.accept()
+    result_text = driver.find_element(By.ID, "result").text
+    assert result_text == f"You entered: {my_text}"
+    print("Prompt alert оброблено успішно!")
+
+except Exception as e:
+    print(f"Тест впав: {e}")
+
+finally:
+    time.sleep(2)
+    driver.quit()
+
+        </code></pre>
+    </div>
+</div>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <pre><code class="language-python">
+import requests
+import json
+
+BASE_URL = "https://jsonplaceholder.typicode.com"
+
+def test_get_all_users():
+    # 1. Відправляємо GET-запит
+    response = requests.get(f"{BASE_URL}/users")
+
+    # 2. Перевіряємо статус-код
+    assert response.status_code == 200
+    print(f"Статус-код: {response.status_code} (OK)")
+
+    # 3. Конвертуємо відповідь в Python-об'єкт
+    users = response.json()
+
+    # 4. Перевіряємо, що отримали не порожній список
+    assert isinstance(users, list)
+    assert len(users) > 0
+    print(f"Отримано {len(users)} користувачів.")
+
+    # 5. Перевіряємо структуру першого користувача
+    first_user = users[0]
+    assert "id" in first_user
+    assert "name" in first_user
+    assert "email" in first_user
+    print("Відповідь сервера (перший користувач):")
+    print(json.dumps(first_user, indent=2))
+
+# Запускаємо нашу тестову функцію
+test_get_all_users()
+        </code></pre>
+    </div>
+</div>

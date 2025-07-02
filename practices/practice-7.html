@@ -1,0 +1,102 @@
+<h1>Практика №7: Тестування API. Перший GET-запит</h1>
+<hr>
+
+<h2>Мета</h2>
+<p>Зрозуміти основи тестування API та написати свій перший API-тест. Ми будемо використовувати бібліотеку `requests` в Python для відправки GET-запиту та перевірки отриманої відповіді.</p>
+
+<h2>Очікуваний результат</h2>
+<p>Python-скрипт, який відправляє запит до публічного API, отримує дані у форматі JSON, перевіряє статус-код відповіді та вміст отриманих даних.</p>
+
+<h2>Покрокова інструкція</h2>
+<ol>
+    <li>
+        <strong>Підготовка.</strong>
+        <p>Переконайтесь, що у вас встановлена бібліотека `requests`. Якщо ні, встановіть її: `pip install requests`.</p>
+    </li>
+    <li>
+        <strong>Об'єкт тестування.</strong>
+        <p>Ми будемо використовувати тестовий сервіс <strong><a href="https://jsonplaceholder.typicode.com/" target="_blank">JSONPlaceholder</a></strong>. Це безкоштовне fake API для тестування. Наша задача — отримати список всіх користувачів за ендпоінтом `/users`.</p>
+    </li>
+    <li>
+        <strong>Написання коду.</strong>
+        <p>Створіть файл `api_test.py` та додайте до нього цей код:</p>
+        <pre><code class="language-python">
+import requests
+
+# Базова URL нашого API
+BASE_URL = "https://jsonplaceholder.typicode.com"
+
+def test_get_all_users():
+    # 1. Відправляємо GET-запит на ендпоінт /users
+    response = requests.get(f"{BASE_URL}/users")
+
+    # 2. Перевіряємо статус-код відповіді. 200 означає "OK"
+    assert response.status_code == 200
+    print(f"Статус-код: {response.status_code} (OK)")
+
+    # 3. Конвертуємо відповідь з JSON формату в Python-об'єкт (список словників)
+    users = response.json()
+
+    # 4. Перевіряємо, що ми отримали список, і він не порожній
+    assert isinstance(users, list)
+    assert len(users) > 0
+    print(f"Отримано {len(users)} користувачів.")
+
+    # 5. Перевіряємо структуру першого користувача
+    # Це допомагає переконатись, що контракт API не порушено
+    first_user = users[0]
+    assert "id" in first_user
+    assert "name" in first_user
+    assert "email" in first_user
+    print(f"Перший користувач: {first_user['name']} ({first_user['email']})")
+
+# Запускаємо нашу тестову функцію
+test_get_all_users()
+        </code></pre>
+    </li>
+    <li>
+        <strong>Запуск та аналіз.</strong>
+        <p>Запустіть скрипт: `python api_test.py`. Ви побачите в консолі статус-код, кількість отриманих користувачів та дані першого з них. Ми переконалися, що ендпоінт працює коректно і повертає дані у правильному форматі.</p>
+    </li>
+</ol>
+
+<div class="solution-container">
+    <div class="solution-toggle">
+        <h4><i class="fa-solid fa-eye"></i> Показати рішення</h4>
+    </div>
+    <div class="solution-content">
+        <pre><code class="language-python">
+import requests
+import json
+
+BASE_URL = "https://jsonplaceholder.typicode.com"
+
+def test_get_all_users():
+    # 1. Відправляємо GET-запит
+    response = requests.get(f"{BASE_URL}/users")
+
+    # 2. Перевіряємо статус-код
+    assert response.status_code == 200
+    print(f"Статус-код: {response.status_code} (OK)")
+
+    # 3. Конвертуємо відповідь в Python-об'єкт
+    users = response.json()
+
+    # 4. Перевіряємо, що отримали не порожній список
+    assert isinstance(users, list)
+    assert len(users) > 0
+    print(f"Отримано {len(users)} користувачів.")
+
+    # 5. Перевіряємо структуру першого користувача
+    first_user = users[0]
+    assert "id" in first_user
+    assert "name" in first_user
+    assert "email" in first_user
+    print("Відповідь сервера (перший користувач):")
+    print(json.dumps(first_user, indent=2))
+
+# Запускаємо нашу тестову функцію
+test_get_all_users()
+        </code></pre>
+    </div>
+</div>
