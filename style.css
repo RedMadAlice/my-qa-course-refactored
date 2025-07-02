@@ -766,3 +766,99 @@ body .module-container.active {
     opacity: 1;
     padding: 20px 20px; /* Повертаємо відступи */
 }
+
+/* ============================================== */
+/* === АДАПТАЦІЯ ДЛЯ ПЛАНШЕТІВ (iPad) === */
+/* ============================================== */
+
+/* Застосовуємо ці стилі для екранів шириною до 1024px (стандартний iPad в ландшафтній орієнтації) */
+@media (max-width: 1024px) {
+
+    /* --- Головний контейнер з посиланнями на модулі --- */
+    .module-links-container {
+        /* Прибираємо жорстку прив'язку до лівого краю */
+        position: static; /* Скасовуємо absolute */
+        transform: none;  /* Скасовуємо transform: translateX(-50%) */
+        
+        /* Робимо його гнучким і центрованим */
+        display: flex;
+        flex-direction: column; /* Ставимо посилання в стовпчик */
+        align-items: center; /* Центруємо їх */
+        
+        /* Даємо йому адекватну ширину і відступи */
+        width: 80%;
+        max-width: 500px; /* Обмежимо максимальну ширину */
+        margin-top: 20vh; /* Відступ зверху, щоб не наповзало на віджет */
+        padding: 20px;
+        
+        /* Додамо легкий фон для кращої читабельності */
+        background-color: rgba(13, 32, 44, 0.4);
+        border-radius: 12px;
+    }
+
+    .module-link {
+        font-size: 1.2em; /* Трохи збільшимо шрифт для зручності */
+        width: 100%;
+        text-align: center;
+        padding: 5px;
+    }
+
+    /* Змінюємо сітку посилань на 2 колонки, щоб було компактніше */
+    .module-links-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px 20px; /* Змінюємо відступи */
+        width: 90%;
+        max-width: 600px;
+        margin-top: 15vh; /* Трохи піднімемо */
+        left: 50%; /* Центруємо по горизонталі */
+        transform: translateX(-50%);
+        position: absolute; /* Повертаємо, але тепер з нормальним центруванням */
+        top: 45%;
+    }
+    
+    /* --- Віджет з бліц-питаннями --- */
+    #blitz-widget {
+        /* Прибираємо жорстку прив'язку до кута */
+        position: relative; /* Робимо його частиною загального потоку */
+        left: auto;
+        top: auto;
+        
+        /* Центруємо його і даємо відступи */
+        margin: 10vh auto 20px auto; 
+        max-width: 350px;
+    }
+
+    /* --- Зайві елементи, які можуть заважати --- */
+    #quote-text, #animated-spider {
+        display: none; /* Просто сховаємо цитату і павука на планшеті, вони не є критичними */
+    }
+
+    /* --- Контейнер модуля --- */
+    .module-container {
+        /* Робимо відступи меншими на вузьких екранах */
+        padding: 20px 25px;
+    }
+}
+
+
+/* Додаткові налаштування для портретної орієнтації (високий і вузький екран) */
+@media (max-width: 834px) and (orientation: portrait) {
+    .module-links-container {
+        /* На вертикальному екрані знову ставимо посилання в один стовпчик */
+        grid-template-columns: 1fr; 
+        width: 80%;
+        max-width: 400px;
+        top: auto; /* Скасовуємо прив'язку до верху */
+        position: static; /* Повертаємо в потік документа */
+        transform: none;
+        margin-top: 5vh; /* Зменшуємо верхній відступ */
+    }
+
+    #hero-section {
+        /* Дозволяємо скролл, якщо контент не влазить */
+        height: auto;
+        min-height: 100vh;
+        padding-top: 5vh;
+        padding-bottom: 5vh;
+    }
+}
